@@ -1,0 +1,13 @@
+.navbar_footer_container{
+    width: 100%;
+    height: 30px;
+    background-color: #22303E;
+    color: white;
+    display: flex;
+}
+
+.navbar_text_footer {
+    margin: 5px 10px;
+    font-size: 14px;
+    font-weight: bold;
+}

@@ -1,0 +1,30 @@
+.advertiseOne_container {
+    min-width: 300px;
+    max-width: 320px;
+    height: 420px;
+    background-color: white;
+    border-width: 1px black solid;
+    margin: 10px;
+    box-shadow: 1px 9px 47px 19px rgba(0,0,0,0.3);
+    -webkit-box-shadow: 1px 9px 47px 19px rgba(0,0,0,0.3);
+    -moz-box-shadow: 1px 9px 47px 19px rgba(0,0,0,0.3);
+}
+.advertise_header_text{
+    font-size: 21px;
+    line-height: 27px;
+    font-weight: 700;
+    overflow: hidden;
+    padding: 15px;
+    font-family: sans-serif;
+}
+.advertise_header_text:hover{
+    color: #FEBE68;
+    cursor: pointer;
+}
+.advertiseOne_main{
+    padding: 15px;
+    margin: 15px;
+}
+.advertiseOne_footer{
+    padding: 15px;
+}

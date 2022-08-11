@@ -1,0 +1,33 @@
+.advertiseFour_container {
+    min-width: 280px;
+    max-width: 310px;
+    height: 420px;
+    background-color: white;
+    border-width: 1px black solid;
+    margin-top:10px;
+}
+.advertiseFour_header_text{
+    font-size: 21px;
+    line-height: 27px;
+    font-weight: 700;
+    overflow: hidden;
+    padding: 15px;
+    font-family: sans-serif;
+}
+.advertiseFour_header_text:hover{
+    color: #FEBE68;
+    cursor: pointer;
+}
+.advertiseFour_main{
+    padding: 10px;
+    margin: 10px;
+    margin-top: 20px;
+}
+.advertiseFour_footer{
+    padding: 15px;
+    display: flex;
+    margin-top: 20px;
+}
+img{
+    margin:5px;
+}
