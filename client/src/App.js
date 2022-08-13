@@ -1,7 +1,8 @@
-import MainPage from "./components/pages/homePage/MainPage";
+import MainPage from "./pages/homePage/MainPage";
+import Routing from "./Routing/Routing";
 
 function App() {
-  return <MainPage />;
+  return <Routing />;
 }
 
 export default App;

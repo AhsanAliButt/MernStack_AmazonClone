@@ -1,0 +1,14 @@
+.checkOutPage__container {
+  display: flex;
+  flex-direction: column;
+  width: 80%;
+  background-color: whitesmoke;
+  height: 100%;
+  margin: 0 auto;
+}
+.checkOutPage__title {
+  font-size: 30px;
+  font-weight: bold;
+  padding-left: 20px;
+  margin-top: 10px !important;
+}

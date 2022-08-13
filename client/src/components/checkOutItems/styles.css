@@ -1,0 +1,14 @@
+.checkOutItem_container{
+    border : 1px solid #ccc;
+    width: 95%;
+    display: flex;
+    height: 250px;
+    margin: 0 auto;
+    padding: 5px;
+    margin-top: 10px;
+
+}
+.text_style{
+    font-size: medium;
+    font-weight: bold;
+}
