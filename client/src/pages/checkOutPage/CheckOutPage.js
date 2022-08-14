@@ -7,10 +7,14 @@ import { autocompleteClasses, Typography } from "@mui/material";
 import getSymbolFromCurrency from "currency-symbol-map";
 import ButtonWithLabel from "../../components/buttons/ButtonWithLabel";
 import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
-
+import { useSelector, useDispatch } from "react-redux";
 import { ArrowDropDown } from "@mui/icons-material";
 
 const CheckOutPage = () => {
+  const dispatch = useDispatch();
+  const amount = useSelector((state) => state.cart.total);
+  const items = useSelector((state) => state.cart.items);
+  const grandTotal = amount.toFixed(2);
   return (
     <Box className="checkOutPage__container">
       <Grid container>
@@ -18,12 +22,9 @@ const CheckOutPage = () => {
           <Typography>
             <Box className="checkOutPage__title">Check Out</Box>
           </Typography>
-          <CheckOutItems />
-          <CheckOutItems />
-          <CheckOutItems />
-          <CheckOutItems />
-          <CheckOutItems />
-          <CheckOutItems />
+          {items.map((item) => {
+            return <CheckOutItems item={item} />;
+          })}
         </Grid>
         <Grid
           item
@@ -45,8 +46,7 @@ const CheckOutPage = () => {
                 marginLeft: "10px",
               }}
             >
-              {" "}
-              5{" "}
+              {items.length}
             </Typography>
           </Box>
           <Box
@@ -54,7 +54,7 @@ const CheckOutPage = () => {
               display: "flex",
             }}
           >
-            Subtotal : <Typography> 1,50,000</Typography>
+            Subtotal : <Typography> {grandTotal}</Typography>
           </Box>
           <Box
             sx={{

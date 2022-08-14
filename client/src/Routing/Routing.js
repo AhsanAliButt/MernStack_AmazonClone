@@ -12,10 +12,10 @@ const Routing = () => {
     <Router>
       <Navbar />
       <Routes>
-        <Route path="/" element={<MainPage />} />
         <Route path="/displayItemPage" element={<DisplayItemPage />} />
-        <Route path="/productOrderPage" element={<ProductOrderPage />} />
+        <Route path="/productOrderPage/:id" element={<ProductOrderPage />} />
         <Route path="/checkOutPage" element={<CheckOutPage />} />
+        <Route path="/" element={<MainPage />} />
       </Routes>
     </Router>
   );

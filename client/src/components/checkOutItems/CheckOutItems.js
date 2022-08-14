@@ -4,13 +4,13 @@ import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import { Typography } from "@mui/material";
 
-const CheckOutItems = ({}) => {
+const CheckOutItems = ({ item }) => {
   return (
     <Box>
       <Box className="checkOutItem_container">
         <Box>
           <img
-            src="https://ik.imagekit.io/amazonClone/51PuFBgBK4L._AC_UL640_FMwebp_QL65___1__V6Oa7zibX.webp?ik-sdk-version=javascript-1.4.3&updatedAt=1660049731048"
+            src={item.imageUrl}
             className="checkOutItem_img"
             alt=""
             srcset=""
@@ -22,12 +22,11 @@ const CheckOutItems = ({}) => {
             padding: "10px",
           }}
         >
+          <Typography className="text_style">{item.description}</Typography>
+          <Typography className="text_style"> {item.price}</Typography>
           <Typography className="text_style">
-            {" "}
-            New Apple i phone - 64GB
+            {item.stock < 1 ? "Out of Stock" : "In Stock"}
           </Typography>
-          <Typography className="text_style"> 60,000</Typography>
-          <Typography className="text_style"> in Stock</Typography>
         </Box>
       </Box>
     </Box>
