@@ -9,6 +9,7 @@ import ButtonWithLabel from "../../components/buttons/ButtonWithLabel";
 import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
 import { useSelector, useDispatch } from "react-redux";
 import { ArrowDropDown } from "@mui/icons-material";
+import { red } from "@mui/material/colors";
 
 const CheckOutPage = () => {
   const dispatch = useDispatch();
@@ -38,12 +39,14 @@ const CheckOutPage = () => {
           <Box
             style={{
               display: "flex",
+              fontSize: "22px",
             }}
           >
             TotalItems :{" "}
             <Typography
               style={{
                 marginLeft: "10px",
+                fontSize: "22px",
               }}
             >
               {items.length}
@@ -54,11 +57,25 @@ const CheckOutPage = () => {
               display: "flex",
             }}
           >
-            Subtotal : <Typography> {grandTotal}</Typography>
+            <Typography
+              style={{
+                fontSize: "20px",
+              }}
+            >
+              <span
+                style={{
+                  color: "red",
+                }}
+              >
+                Subtotal
+              </span>
+              : {grandTotal}
+            </Typography>
           </Box>
           <Box
             sx={{
               marginBottom: "10px",
+              fontSize: "20px",
             }}
           >
             {getSymbolFromCurrency("PKR")} 64.99
@@ -66,18 +83,26 @@ const CheckOutPage = () => {
           <Box
             sx={{
               fontSize: "14px",
+              display: "flex",
               alignItems: "center",
               justifyContent: "center",
               marginY: "15px",
               fontFamily: "Roboto",
             }}
           >
-            {getSymbolFromCurrency("PKR")} 64.99101.27 Shipping & Import Fees
-            Deposit to Pakistan Details <ArrowDropDown />
+            <Typography
+              style={{
+                fontSize: "14px",
+                fontWeight: "500",
+              }}
+            >
+              {getSymbolFromCurrency("PKR")} 64.99101.27 Shipping & Import Fees
+              Deposit to Pakistan Details <ArrowDropDown />
+            </Typography>{" "}
           </Box>
           <Box
             sx={{
-              fontSize: "16px",
+              fontSize: "14px",
               fontWeight: "bold",
               marginY: "20px",
             }}
@@ -89,9 +114,24 @@ const CheckOutPage = () => {
               fontSize: "14px",
               marginY: "20px",
               fontWeight: "bold",
+              display: "flex",
+              alignItems: "center",
             }}
           >
-            <LocationOnOutlinedIcon /> Deliver to Pakistan
+            <LocationOnOutlinedIcon
+              style={{
+                color: "black",
+              }}
+            />
+            <Typography
+              style={{
+                fontSize: "14px",
+                fontWeight: "bold",
+                marginTop: "8px",
+              }}
+            >
+              Deliver to Pakistan
+            </Typography>
           </Box>
           <Box>In Stock</Box>
           <Box
