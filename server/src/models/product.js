@@ -26,6 +26,10 @@ const productSchema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
+    brand: {
+      type: String,
+      required: false,
+    },
     name: {
       type: String,
       required: true,
