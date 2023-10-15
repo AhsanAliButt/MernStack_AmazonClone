@@ -1,5 +1,4 @@
 ("use strict");
-require("dotenv").config();
 const nodemailer = require("nodemailer");
 const port = process.env.PORT;
 const email = process.env.EMAIL;

@@ -30,6 +30,13 @@ const productSchema = new mongoose.Schema(
       type: String,
       required: false,
     },
+    keywords: {
+      type: [String], // Store variations of the product name
+    },
+    company: {
+      type: String,
+      required: false, // Modify as per your requirements
+    },
     name: {
       type: String,
       required: true,

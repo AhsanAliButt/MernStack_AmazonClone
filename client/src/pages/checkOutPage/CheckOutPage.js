@@ -10,6 +10,7 @@ import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
 import { useSelector, useDispatch } from "react-redux";
 import { ArrowDropDown } from "@mui/icons-material";
 import { red } from "@mui/material/colors";
+import { useParams } from "react-router-dom";
 
 const CheckOutPage = () => {
   const dispatch = useDispatch();
@@ -23,8 +24,8 @@ const CheckOutPage = () => {
           <Typography>
             <Box className="checkOutPage__title">Check Out</Box>
           </Typography>
-          {items.map((item) => {
-            return <CheckOutItems item={item} />;
+          {items.map((item, index) => {
+            return <CheckOutItems item={item} index={index} />;
           })}
         </Grid>
         <Grid

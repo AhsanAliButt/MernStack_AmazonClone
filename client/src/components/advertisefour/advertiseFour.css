@@ -1,10 +1,11 @@
 .advertiseFour_container {
-    min-width: 280px;
-    max-width: 310px;
+    min-width: 300px;
+    max-width: 320px;
     height: 420px;
     background-color: white;
     border-width: 1px black solid;
     margin-top:10px;
+    margin-left: 8px;
 }
 .advertiseFour_header_text{
     font-size: 21px;

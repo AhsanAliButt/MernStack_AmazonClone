@@ -3,10 +3,16 @@ import React from "react";
 import InfoBar from "../../components/infoBar/InfoBar";
 import LeftContainer from "../../components/leftContainer/LeftContainer";
 import RighntContaier from "../../components/rightContainer/RighntContaier";
+import { useSearchParams } from "react-router-dom";
 
 import "./displayItemPage.css";
 
 const DisplayItemPage = () => {
+  const [searchParams] = useSearchParams();
+  const searchTerm = searchParams.get("term");
+  const category = searchParams.get("category");
+
+  console.log("DisplayItemSEARCHTERM", searchTerm);
   return (
     <>
       <InfoBar />
@@ -16,8 +22,8 @@ const DisplayItemPage = () => {
             display: "flex",
           }}
         >
-          <LeftContainer />
-          <RighntContaier />
+          <LeftContainer searchQuery={searchTerm} category={category} />
+          <RighntContaier searchQuery={searchTerm} />
         </div>
       </div>
     </>

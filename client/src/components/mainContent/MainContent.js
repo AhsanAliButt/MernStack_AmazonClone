@@ -2,8 +2,11 @@ import React from "react";
 import AdvertiseFour from "../advertisefour/AdvertiseFour";
 import AdvertiseOne from "../advertiseOne/AdvertiseOne";
 import TopCarasol from "../topCarasol/TopCarasol";
+import useMainContent from "./useMainContent";
 
 const MainContent = () => {
+  const { data } = useMainContent();
+  console.log("data in main content", data);
   return (
     <div
       style={{
@@ -18,9 +21,9 @@ const MainContent = () => {
         <TopCarasol />
         <div>
           <div className="main_page_advertisement_container">
-            <AdvertiseOne />
-            <AdvertiseOne />
-            <AdvertiseOne />
+            <AdvertiseOne data={data} />
+            <AdvertiseOne data={data} />
+            <AdvertiseOne data={data} />
             <AdvertiseFour />
             <AdvertiseOne />
             <AdvertiseOne />

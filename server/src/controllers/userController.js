@@ -2,7 +2,6 @@ const UserModel = require("../models/User");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
-dotenv.config();
 const secret = process.env.JWT_SECRET;
 const transporter = require("../config/nodeMailer");
 

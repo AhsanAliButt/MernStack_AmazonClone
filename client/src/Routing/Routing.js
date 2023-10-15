@@ -12,7 +12,8 @@ const Routing = () => {
     <Router>
       <Navbar />
       <Routes>
-        <Route path="/displayItemPage" element={<DisplayItemPage />} />
+        <Route path="/search" element={<DisplayItemPage />} />
+
         <Route path="/productOrderPage/:id" element={<ProductOrderPage />} />
         <Route path="/checkOutPage" element={<CheckOutPage />} />
         <Route path="/" element={<MainPage />} />

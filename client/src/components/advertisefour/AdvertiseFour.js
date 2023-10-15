@@ -4,7 +4,7 @@ import "./advertiseFour.css";
 const AdvertiseFour = () => {
   return (
     <div className="advertiseFour_container">
-      <div className="advertise_header_text"> Gaming accesories</div>
+      <div className="advertise_header_text"> Gaming Accessories</div>
       <div className="advertiseFour_main">
         {" "}
         <img

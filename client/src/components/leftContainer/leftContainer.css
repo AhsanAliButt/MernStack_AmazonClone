@@ -1,24 +1,24 @@
-.leftSide_container{
-    width: 30%;
-    height: '100%';
-    min-height: 800px;
-    display: flex;
-    flex-direction: column;
-    background-color: aliceblue;
-    border-right: 1px solid;
-    padding: 10px;
+.leftSide_container {
+  width: 20%;
+  height: "100%";
+  min-height: 800px;
+  display: flex;
+  flex-direction: column;
+  background-color: aliceblue;
+  border-right: 1px solid;
+  padding: 10px;
 }
-.leftSide_header_name{
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 10px;
-    margin: 20px;
-    font-weight: 600;
+.leftSide_header_name {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  margin: 20px;
+  font-weight: 600;
 }
-.leftSide_brand_names{
-    display: flex;
-    margin-bottom: 10px;
-    flex-direction: column;
-    margin-left: 20px;
+.leftSide_brand_names {
+  display: flex;
+  margin-bottom: 10px;
+  flex-direction: column;
+  margin-left: 20px;
 }

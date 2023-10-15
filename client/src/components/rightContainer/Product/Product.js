@@ -4,13 +4,31 @@ import productData from "../productData/productData";
 import getSymbolFromCurrency from "currency-symbol-map";
 import Rating from "@mui/material/Rating";
 import { Link } from "react-router-dom";
+import Grid from "@mui/material/Grid";
 
 const Product = () => {
   const [product, setProduct] = useState([]);
   const [value, setValue] = useState(2);
+
+  console.log("data", product);
+
   useEffect(() => {
-    setProduct(productData);
+    fetchProducts();
   }, []);
+
+  const requestOptions = {
+    headers: {
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
+    },
+  };
+  const fetchProducts = async () => {
+    fetch("http://localhost:8001/api/product/getAllProducts", requestOptions)
+      .then((response) => response.json())
+      .then((result) => setProduct(result.products))
+      .catch((error) => console.log("error", error));
+  };
   return (
     <>
       {product.map((product, key) => {
@@ -18,6 +36,20 @@ const Product = () => {
           try {
             return (
               <>
+                {/* <Grid container spacing={2}>
+                  <Grid item xs={6} md={6}>
+                    xs=6 md=8
+                  </Grid>
+                  <Grid item xs={6} md={6}>
+                    xs=6 md=4
+                  </Grid>
+                  <Grid item xs={6} md={6}>
+                    xs=6 md=4
+                  </Grid>
+                  <Grid item xs={6} md={6}>
+                    xs=6 md=8
+                  </Grid>
+                </Grid> */}
                 <Link
                   to={"/productOrderPage/" + product._id}
                   className="product_container"
@@ -27,7 +59,7 @@ const Product = () => {
                       <img
                         src={product.imageUrl}
                         alt={product.name}
-                        width={250}
+                        width={350}
                         height={400}
                       />
                     </div>
@@ -50,7 +82,9 @@ const Product = () => {
                         {getSymbolFromCurrency("PKR")} {product.price}
                       </div>
                       <div className="product_availability">
-                        {product.stock.value == 0 ? "Out of Stock" : "In Stock"}
+                        {product.stock.value === 0
+                          ? "Out of Stock"
+                          : "In Stock"}
                       </div>
 
                       <div className="product_ship">{product.ship}</div>

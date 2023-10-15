@@ -2,6 +2,8 @@ import React from "react";
 import FooterNavbar from "../footerNavbar/footerNavbar";
 import "./NavBar.css";
 import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
+import SearchBar from "./SearchBar/SearchBar";
 
 const Navbar = () => {
   const count = useSelector((state) => state.cart.count);
@@ -14,28 +16,17 @@ const Navbar = () => {
         }}
       >
         <div className="navbar_container">
-          <div className="navbar_logo"></div>
+          <Link to={"/"}>
+            <div className="navbar_logo"></div>
+          </Link>
           <div className="navbar_locator">
             <div className="navbar_locator_image"></div>
+
             <div className="navbar_location"> Faisalabad </div>
           </div>
-          <div className="navbar_searchcontainer">
-            <div>
-              <select className="navbar_dropdown">
-                <option value="">All</option>
-                <option value="">Books</option>
-                <option value="">baby</option>
-                <option value="">Beauty</option>
-                <option value="">clothes</option>
-                <option value="">All</option>
-              </select>
-            </div>
-            <div>
-              <input type="text" className="navbar_searchbox" />
-            </div>
-            <div className="search_icon_container">
-              <div className="navbar_searchicon" />
-            </div>
+          <div>
+            {/* <input type="text" className="navbar_searchbox" /> */}
+            <SearchBar />
           </div>
           <div className="navbar_signin">
             <div
