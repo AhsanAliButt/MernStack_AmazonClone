@@ -3,7 +3,13 @@ import MainPage from "./pages/homePage/MainPage";
 import Routing from "./Routing/Routing";
 import { PersistGate } from "redux-persist/integration/react";
 import { store, persistor } from "./redux/store/store";
-import { Provider } from "react-redux";
+import { Provider, useSelector } from "react-redux";
+import {
+  selectIsAuthenticated,
+  selectlastRoute,
+} from "./redux/slicers/authSlice";
+
+console.log("Last Route: " + selectlastRoute);
 
 function App() {
   return <Routing />;

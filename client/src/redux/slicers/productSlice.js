@@ -4,7 +4,7 @@ import {
   getAllProducts,
   getSearchedProducts,
   getBrandSearchedProducts,
-} from "../../components/constant/apiCalls";
+} from "../../components/constant/productApiCalls";
 
 const fetchProducts = createAsyncThunk("product/fetchProducts", async () => {
   try {

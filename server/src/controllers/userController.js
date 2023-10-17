@@ -8,7 +8,7 @@ const transporter = require("../config/nodeMailer");
 const UserController = {
   register: async (req, res) => {
     console.log("register");
-    const { name, email, password, age, tc } = req.body;
+    const { name, email, password, age, tc,photo } = req.body;
     const checkUser = await UserModel.findOne({ email: email });
     if (checkUser) {
       return res.status(400).json({
@@ -77,10 +77,20 @@ const UserController = {
             const token = jwt.sign({ _id: user._id }, secret, {
               expiresIn: "15d",
             });
+            // Retrieve the user's cart items
+            // const cart = await CartModel.findOne({ user: user._id });
+
             return res.status(200).json({
               status: "Status Success",
               message: "Login successful",
               token: token,
+              user: {
+                name: user.name,
+                _id: user._id,
+                email: user.email,
+                // Include other user data as needed
+              },
+              // cart: cart, // Include cart items
             });
           }
         }

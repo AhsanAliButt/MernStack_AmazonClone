@@ -10,15 +10,27 @@ import {
 import { Box } from "@mui/material";
 
 const LeftContainer = ({ searchQuery, category }) => {
+  const [productCategory, setProductCategory] = useState("");
   const allProducts = useSelector(selectProducts);
   const filteredProducts = useSelector(selectfilteredProducts);
 
-  const products = filteredProducts || allProducts;
+  console.log("PorductsCategory", productCategory);
 
+  const products = filteredProducts || allProducts;
+  useEffect(() => {
+    // Update the productCategory state based on the first product's category
+    if (products.length > 0) {
+      setProductCategory(products[0].category);
+    }
+  }, [products]);
   const uniqueBrands = new Set();
 
-  products.forEach((product) => {
-    uniqueBrands.add(product.brand);
+  allProducts.forEach((product) => {
+    if (product.category === productCategory) {
+      uniqueBrands.add(product.brand);
+    } else {
+      console.log("These Barnds are not in your search", product.brand);
+    }
   });
 
   const uniqueBrandsArray = [...uniqueBrands];

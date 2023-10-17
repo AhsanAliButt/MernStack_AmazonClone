@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import "../NavBar.css";
 import { Box, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-
+import { useDispatch, useSelector } from "react-redux";
+import { selectProducts } from "../../../redux/slicers/productSlice";
 const SearchBar = () => {
   const navigate = useNavigate(); // Initialize React Router's useHistory
 
@@ -11,6 +12,14 @@ const SearchBar = () => {
   const [selectedCategory, setSelectedCategory] = useState("");
   const [showDropdown, setShowDropdown] = useState(false);
   const searchHistory = ["Games", "Mobiles", "VideoGames"];
+  const allProducts = useSelector(selectProducts);
+
+  // Filter out duplicate categories from allProducts
+  const uniqueCategories = [
+    ...new Set(allProducts.map((product) => product.category)),
+  ];
+
+  console.log("Categories: " + selectedCategory);
 
   const handleInputChange = (event) => {
     const input = event.target.value;
@@ -59,10 +68,13 @@ const SearchBar = () => {
         <Box>
           <select className="navbar_dropdown" onChange={handleCategoryChange}>
             <option value="">All</option>
-            <option value="Books">Books</option>
-            <option value="baby">Baby</option>
-            <option value="Beauty">Beauty</option>
-            <option value="clothes">Clothes</option>
+            {uniqueCategories.map((product, index) => {
+              return (
+                <option key={index} value={product}>
+                  {product}
+                </option>
+              );
+            })}
           </select>
         </Box>
         <Box>

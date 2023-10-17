@@ -1,98 +1,99 @@
 .navbar_container {
-    width: 100%;
-    height: 60px;
-    background-color: black;    
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 1;
-    display: flex;
-    justify-content: space-between;
+  width: 100%;
+  height: 60px;
+  background-color: black;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  display: flex;
+  justify-content: space-between;
 }
-.navbar_logo{
-
-    background: url('https://ik.imagekit.io/amazonClone/sprite_350x_yGip6ov_K.png?ik-sdk-version=javascript-1.4.3&updatedAt=1660049647468') no-repeat -9px -50px;
-	width: 98px;
-	height: 31px;
-    margin: 18px;
+.navbar_logo {
+  background: url("https://ik.imagekit.io/amazonClone/sprite_350x_yGip6ov_K.png?ik-sdk-version=javascript-1.4.3&updatedAt=1660049647468")
+    no-repeat -9px -50px;
+  width: 98px;
+  height: 31px;
+  margin: 18px;
 }
-.navbar_locator_image{
-    background: url('https://ik.imagekit.io/amazonClone/sprite_350x_yGip6ov_K.png?ik-sdk-version=javascript-1.4.3&updatedAt=1660049647468') no-repeat -70px -305px;
-	width: 19px;
-	height: 22px;
+.navbar_locator_image {
+  background: url("https://ik.imagekit.io/amazonClone/sprite_350x_yGip6ov_K.png?ik-sdk-version=javascript-1.4.3&updatedAt=1660049647468")
+    no-repeat -70px -305px;
+  width: 19px;
+  height: 22px;
 }
-.navbar_location{
-color:aliceblue;
-font-size:16px;
-font-weight:bold;
-margin-left: 5px;
+.navbar_location {
+  color: aliceblue;
+  font-size: 16px;
+  font-weight: bold;
+  margin-left: 5px;
 }
-.navbar_locator{
-    display: flex;
-    margin: 20px 0px;
+.navbar_locator {
+  display: flex;
+  margin: 20px 0px;
 }
-.navbar_searchbox{
-    width: 1050px;
-    height: 38px;
-    margin-top: 8px;
+.navbar_searchbox {
+  width: 1050px;
+  height: 38px;
+  margin-top: 8px;
 }
-.navbar_searchicon{
-    background: url('https://ik.imagekit.io/amazonClone/sprite_350x_yGip6ov_K.png?ik-sdk-version=javascript-1.4.3&updatedAt=1660049647468') no-repeat -9px -289px;
-	width: 23px;
-	height: 23px;
-    margin: 12px;
+.navbar_searchicon {
+  background: url("https://ik.imagekit.io/amazonClone/sprite_350x_yGip6ov_K.png?ik-sdk-version=javascript-1.4.3&updatedAt=1660049647468")
+    no-repeat -9px -289px;
+  width: 23px;
+  height: 23px;
+  margin: 12px;
 }
-.navbar_searchcontainer{
-    display: flex;
-    margin: 0px 10px;
+.navbar_searchcontainer {
+  display: flex;
+  margin: 0px 10px;
 }
-.search_icon_container{
-    background-color: #FEBE68;
-    width: 48px;
-    height: 44px;
-    border-radius: 0px 5px 5px 0px;
-    margin-top: 8px;
+.search_icon_container {
+  background-color: #febe68;
+  width: 48px;
+  height: 44px;
+  border-radius: 0px 5px 5px 0px;
+  margin-top: 8px;
 }
-.navbar_dropdown{
-    width: 48px;
-    height: 44px;
-    border-radius: 5px 0px 0px 5px;
-    margin-top: 8px;
-    text-align-last: center;
+.navbar_dropdown {
+  width: auto;
+  height: 44px;
+  border-radius: 5px 0px 0px 5px;
+  margin-top: 8px;
+  text-align-last: center;
 }
-.navbar_signin{
-    color:white;
-    width: 130px;
-    font-size: 14px;
-    margin-top: 12px;
-    margin-left: 50px;
+.navbar_signin {
+  color: white;
+  width: 130px;
+  font-size: 14px;
+  margin-top: 12px;
 }
-.navbar_returns{
-    color:white;
-    width:80px;
-    margin-top: 10px;
-    margin-left: 10px;
+.navbar_returns {
+  color: white;
+  width: 80px;
+  margin-top: 10px;
+  margin-left: 10px;
 }
-.navbar_cart{
-    display: flex;
-    margin-top:16px;
-    margin-right: 10px;
+.navbar_cart {
+  display: flex;
+  margin-top: 16px;
+  margin-right: 10px;
 }
-.navbar_cart_image{
-    background: url('https://ik.imagekit.io/amazonClone/sprite_350x_yGip6ov_K.png?ik-sdk-version=javascript-1.4.3&updatedAt=1660049647468') no-repeat -217px -336px;
-	width: 43px;
-	height: 30px;
+.navbar_cart_image {
+  background: url("https://ik.imagekit.io/amazonClone/sprite_350x_yGip6ov_K.png?ik-sdk-version=javascript-1.4.3&updatedAt=1660049647468")
+    no-repeat -217px -336px;
+  width: 43px;
+  height: 30px;
 }
-.navbar_cart_text{
-    color:white;
-    margin-top: 10px;
-    font-weight: bold;
-    margin-left: -8px;
-
+.navbar_cart_text {
+  color: white;
+  margin-top: 10px;
+  font-weight: bold;
+  margin-left: -8px;
 }
-.navbar_cart_count{
-    color:#FEBE68;
-    position: relative;
-    left:-23px;
-    top: -3px;
+.navbar_cart_count {
+  color: #febe68;
+  position: relative;
+  left: -23px;
+  top: -3px;
 }

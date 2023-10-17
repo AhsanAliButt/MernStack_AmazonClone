@@ -14,7 +14,6 @@ import {
 const Products = ({ searchQuery }) => {
   const [value, setValue] = useState(2);
   const dispatch = useDispatch();
-  console.log("SearhQueryInProducts.js", searchQuery);
   const allProducts = useSelector(selectProducts);
   const filteredProducts = useSelector(selectfilteredProducts);
 

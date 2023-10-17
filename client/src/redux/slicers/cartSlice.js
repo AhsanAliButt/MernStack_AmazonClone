@@ -38,23 +38,6 @@ const cartSlice = createSlice({
         })
       );
     },
-    // removeItem: (state, action) => {
-    //   state.items.splice(action.payload);
-    //   state.count = state.items.length;
-    //   state.total = state.items.reduce((acc, item) => {
-    //     console.log("Item Price", acc + item.price);
-    //     return acc + item.price;
-    //   }, 0);
-    //   console.log("state", state);
-    //   localStorage.setItem(
-    //     "cart",
-    //     JSON.stringify({
-    //       items: state.items,
-    //       count: state.count,
-    //       total: state.total,
-    //     })
-    //   );
-    // },
     removeItem: (state, action) => {
       const indexToRemove = action.payload; // Assuming action.payload contains the index of the item to remove
 
