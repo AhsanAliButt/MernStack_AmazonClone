@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-
+const cloudinary = require("cloudinary").v2;
 const reviewSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -35,7 +35,7 @@ const productSchema = new mongoose.Schema(
     },
     company: {
       type: String,
-      required: false, // Modify as per your requirements
+      required: true, // Modify as per your requirements
     },
     name: {
       type: String,

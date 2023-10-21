@@ -1,6 +1,13 @@
 import { Box } from "@mui/material";
 import InputBase from "@mui/material/InputBase";
-const InputField = ({ type,value, onChange, placeholder,autoComplete }) => {
+const InputField = ({
+  width,
+  type,
+  value,
+  onChange,
+  placeholder,
+  autoComplete,
+}) => {
   return (
     <Box
       sx={{
@@ -13,7 +20,7 @@ const InputField = ({ type,value, onChange, placeholder,autoComplete }) => {
           borderRadius: "6px",
           marginTop: "8px",
           padding: "8px",
-          width: "500px",
+          width: width || "500px",
         }}
         placeholder={placeholder || "please enter a username"}
         defaultValue={value || "Please enter a username"}

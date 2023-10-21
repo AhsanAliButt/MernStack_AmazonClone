@@ -1,4 +1,11 @@
 const ProductModel = require("../models/product");
+const cloudinary = require("cloudinary").v2;
+const cloudinarySecret = process.env.CLOUDNARY_API_SECRET;
+cloudinary.config({
+  cloud_name: "dbi6jvkot",
+  api_key: "268511633691445",
+  api_secret: cloudinarySecret,
+});
 
 const ProductsController = {
   getAllProducts: async (req, res) => {
@@ -18,20 +25,25 @@ const ProductsController = {
     }
   },
   createProduct: async (req, res) => {
+    const file = req.files?.photo;
+    console.log("File Object:", file); // Log the file object to verify its contents
+
     try {
+      const result = await cloudinary.uploader.upload(file.tempFilePath, {
+        folder: "productPictures",
+      });
       const {
         name,
         description,
         stock,
         price,
         category,
-        imageUrl,
         company,
         brand,
         keywords,
       } = req.body;
 
-      if (!name || !description || !price || !category || !imageUrl || !stock) {
+      if (!name || !description || !price || !category || !stock || !brand || !company) {
         return res.status(400).json({
           status: "Status Failed",
           message: "Please fill all fields",
@@ -43,7 +55,7 @@ const ProductsController = {
           description: description.charAt(0).toUpperCase() + string.slice(1),
           price: price,
           category: category.charAt(0).toUpperCase() + string.slice(1),
-          imageUrl: imageUrl,
+          imageUrl: result.url || "", // Use the URL from Cloudinary
           createdAt: Date.now(),
           stock: stock,
           company: company.charAt(0).toUpperCase() + string.slice(1),

@@ -4,6 +4,7 @@ import {
   getAllProducts,
   getSearchedProducts,
   getBrandSearchedProducts,
+  addProduct,
 } from "../../components/constant/productApiCalls";
 
 const fetchProducts = createAsyncThunk("product/fetchProducts", async () => {
@@ -36,6 +37,19 @@ const fetchProductByBrand = createAsyncThunk(
       console.log("RESULTBrands", products);
       return products;
     } catch (error) {}
+  }
+);
+const fetchNewProduct = createAsyncThunk(
+  "product/createProduct",
+  async (data) => {
+    console.log("ProductSliceBrand", data);
+    try {
+      const product = await addProduct(data);
+      console.log("RESULTBrands", product);
+      return product;
+    } catch (error) {
+      console.log("ERROR", error);
+    }
   }
 );
 
@@ -80,6 +94,17 @@ const productSlice = createSlice({
   },
   extraReducers: {
     // add your async reducers here
+    [fetchNewProduct.pending]: (state, action) => {
+      state.loading = true;
+    },
+    [fetchNewProduct.fulfilled]: (state, action) => {
+      state.loading = false;
+      state.products = action.payload;
+    },
+    [fetchNewProduct.rejected]: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    },
     [fetchProducts.pending]: (state, action) => {
       state.loading = true;
     },
@@ -158,6 +183,7 @@ export {
   fetchProducts,
   fetchProductBySearch,
   fetchProductByBrand,
+  fetchNewProduct,
   // fetchProductByID,
   // fetchProductByCategory,
   // deleteProduct,

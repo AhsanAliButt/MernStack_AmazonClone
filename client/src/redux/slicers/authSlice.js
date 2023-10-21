@@ -1,28 +1,54 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { signInUser,signUpUser } from "../../components/constant/authApiCalls";
+// import { isRejectedWithValue, rejectWithValue } from "@reduxjs/toolkit";
+import { signInUser, signUpUser } from "../../components/constant/authApiCalls";
 import { createSelector } from "reselect"; // its normaly use to memorize the selectors used in the component
 import { useNavigate } from "react-router-dom";
-const loginUser = createAsyncThunk("auth/loginUser", async (credentials) => {
-  try {
-    const user = await signInUser(credentials);
-    // localStorage.setItem("usersdatatoken", user.token);
-    return user;
-  } catch (error) {
-    console.error("Error", error);
-  }
-});
-const createUser = createAsyncThunk("auth/createUser", async (credentials) => {
-  console.log("AuthSliceCreateUserCredentials", credentials);
-  try {
-    const user = await signUpUser(credentials);
-    console.log("UserAUTH", user);
-    // localStorage.setItem("usersdatatoken", user.token);
-    return user;
-  } catch (error) {
-    console.error("Error", error);
-  }
-});
+const loginUser = createAsyncThunk(
+  "auth/loginUser",
+  async (credentials, thunkApi) => {
+    try {
+      const user = await signInUser(credentials);
+      // localStorage.setItem("usersdatatoken", user.token);
+      if (user.status === 200) {
+        return thunkApi.fulfillWithValue(user);
+      } else if (user.status === 400) {
+        console.log("Authentication failed:", user.message);
+        return thunkApi.rejectWithValue(user.message);
+      } else {
+        // Handle other status codes as needed
+        console.error("Unexpected status code:", user.status);
+        return thunkApi.rejectWithValue("Unexpected status code");
+      }
+    } catch (error) {
+      console.error("Error", error);
 
+      return thunkApi.rejectWithValue(error); // Use rejectWithValue to handle rejections
+    }
+  }
+);
+const createUser = createAsyncThunk(
+  "auth/createUser",
+  async (credentials, thunkApi) => {
+    console.log("AuthSliceCreateUserCredentials", credentials);
+    try {
+      const user = await signUpUser(credentials);
+      console.log("UserAUTH", user);
+      if (user.status === 200) {
+        return thunkApi.fulfillWithValue(user);
+      } else if (user.status === 400) {
+        console.log("Authentication failed:", user.message);
+        return thunkApi.rejectWithValue(user.message);
+      } else {
+        // Handle other status codes as needed
+        console.error("Unexpected status code:", user.status);
+        return thunkApi.rejectWithValue("Unexpected status code");
+      }
+      // localStorage.setItem("usersdatatoken", user.token);
+    } catch (error) {
+      console.error("Error", error);
+    }
+  }
+);
 
 const authSlice = createSlice({
   name: "auth",
@@ -89,7 +115,7 @@ const authSlice = createSlice({
 
 // Action creators
 export const { clearErrors, clearUser, setPreviousRoute } = authSlice.actions;
-export { loginUser,createUser };
+export { loginUser, createUser };
 // export states
 export default authSlice.reducer;
 

@@ -4,51 +4,100 @@ const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
 const secret = process.env.JWT_SECRET;
 const transporter = require("../config/nodeMailer");
+const cloudinary = require("cloudinary").v2;
+const cloudinarySecret = process.env.CLOUDNARY_API_SECRET;
+cloudinary.config({
+  cloud_name: "dbi6jvkot",
+  api_key: "268511633691445",
+  api_secret: cloudinarySecret,
+});
 
 const UserController = {
   register: async (req, res) => {
-    console.log("register");
-    const { name, email, password, age, tc,photo } = req.body;
-    const checkUser = await UserModel.findOne({ email: email });
-    if (checkUser) {
-      return res.status(400).json({
-        message: "User already exists",
+    
+    const file = req.files?.photo;
+    console.log("File Object:", file); // Log the file object to verify its contents
+
+    try {
+      const result = await cloudinary.uploader.upload(file.tempFilePath, {
+        folder: "profilePictures",
       });
-    } else {
-      if (!name || !email || !password || !age || !tc) {
+
+      const {
+        firstName,
+        lastName,
+        name,
+        email,
+        password,
+        tc,
+        recoveryEmail,
+        country,
+        zipCode,
+        dob,
+        photo,
+      } = req.body;
+      console.log(photo);
+      const checkUser = await UserModel.findOne({ email: email });
+
+      if (checkUser) {
         return res.status(400).json({
-          status: "Status Failed",
-          message: "Please fill all fields",
+          message: "User already exists",
         });
       } else {
-        try {
+        if (!name || !email || !password || !tc) {
+          return res.status(400).json({
+            status: 400,
+            message: "Please fill all fields",
+          });
+        } else {
           const salt = await bcrypt.genSalt(10);
           const hash = await bcrypt.hash(password, salt);
           const user = new UserModel({
+            firstName: firstName,
+            lastName: lastName,
             name: name,
             email: email,
             password: hash,
-            age: age,
+            dob: dob,
             tc: tc,
+            imageUrl: result.url || "", // Use the URL from Cloudinary
+            recoveryEmail: recoveryEmail,
+            country: country,
+            zipCode: zipCode,
           });
+
           await user.save();
           const savedUser = await UserModel.findOne({ email: email });
           const token = jwt.sign({ _id: savedUser._id }, secret, {
             expiresIn: "1d",
           });
+
           res.status(200).json({
-            status: "Status Success",
+            status: 200,
             message: "User registered successfully",
             token: token,
-          });
-        } catch (error) {
-          console.log(error.message);
-          res.status(500).json({
-            status: "Status Failed",
-            message: "Server error",
+            user: {
+              firstname: savedUser?.firstName,
+              lastName: savedUser?.lastName,
+              imageUrl: savedUser?.imageUrl,
+              name: savedUser?.name,
+              _id: savedUser?._id,
+              email: savedUser?.email,
+              dob: savedUser?.dob,
+              zipcode: savedUser?.zipCode,
+              country: savedUser?.country,
+
+              // Include other user data as needed
+            },
           });
         }
       }
+    } catch (error) {
+      console.error(error.message);
+      res.status(500).json({
+        status: 400,
+        message: "Server error",
+      });
     }
   },
   userLogin: async (req, res) => {
@@ -56,21 +105,21 @@ const UserController = {
       const { email, password } = req.body;
       if (!email || !password) {
         return res.status(400).json({
-          status: "Status Failed",
+          status: 400,
           message: "Please fill all fields",
         });
       } else {
         const user = await UserModel.findOne({ email: email });
         if (!user) {
           return res.status(400).json({
-            status: "Status Failed",
+            status: 400,
             message: "User not found",
           });
         } else {
           const isMatch = await bcrypt.compare(password, user.password);
           if (!isMatch) {
             return res.status(400).json({
-              status: "Status Failed",
+              status: 400,
               message: "Invalid credentials",
             });
           } else {
@@ -81,13 +130,20 @@ const UserController = {
             // const cart = await CartModel.findOne({ user: user._id });
 
             return res.status(200).json({
-              status: "Status Success",
+              status: 200,
               message: "Login successful",
               token: token,
               user: {
-                name: user.name,
-                _id: user._id,
-                email: user.email,
+                firstname: user?.firstName,
+                lastName: user?.lastName,
+                imageUrl: user?.imageUrl,
+                name: user?.name,
+                _id: user?._id,
+                email: user?.email,
+                dob: user?.dob,
+                zipcode: user?.zipCode,
+                country: user?.country,
+
                 // Include other user data as needed
               },
               // cart: cart, // Include cart items
@@ -105,7 +161,7 @@ const UserController = {
     try {
       const users = await UserModel.find();
       return res.status(200).json({
-        status: "Status Success",
+        status: 200,
         message: "Users found",
         users: users,
       });
@@ -120,20 +176,20 @@ const UserController = {
       const { password, newPassword, newPassword_confirm } = req.body;
       if (!newPassword_confirm || !newPassword || !password) {
         return res.status(400).json({
-          status: "Status Failed",
+          status: 400,
           message: "Please fill all fields",
         });
       } else {
         if (newPassword !== newPassword_confirm) {
           return res.status(400).json({
-            status: "Status Failed",
+            status: 400,
             message: "New Passwords do not match",
           });
         }
         const checkPassword = await bcrypt.compare(password, newPassword);
         if (password === newPassword) {
           return res.status(400).json({
-            status: "Status Failed",
+            status: 400,
             message: "You can't set same Password as old Password",
           });
         } else {
@@ -141,7 +197,7 @@ const UserController = {
           const isMatch = await bcrypt.compare(password, user.password);
           if (!isMatch) {
             return res.status(400).json({
-              status: "Status Failed",
+              status: 400,
               message: "Invalid credentials",
             });
           } else {
@@ -151,7 +207,7 @@ const UserController = {
               password: newHash,
             });
             return res.status(200).json({
-              status: "Status Success",
+              status: 200,
               message: "Password changed successfully",
             });
           }
@@ -167,7 +223,7 @@ const UserController = {
     try {
       const user = await UserModel.findById(req.user._id);
       return res.status(200).json({
-        status: "Status Success",
+        status: 200,
         message: "User found",
         user: user,
       });
@@ -182,7 +238,7 @@ const UserController = {
       const user = await UserModel.findById(req.user._id);
       await UserModel.findByIdAndDelete(user._id);
       return res.status(200).json({
-        status: "Status Success",
+        status: 200,
         message: "User deleted",
       });
     } catch (error) {
@@ -196,14 +252,14 @@ const UserController = {
       const { email } = req.body;
       if (!email) {
         return res.status(400).json({
-          status: "Status Failed",
+          status: 400,
           message: "Please Email Field",
         });
       } else {
         const user = await UserModel.findOne({ email: email });
         if (!user) {
           return res.status(400).json({
-            status: "Status Failed",
+            status: 400,
             message: "User not found",
           });
         } else {
@@ -225,12 +281,12 @@ const UserController = {
           try {
             await transporter.sendMail(mailOptions);
             return res.status(200).json({
-              status: "Status Success",
+              status: 200,
               message: "Email sent",
             });
           } catch (error) {
             return res.status(500).json({
-              status: "Status Failed",
+              status: 500,
               message: error.message,
             });
           }
@@ -248,13 +304,13 @@ const UserController = {
       const { token } = req.params;
       if (!newPassword_confirm || !newPassword) {
         return res.status(400).json({
-          status: "Status Failed",
+          status: 400,
           message: "Please fill all fields",
         });
       } else {
         if (newPassword !== newPassword_confirm) {
           return res.status(400).json({
-            status: "Status Failed",
+            status: 400,
             message: "New Passwords do not match",
           });
         }
@@ -268,12 +324,12 @@ const UserController = {
             password: newHash,
           });
           return res.status(200).json({
-            status: "Status Success",
+            status: 200,
             message: "Password changed successfully",
           });
         } catch (error) {
           res.status(401).json({
-            status: "Status Failed",
+            status: 401,
             message: "Invalid Token",
           });
         }

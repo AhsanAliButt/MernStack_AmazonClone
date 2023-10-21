@@ -1,3 +1,7 @@
+const credentials = {
+  password: "",
+  username: "",
+};
 export const signUpPageData = [
   {
     tag: "UserName",

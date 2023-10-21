@@ -2,7 +2,7 @@ import React from "react";
 import "./AdvertiseOne.css";
 
 const AdvertiseOne = ({ data }) => {
-  console.log("data in advertise one", data?._id);
+  // console.log("data in advertise one", data?._id);
   return (
     <>
       <div className="advertiseOne_container">

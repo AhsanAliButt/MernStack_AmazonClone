@@ -6,7 +6,7 @@ const useMainContent = () => {
 
   useEffect(() => {
     fetchProducts();
-    console.log("data in useMainContent", data);
+    // console.log("data in useMainContent", data);
   }, []);
 
   const requestOptions = {
@@ -21,7 +21,7 @@ const useMainContent = () => {
       .get("http://localhost:8001/api/product/getAllProducts", requestOptions)
       .then((res) => {
         setData(res.data.products);
-        console.log("data in fetchProducts", res.data.products);
+        // console.log("data in fetchProducts", res.data.products);
       });
   };
   return {

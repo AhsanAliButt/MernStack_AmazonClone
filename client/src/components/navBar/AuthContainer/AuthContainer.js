@@ -6,9 +6,10 @@ import { Box, Button, Menu, MenuItem, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { routes } from "../../constant/routes";
 import useAuth from "../../hooks/useAuth";
+import Avatar from "@mui/material/Avatar";
+import { selectUser } from "../../../redux/slicers/authSlice";
 const AuthContainer = ({ isLogin, user }) => {
   const dispatch = useDispatch();
-  const count = useSelector((state) => state.cart.count);
   const [showDropdown, setShowDropdown] = useState(false);
   const navigate = useNavigate();
   const handleFocus = () => {
@@ -31,6 +32,10 @@ const AuthContainer = ({ isLogin, user }) => {
 
   const handleSignInButton = () => {
     navigate(routes.signIn);
+  };
+  const handleCreateProduct = () => {
+    console.log("Create Product");
+    navigate(routes.productForm);
   };
   const handleSignOutButton = () => {
     console.log("SignOutTriiggered"); //
@@ -72,18 +77,42 @@ const AuthContainer = ({ isLogin, user }) => {
               display: "block",
               position: "absolute",
               left: "1550.516px",
+              padding: "10px",
             }}
           >
             {isLogin ? (
-              <Button onClick={handleSignOutButton}>SignOut</Button>
+              <>
+                <Button onClick={handleSignOutButton}>SignOut</Button>
+                <Avatar alt="Remy Sharp" src={user.imageUrl} />
+                <Button
+                  sx={{
+                    minWidth: "150px",
+                    borderRadius: "5px",
+                    color: "white",
+                    backgroundColor: "black",
+                    marginTop: "10px",
+                  }}
+                  onClick={handleCreateProduct}
+                >
+                  createProduct
+                </Button>
+              </>
             ) : (
-              <Button onClick={handleSignInButton}>SignIn</Button>
+              <>
+                <Button
+                  sx={{
+                    minWidth: "150px",
+                    borderRadius: "5px",
+                    color: "white",
+                    backgroundColor: "black",
+                    marginTop: "10px",
+                  }}
+                  onClick={handleSignInButton}
+                >
+                  SignIn
+                </Button>
+              </>
             )}
-
-            <MenuItem>LOGIN</MenuItem>
-            <MenuItem>LOGIN</MenuItem>
-            <MenuItem>LOGIN</MenuItem>
-            <MenuItem>LOGIN</MenuItem>
           </Box>
         )}
       </Box>

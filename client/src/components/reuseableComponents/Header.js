@@ -1,16 +1,16 @@
 import { Typography } from "@mui/material";
 import React from "react";
 
-const Header = ({ tag }) => {
+const Header = ({ tag, fontSize, fontWeight, component, variant }) => {
   return (
     <>
       <Typography
-        variant="h6"
-        component="h2"
+        variant={variant || "h6"}
+        component={component || "h2"}
         color={"#49515A"}
-        fontSize={16}
+        fontSize={fontSize || 16}
         fontFamily={"inherit"}
-        fontWeight={500}
+        fontWeight={fontWeight || 500}
       >
         {tag}
       </Typography>

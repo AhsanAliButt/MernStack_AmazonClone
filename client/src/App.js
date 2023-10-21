@@ -9,7 +9,7 @@ import {
   selectlastRoute,
 } from "./redux/slicers/authSlice";
 
-console.log("Last Route: " + selectlastRoute);
+// console.log("Last Route: " + selectlastRoute);
 
 function App() {
   return <Routing />;

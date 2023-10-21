@@ -3,10 +3,13 @@ import AdvertiseFour from "../advertisefour/AdvertiseFour";
 import AdvertiseOne from "../advertiseOne/AdvertiseOne";
 import TopCarasol from "../topCarasol/TopCarasol";
 import useMainContent from "./useMainContent";
+import { useSelector } from "react-redux";
+import { selectUser } from "../../redux/slicers/authSlice";
 
 const MainContent = () => {
+  const user = useSelector(selectUser);
+  console.log("USER DATA", user);
   const { data } = useMainContent();
-  console.log("data in main content", data);
   return (
     <div
       style={{

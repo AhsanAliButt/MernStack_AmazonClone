@@ -9,6 +9,8 @@ const userRoutes = require("./src/routes/userRoutes");
 const productRoutes = require("./src/routes/productRoutes");
 const Product = require("./src/models/product"); // Import your Mongoose model
 const pluralize = require("pluralize");
+const User = require("./src/models/User");
+const fileUpload = require("express-fileupload");
 // Import the necessary modules and your Mongoose model
 
 // async function updateBrandsForProducts() {
@@ -56,17 +58,23 @@ const pluralize = require("pluralize");
 
 // async function updateExistingProductsCompanyField() {
 //   try {
-//     const updatedCompanyValue = "Keywords"; // Set the company value
+//     dob = "24-08-1988";
+//     country = "Pakistan";
+//     zipCode="12345";
+//     recoveryEmail = "ahsanbutt515@gmail.com";
 
 //     // Update all documents with the new "company" field
-//     const result = await Product.updateMany(
+//     const result = await User.updateMany(
 //       {},
-//       { $set: { keywords: updatedCompanyValue } }
+//       {
+//         $set: {
+//           dob: dob,
+//           country: country
+//         },
+//       }
 //     );
 
-//     console.log(
-//       `${result.modifiedCount} products were updated with the "company" field.`
-//     );
+//     console.log(`${result.modifiedCount} Users were updated with the field.`);
 //   } catch (error) {
 //     console.error("Error updating products:", error);
 //   }
@@ -113,6 +121,11 @@ const pluralize = require("pluralize");
 app.use(cors());
 //JSON Parser
 app.use(express.json());
+app.use(
+  fileUpload({
+    useTempFiles: true,
+  })
+);
 
 //Connect to MongoDB
 connectDB();
