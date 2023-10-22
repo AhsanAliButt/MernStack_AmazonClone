@@ -14,7 +14,7 @@ const LeftContainer = ({ searchQuery, category }) => {
   const allProducts = useSelector(selectProducts);
   const filteredProducts = useSelector(selectfilteredProducts);
 
-  console.log("PorductsCategory", productCategory);
+  // console.log("PorductsCategory", productCategory);
 
   const products = filteredProducts || allProducts;
   useEffect(() => {
@@ -29,7 +29,7 @@ const LeftContainer = ({ searchQuery, category }) => {
     if (product.category === productCategory) {
       uniqueBrands.add(product.brand);
     } else {
-      console.log("These Barnds are not in your search", product.brand);
+      // console.log("These Barnds are not in your search", product.brand);
     }
   });
 

@@ -3,68 +3,86 @@ import useProducts from "../../components/hooks/useProducts";
 import useStates from "../../components/hooks/useStates";
 import Header from "../../components/reuseableComponents/Header";
 import InputField from "../../components/reuseableComponents/InputField";
-import { Alert, Box, Button } from "@mui/material";
+import { Alert, Avatar, Box, Button } from "@mui/material";
 import Dropzone from "react-dropzone";
 import AvatarEditor from "react-avatar-editor";
 import Select from "react-select";
+import useProductForm from "./useProductForm";
+import { useParams } from "react-router-dom";
 const ProductForm = () => {
   const {
-    createNewProduct,
+    handleCreateProduct,
+    handleImageUpload,
+    handleImageDrop,
+    uploadedImage,
+    handleUpdateProduct,
+    editor,
+    handleSetEditor,
     productData,
     addProductData,
-    showError,
-    showSuccess,
-    setShowError,
-    setShowSuccess,
-  } = useProducts();
-  const { authToken, productLoading } = useStates();
-  const [uploadedImage, setUploadedImage] = useState(null);
-  const [editor, setEditor] = useState(null);
-  const handleImageDrop = (acceptedFiles) => {
-    if (acceptedFiles && acceptedFiles.length > 0) {
-      setUploadedImage(acceptedFiles[0]);
+    setPreviousUserData,
+  } = useProductForm();
+  let { id } = useParams();
+  useEffect(() => {
+    console.log("Product ID by ", id);
+    if (id) {
+      setPreviousUserData(id);
     }
-  };
+  }, [id]);
+  // const {
+  //   createNewProduct,
+  //   productData,
+  //   addProductData,
+  //   showError,
+  //   showSuccess,
+  //   setShowError,
+  //   setShowSuccess,
+  // } = useProducts();
+  // const { authToken, productLoading } = useStates();
+  // const [uploadedImage, setUploadedImage] = useState(null);
+  // const [editor, setEditor] = useState(null);
+  // const handleImageDrop = (acceptedFiles) => {
+  //   if (acceptedFiles && acceptedFiles.length > 0) {
+  //     setUploadedImage(acceptedFiles[0]);
+  //   }
+  // };
 
-  const handleImageUpload = () => {
-    if (editor) {
-      const canvas = editor.getImageScaledToCanvas();
-      //Export as Blob
-      canvas.toBlob((blob) => {
-        addProductData({ ...productData, photo: blob });
-      }, "image/jpeg");
-      console.log("Canvas", canvas);
-      // const dataURL = canvas.toDataURL("image/jpeg");
-      // // You can send the dataURL to your server or do further processing here.
-      // setCredentials({ ...credentials, photo: dataURL });
-      // console.log(dataURL);
-    } else {
-      console.log("Avatar editor not ready.");
-    }
-  };
-  const handleCreateProduct = async () => {
-    // try {
-    //   await createNewProduct();
-    //   // Reset the form or perform other actions on success
-    //   // setShowSuccess(true);
-    // } catch (error) {
-    //   // Handle the error
-    //   // setShowError(true);
-    // }
-    console.log("Success");
-  };
+  // const handleImageUpload = () => {
+  //   if (editor) {
+  //     const canvas = editor.getImageScaledToCanvas();
+  //     //Export as Blob
+  //     canvas.toBlob((blob) => {
+  //       addProductData({ ...productData, picture: blob });
+  //     }, "image/jpeg");
+  //     console.log("Canvas", canvas);
+  //     // const dataURL = canvas.toDataURL("image/jpeg");
+  //     // // You can send the dataURL to your server or do further processing here.
+  //     // setCredentials({ ...credentials, photo: dataURL });
+  //     // console.log(dataURL);
+  //   } else {
+  //     console.log("Avatar editor not ready.");
+  //   }
+  // };
+  // const handleCreateProduct = async () => {
+  //   try {
+  //     await createNewProduct();
+  //     // Handle success or reset the form
+  //   } catch (error) {
+  //     console.error("An error occurred:", error);
+  //     // Handle the error gracefully, e.g., set an error state or show an error message
+  //   }
+  // };
   const options = [
     { value: "mobiles", label: "Mobiles" },
     { value: "property", label: "Property" },
     { value: "electronics", label: "Electronics" },
   ];
-  const handleCloseAlert = () => {};
 
-  const loading = productLoading;
+  // const loading = productLoading;
   return (
     <Box>
       {/* {loading && <p>Loading...</p>} */}
-      {showError && (
+      {/* {showError && (
         <Alert
           severity="error"
           action={<Button onClick={handleCloseAlert}>OK</Button>}
@@ -74,7 +92,7 @@ const ProductForm = () => {
       )}
       {showSuccess && (
         <Alert severity="success">Congrats you are successfully signedIn</Alert>
-      )}
+      )} */}
       <Box display={"flex"} alignItems={"center"} justifyContent={"center"}>
         <Box
           className="mainPage"
@@ -108,7 +126,7 @@ const ProductForm = () => {
                 <Box mt={4} width={"300px"} textAlign={"left"}>
                   <Header tag={"Product Name"} />
                   <InputField
-                    value={productData.name}
+                    value={productData?.name}
                     onChange={(e) =>
                       addProductData({
                         name: e.target.value,
@@ -117,7 +135,7 @@ const ProductForm = () => {
                   />
                   <Header tag="Price" />
                   <InputField
-                    value={productData.price}
+                    value={productData?.price}
                     onChange={(e) =>
                       addProductData({
                         price: parseInt(e.target.value, 10),
@@ -132,7 +150,7 @@ const ProductForm = () => {
                     className="react-select"
                     options={options}
                     value={options.find(
-                      (option) => option.label === productData.country
+                      (option) => option.label === productData?.category
                     )}
                     onChange={(value) =>
                       addProductData({
@@ -143,7 +161,7 @@ const ProductForm = () => {
                   />
                   <Header tag={"Product Description"} />
                   <InputField
-                    value={productData.description}
+                    value={productData?.description}
                     onChange={(e) =>
                       addProductData({
                         description: e.target.value,
@@ -153,7 +171,7 @@ const ProductForm = () => {
                   />
                   <Header tag="Brand Name" />
                   <InputField
-                    value={productData.brand}
+                    value={productData?.brand}
                     onChange={(e) =>
                       addProductData({
                         brand: e.target.value,
@@ -164,7 +182,7 @@ const ProductForm = () => {
                 </Box>
                 <Header tag={"Company Name"} />
                 <InputField
-                  value={productData.company}
+                  value={productData?.company}
                   onChange={(e) =>
                     addProductData({
                       company: e.target.value,
@@ -174,7 +192,7 @@ const ProductForm = () => {
                 />
                 <Header tag="Available Stock" />
                 <InputField
-                  value={productData.stock}
+                  value={productData?.stock}
                   onChange={(e) =>
                     addProductData({
                       stock: parseInt(e.target.value, 10),
@@ -187,12 +205,12 @@ const ProductForm = () => {
               <Box mt={4} display={"flex"} justifyContent={"space-between"}>
                 <Button
                   variant="contained"
-                  onClick={handleCreateProduct}
+                  onClick={id ? handleUpdateProduct : handleCreateProduct}
                   sx={{
                     width: "200px",
                   }}
                 >
-                  create Product
+                  {id ? "Update Product" : "Create Product"}
                 </Button>
               </Box>
             </Box>
@@ -212,16 +230,17 @@ const ProductForm = () => {
                   fontSize={22}
                   tag={"Add Picture"}
                 />
+                <Avatar src={productData?.imageUrl} />
                 <Dropzone onDrop={handleImageDrop} accept="image/*">
                   {({ getRootProps, getInputProps }) => (
                     <div {...getRootProps()}>
                       <input {...getInputProps()} />
                       {uploadedImage ? (
                         <AvatarEditor
-                          ref={(editor) => setEditor(editor)}
+                          ref={(editor) => handleSetEditor(editor)}
                           image={uploadedImage}
-                          width={200}
-                          height={200}
+                          width={400}
+                          height={400}
                           border={10}
                           scale={1.2}
                         />

@@ -66,7 +66,11 @@ const SearchBar = () => {
     <Box>
       <Box className="navbar_searchcontainer">
         <Box>
-          <select className="navbar_dropdown" onChange={handleCategoryChange}>
+          <select
+            className="navbar_dropdown"
+            value={selectedCategory}
+            onChange={handleCategoryChange}
+          >
             <option value="">All</option>
             {uniqueCategories.map((product, index) => {
               return (
@@ -105,7 +109,7 @@ const SearchBar = () => {
             </Box>
           )}
         </Box>
-        <Box className="search_icon_container">
+        <Box className="search_icon_container" onClick={handleSearch}>
           <button className="navbar_searchicon" onClick={handleSearch}></button>
         </Box>
       </Box>

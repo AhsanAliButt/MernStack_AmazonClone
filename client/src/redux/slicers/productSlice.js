@@ -5,6 +5,8 @@ import {
   getSearchedProducts,
   getBrandSearchedProducts,
   addProduct,
+  getCategorisedProducts,
+  getProductsOfUser,
 } from "../../components/constant/productApiCalls";
 
 const fetchProducts = createAsyncThunk("product/fetchProducts", async () => {
@@ -20,10 +22,10 @@ const fetchProducts = createAsyncThunk("product/fetchProducts", async () => {
 
 const fetchProductBySearch = createAsyncThunk(
   "product/fetchProductBySearch",
-  async (searchQuery) => {
-    console.log("searchQuery", searchQuery);
+  async (data) => {
+    console.log("search Query In Product Slice", data);
     try {
-      const products = await getSearchedProducts(searchQuery);
+      const products = await getSearchedProducts(data);
       return products;
     } catch (error) {}
   }
@@ -40,15 +42,72 @@ const fetchProductByBrand = createAsyncThunk(
   }
 );
 const fetchNewProduct = createAsyncThunk(
-  "product/createProduct",
-  async (data) => {
-    console.log("ProductSliceBrand", data);
+  "product/fetchNewProduct",
+  async (data, thunkApi) => {
+    console.log("Product Slice New Product", data);
     try {
-      const product = await addProduct(data);
-      console.log("RESULTBrands", product);
-      return product;
+      const newProduct = await addProduct(data);
+      console.log("UserAUTH", newProduct);
+      if (newProduct.status === 200) {
+        return thunkApi.fulfillWithValue();
+      } else if (newProduct.status === 400) {
+        console.log("Authentication failed:", newProduct.message);
+        return thunkApi.rejectWithValue(newProduct.message);
+      } else {
+        // Handle other status codes as needed
+        console.error("Unexpected status code:", newProduct.status);
+        return thunkApi.rejectWithValue("Unexpected status code");
+      }
+      // localStorage.setItem("usersdatatoken", user.token);
     } catch (error) {
-      console.log("ERROR", error);
+      console.error("Error", error);
+    }
+  }
+);
+
+const fetchProductsByCategory = createAsyncThunk(
+  "product/fetchProductsByCategory",
+  async (category, thunkApi) => {
+    console.log("Product Slice New Product", category);
+    try {
+      const products = await getCategorisedProducts(category);
+      console.log("UserAUTH", products);
+      if (products.status === 200) {
+        return thunkApi.fulfillWithValue();
+      } else if (products.status === 400) {
+        console.log("Authentication failed:", products.message);
+        return thunkApi.rejectWithValue(products.message);
+      } else {
+        // Handle other status codes as needed
+        console.error("Unexpected status code:", products.status);
+        return thunkApi.rejectWithValue("Unexpected status code");
+      }
+      // localStorage.setItem("usersdatatoken", user.token);
+    } catch (error) {
+      console.error("Error", error);
+    }
+  }
+);
+
+const fetchProductsByUserId = createAsyncThunk(
+  "product/fetchProductsByUserId",
+  async (data, thunkApi) => {
+    try {
+      const products = await getProductsOfUser(data);
+      console.log("My All Products", products);
+      if (products.status === 200) {
+        return thunkApi.fulfillWithValue(products.product);
+      } else if (products.status === 400) {
+        console.log("Authentication failed:", products.message);
+        return thunkApi.rejectWithValue(products.message);
+      } else {
+        // Handle other status codes as needed
+        console.error("Unexpected status code:", products.status);
+        return thunkApi.rejectWithValue("Unexpected status code");
+      }
+      // localStorage.setItem("usersdatatoken", user.token);
+    } catch (error) {
+      console.error("Error", error);
     }
   }
 );
@@ -82,8 +141,10 @@ const fetchNewProduct = createAsyncThunk(
 const initialState = {
   products: [],
   filteredProducts: [],
+  userProducts: [],
   loading: false,
   error: null,
+  newProductAdded: false,
 };
 
 const productSlice = createSlice({
@@ -99,7 +160,8 @@ const productSlice = createSlice({
     },
     [fetchNewProduct.fulfilled]: (state, action) => {
       state.loading = false;
-      state.products = action.payload;
+      state.newProductAdded = true; // Set this flag to true
+      // state.products.push(action.payload);
     },
     [fetchNewProduct.rejected]: (state, action) => {
       state.loading = false;
@@ -135,6 +197,29 @@ const productSlice = createSlice({
       state.filteredProducts = action.payload;
     },
     [fetchProductByBrand.rejected]: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    },
+    [fetchProductsByCategory.pending]: (state, action) => {
+      state.loading = true;
+    },
+    [fetchProductsByCategory.fulfilled]: (state, action) => {
+      state.loading = false;
+      state.filteredProducts = action.payload;
+    },
+    [fetchProductsByCategory.rejected]: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    },
+    [fetchProductsByUserId.pending]: (state, action) => {
+      state.loading = true;
+    },
+    [fetchProductsByUserId.fulfilled]: (state, action) => {
+      console.log("Fetched User Products Action Payload", action.payload);
+      state.loading = false;
+      state.userProducts = action.payload;
+    },
+    [fetchProductsByUserId.rejected]: (state, action) => {
       state.loading = false;
       state.error = action.payload;
     },
@@ -184,6 +269,8 @@ export {
   fetchProductBySearch,
   fetchProductByBrand,
   fetchNewProduct,
+  fetchProductsByCategory,
+  fetchProductsByUserId,
   // fetchProductByID,
   // fetchProductByCategory,
   // deleteProduct,
@@ -213,4 +300,8 @@ export const selectProductsError = createSelector(
 export const selectfilteredProducts = createSelector(
   selectProductState,
   (productState) => productState.filteredProducts
+);
+export const selectUserProducts = createSelector(
+  selectProductState,
+  (productState) => productState.userProducts
 );

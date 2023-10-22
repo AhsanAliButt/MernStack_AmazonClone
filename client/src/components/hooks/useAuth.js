@@ -48,7 +48,7 @@ const useAuth = () => {
     }
   };
 
-  const signOut = () => (dispatch) => {
+  const signOutUser = () => (dispatch) => {
     console.log("Signing out in UseAuth");
     // Clear the user-related data from Redux state
     dispatch(clearErrors());
@@ -83,7 +83,7 @@ const useAuth = () => {
     } catch (error) {}
   };
 
-  return { loginHandler, signUpHandler, checkUser, signOut };
+  return { loginHandler, signUpHandler, checkUser, signOutUser };
 };
 
 export default useAuth;

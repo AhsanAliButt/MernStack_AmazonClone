@@ -11,7 +11,7 @@ import {
   selectfilteredProducts,
   fetchProductBySearch,
 } from "../../../redux/slicers/productSlice";
-const Products = ({ searchQuery }) => {
+const Products = ({ searchQuery, category }) => {
   const [value, setValue] = useState(2);
   const dispatch = useDispatch();
   const allProducts = useSelector(selectProducts);
@@ -20,15 +20,17 @@ const Products = ({ searchQuery }) => {
   const products = filteredProducts || allProducts;
 
   useEffect(() => {
-    if (searchQuery) {
+    if (searchQuery || category) {
+      const data = { searchQuery: searchQuery, category: category };
       // Fetch searched products if searchQuery is available
+      console.log("DATA BEFORE SEND TO BACKEND", data);
 
-      dispatch(fetchProductBySearch(searchQuery));
+      dispatch(fetchProductBySearch(data));
     } else {
       dispatch(fetchProductBySearch(""));
       dispatch(fetchProducts());
     }
-  }, [searchQuery]);
+  }, [searchQuery, category]);
   // useEffect(() => {
   //   if (!searchQuery) {
   //     // Fetch searched products if searchQuery is available

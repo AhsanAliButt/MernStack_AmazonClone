@@ -1,4 +1,5 @@
 const ProductModel = require("../models/product");
+const mongoose = require("mongoose");
 const cloudinary = require("cloudinary").v2;
 const cloudinarySecret = process.env.CLOUDNARY_API_SECRET;
 cloudinary.config({
@@ -25,6 +26,7 @@ const ProductsController = {
     }
   },
   createProduct: async (req, res) => {
+    console.log("Received Information", req.body);
     const file = req.files?.photo;
     console.log("File Object:", file); // Log the file object to verify its contents
 
@@ -40,31 +42,40 @@ const ProductsController = {
         category,
         company,
         brand,
-        keywords,
+        userId,
       } = req.body;
 
-      if (!name || !description || !price || !category || !stock || !brand || !company) {
+      if (
+        !name ||
+        !description ||
+        !price ||
+        !category ||
+        !stock ||
+        !brand ||
+        !company ||
+        !userId
+      ) {
         return res.status(400).json({
-          status: "Status Failed",
+          status: 400,
           message: "Please fill all fields",
         });
       } else {
         const product = new ProductModel({
-          user: req.user._id,
-          name: name.charAt(0).toUpperCase() + string.slice(1),
-          description: description.charAt(0).toUpperCase() + string.slice(1),
+          user: userId,
+          name: name,
+          description: description,
           price: price,
-          category: category.charAt(0).toUpperCase() + string.slice(1),
+          category: category,
           imageUrl: result.url || "", // Use the URL from Cloudinary
           createdAt: Date.now(),
           stock: stock,
-          company: company.charAt(0).toUpperCase() + string.slice(1),
-          brand: brand.charAt(0).toUpperCase() + string.slice(1),
-          keywords: keywords,
+          company: company,
+          brand: brand,
+          keywords: [],
         });
         await product.save();
         res.status(200).json({
-          status: "Status Success",
+          status: 200,
           message: "Product created",
           product: product,
         });
@@ -72,7 +83,7 @@ const ProductsController = {
     } catch (error) {
       console.log(error.message);
       res.status(500).json({
-        status: "Status Failed",
+        status: 500,
         message: "Server error",
       });
     }
@@ -144,7 +155,11 @@ const ProductsController = {
   },
   getProductById: async (req, res) => {
     try {
-      const product = await ProductModel.findById(req.params.id);
+      // const product = await ProductModel.findById(req.params.id);
+      const product = await ProductModel.findById(
+        mongoose.Types.ObjectId(req.params.id)
+      );
+
       if (!product) {
         return res.status(400).json({
           status: "Status Failed",
@@ -184,6 +199,29 @@ const ProductsController = {
       console.log(error.message);
       res.status(500).json({
         status: "Status Failed",
+        message: "Server error",
+      });
+    }
+  },
+  getProductByUserId: async (req, res) => {
+    try {
+      const product = await ProductModel.find({ user: req.params.userId });
+      if (!product) {
+        return res.status(400).json({
+          status: 400,
+          message: "Product not found for the user",
+        });
+      } else {
+        res.status(200).json({
+          status: 200,
+          message: "Product found",
+          product: product,
+        });
+      }
+    } catch (error) {
+      console.log(error.message);
+      res.status(500).json({
+        status: 500,
         message: "Server error",
       });
     }
@@ -251,14 +289,18 @@ const ProductsController = {
 
   getProductBySearch: async (req, res) => {
     try {
-      const { search } = req.params;
+      const { search, category } = req.params;
       const product = await ProductModel.find({
         $or: [
           { name: { $regex: search, $options: "i" } },
           { description: { $regex: search, $options: "i" } },
-          { category: { $regex: search, $options: "i" } },
+          { category: { $regex: category || search, $options: "i" } },
         ],
       });
+      // if (category) {
+      //   // If category is provided, add it to the query
+      //   product.category = category;
+      // }
       if (!product) {
         return res.status(400).json({
           status: "Status Failed",

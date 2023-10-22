@@ -1,11 +1,16 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { selectToken } from "../../redux/slicers/authSlice";
-import { selectProductsLoading } from "../../redux/slicers/productSlice";
+import { selectToken, selectUser } from "../../redux/slicers/authSlice";
+import {
+  selectProductsLoading,
+  selectUserProducts,
+} from "../../redux/slicers/productSlice";
 const useStates = () => {
   const authToken = useSelector(selectToken);
   const productLoading = useSelector(selectProductsLoading);
-  return { authToken, productLoading };
+  const user = useSelector(selectUser);
+  const userProducts = useSelector(selectUserProducts);
+  return { authToken, productLoading, user, userProducts };
 };
 
 export default useStates;

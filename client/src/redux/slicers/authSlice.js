@@ -53,7 +53,7 @@ const createUser = createAsyncThunk(
 const authSlice = createSlice({
   name: "auth",
   initialState: {
-    user: null,
+    user: "",
     token: null,
     isAuthenticated: false,
 
@@ -67,7 +67,7 @@ const authSlice = createSlice({
       state.error = null;
     },
     clearUser: (state) => {
-      state.user = null;
+      state.user = "";
       state.token = null;
       state.isAuthenticated = false;
       // isLogin: AsyncStorage.getItem("isLogin").then() === "ture" ? true : false,

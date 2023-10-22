@@ -4,13 +4,11 @@ import Products from "./Product/Products";
 import "./rightContainer.css";
 import { Link } from "react-router-dom";
 
-const RighntContaier = (searchQuery) => {
-  const exactQuery = searchQuery.searchQuery;
-  console.log("RighntCont", exactQuery);
+const RighntContaier = ({ searchQuery, category }) => {
   return (
     <div className="right_container">
       {/* <Product /> */}
-      <Products searchQuery={exactQuery} />
+      <Products searchQuery={searchQuery} category={category} />
     </div>
   );
 };

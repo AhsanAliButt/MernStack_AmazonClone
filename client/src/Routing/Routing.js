@@ -10,6 +10,7 @@ import SignIn from "../pages/auth/SignIn";
 import SignUp from "../pages/auth/SignUp";
 import ForgetPassword from "../pages/auth/ForgetPassword";
 import ProductForm from "../pages/ProductForm/ProductForm";
+import MyProducts from "../pages/myProducts/MyProducts";
 
 const Routing = () => {
   return (
@@ -17,13 +18,14 @@ const Routing = () => {
       <Navbar />
       <Routes>
         <Route path="/search" element={<DisplayItemPage />} />
-
+        <Route path="/myProducts" element={<MyProducts />} />
         <Route path="/productOrderPage/:id" element={<ProductOrderPage />} />
         <Route path="/checkOutPage" element={<CheckOutPage />} />
         <Route path="/signIn" element={<SignIn />} />
         <Route path="/signUp" element={<SignUp />} />
         <Route path="/forgetPassword" element={<ForgetPassword />} />
         <Route path="/productForm" element={<ProductForm />} />
+        <Route path="/productEditForm/:id" element={<ProductForm />} />
         <Route path="/" element={<MainPage />} />
       </Routes>
     </Router>

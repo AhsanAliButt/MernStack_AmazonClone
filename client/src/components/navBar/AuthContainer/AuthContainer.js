@@ -1,46 +1,17 @@
-import React, { useState } from "react";
 import "../NavBar.css";
-import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
-import { Box, Button, Menu, MenuItem, Typography } from "@mui/material";
-import { useNavigate } from "react-router-dom";
-import { routes } from "../../constant/routes";
-import useAuth from "../../hooks/useAuth";
+import { Box, Button } from "@mui/material";
 import Avatar from "@mui/material/Avatar";
-import { selectUser } from "../../../redux/slicers/authSlice";
+import useAuthContainer from "./useAuthContainer";
 const AuthContainer = ({ isLogin, user }) => {
-  const dispatch = useDispatch();
-  const [showDropdown, setShowDropdown] = useState(false);
-  const navigate = useNavigate();
-  const handleFocus = () => {
-    alert("Focus");
-  };
-  const { signOut } = useAuth();
-  const handleMouseEnter = () => {
-    // Add a white border when hover the mouse
-    // const element = document.querySelector(".navbar_signin");
-    // element.style.border = "1px solid white";
-    setShowDropdown(true);
-  };
-
-  const handleMouseLeave = () => {
-    // Remove the white border when stop hovering
-    // const element = document.querySelector(".navbar_signin");
-    // element.style.border = "none";
-    setShowDropdown(false);
-  };
-
-  const handleSignInButton = () => {
-    navigate(routes.signIn);
-  };
-  const handleCreateProduct = () => {
-    console.log("Create Product");
-    navigate(routes.productForm);
-  };
-  const handleSignOutButton = () => {
-    console.log("SignOutTriiggered"); //
-    dispatch(signOut());
-  };
+  const {
+    handleCreateProduct,
+    handleMyProducts,
+    handleSignOutButton,
+    handleMouseEnter,
+    handleMouseLeave,
+    handleSignInButton,
+    showDropdown,
+  } = useAuthContainer();
   return (
     <>
       <Box
@@ -96,6 +67,20 @@ const AuthContainer = ({ isLogin, user }) => {
                 >
                   createProduct
                 </Button>
+                <Box>
+                  <Button
+                    sx={{
+                      minWidth: "150px",
+                      borderRadius: "5px",
+                      color: "white",
+                      backgroundColor: "black",
+                      marginTop: "10px",
+                    }}
+                    onClick={handleMyProducts}
+                  >
+                    My All Products
+                  </Button>
+                </Box>
               </>
             ) : (
               <>

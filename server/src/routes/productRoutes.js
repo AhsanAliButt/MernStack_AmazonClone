@@ -7,6 +7,7 @@ const ProductController = require("../controllers/productController");
 router.use("/addProduct", authMiddleware);
 router.use("/updateProduct", authMiddleware);
 router.use("/deleteProduct", authMiddleware);
+router.use("/getUserProduct", authMiddleware);
 //UnProtected Routes (No Auth Middleware)
 router.get("/getAllProducts", ProductController.getAllProducts); //Get all products
 router.get("/getProductById/:productId", ProductController.getProductById); //Get product by id
@@ -26,5 +27,6 @@ router.get("/getProductByName/:name", ProductController.getProductByName); //Get
 router.post("/addProduct", ProductController.createProduct); //Add product
 router.put("/updateProduct/:id", ProductController.updateProduct); //Update product
 router.delete("/deleteProduct/:id", ProductController.deleteProduct); //Delete product
+router.get("/getUserProducts/:userId", ProductController.getProductByUserId); //user's product
 
 module.exports = router;

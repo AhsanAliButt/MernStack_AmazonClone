@@ -12,7 +12,8 @@ const DisplayItemPage = () => {
   const searchTerm = searchParams.get("term");
   const category = searchParams.get("category");
 
-  console.log("DisplayItemSEARCHTERM", searchTerm);
+  // console.log("DisplayItemSEARCHTERM", searchTerm);
+  // console.log("DisplayItem Category TERM", category);
   return (
     <>
       <InfoBar />
@@ -23,7 +24,7 @@ const DisplayItemPage = () => {
           }}
         >
           <LeftContainer searchQuery={searchTerm} category={category} />
-          <RighntContaier searchQuery={searchTerm} />
+          <RighntContaier searchQuery={searchTerm} category={category} />
         </div>
       </div>
     </>
