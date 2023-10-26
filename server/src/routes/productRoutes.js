@@ -20,6 +20,7 @@ router.get(
   "/getProductsBySearch/:search",
   ProductController.getProductBySearch
 ); //Get products by search
+router.post("/createPayment", ProductController.createPayment); //Make a payment
 router.get("/getProductsByPrice/:price", ProductController.getProductByPrice); //Get products by price
 router.get("/getProductByName/:name", ProductController.getProductByName); //Get products by name
 

@@ -45,8 +45,9 @@ const useProductForm = () => {
     console.log(`Setting`, id);
     userProducts.filter((product) => {
       if (product._id === id) {
-        console.log("PRODUCT FOR EDIT", product);
-        addProductData(product);
+        const previousData = { ...product, id };
+        console.log("PRODUCT FOR EDIT", previousData);
+        addProductData(previousData);
       }
     });
   };
@@ -80,6 +81,7 @@ const useProductForm = () => {
   };
   const handleUpdateProduct = async () => {
     try {
+      console.log("Product Update Button Click");
       await updateProduct();
       // Handle success or reset the form
     } catch (error) {
@@ -87,6 +89,7 @@ const useProductForm = () => {
       // Handle the error gracefully, e.g., set an error state or show an error message
     }
   };
+
   return {
     handleCreateProduct,
     handleImageUpload,

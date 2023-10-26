@@ -7,6 +7,9 @@ cloudinary.config({
   api_key: "268511633691445",
   api_secret: cloudinarySecret,
 });
+// controllers/paymentController.js
+const stripe = require("stripe")(`${process.env.STRIPE_SECRET_KEY}`);
+const paymentModel = require("../models/payment"); // Import your Mongoose model
 
 const ProductsController = {
   getAllProducts: async (req, res) => {
@@ -89,20 +92,36 @@ const ProductsController = {
     }
   },
   updateProduct: async (req, res) => {
+    console.log("Received Information", req.body);
+    const file = req.files?.photo;
+    console.log("File Object:", file); // Log the file object to verify its contents
+
     try {
-      const { name, description, price, category, imageUrl } = req.body;
+      const result = await cloudinary.uploader.upload(file.tempFilePath, {
+        folder: "productPictures",
+      });
+      const { name, description, price, category, company, stock, brand } =
+        req.body;
       console.log("NAME", name);
       // update only provided fields
-      if (!name || !description || !price || !category || !imageUrl) {
+      if (
+        !name ||
+        !description ||
+        !price ||
+        !category ||
+        !brand ||
+        !company ||
+        !stock
+      ) {
         return res.status(400).json({
-          status: "Status Failed",
+          status: 400,
           message: "Please fill all fields",
         });
       } else {
         const product = await ProductModel.findById(req.params.id);
         if (!product) {
           return res.status(400).json({
-            status: "Status Failed",
+            status: 400,
             message: "Product not found",
           });
         } else {
@@ -110,10 +129,13 @@ const ProductsController = {
           product.description = description;
           product.price = price;
           product.category = category;
-          product.imageUrl = imageUrl;
+          product.imageUrl = result.url;
+          product.company = company;
+          product.brand = brand;
+          product.stock = stock;
           await product.save();
           res.status(200).json({
-            status: "Status Success",
+            status: 200,
             message: "Product updated",
             product: product,
           });
@@ -122,7 +144,7 @@ const ProductsController = {
     } catch (error) {
       console.log(error.message);
       res.status(500).json({
-        status: "Status Failed",
+        status: 500,
         message: "Server error",
       });
     }
@@ -132,23 +154,21 @@ const ProductsController = {
       const product = await ProductModel.findById(req.params.id);
       if (!product) {
         return res.status(400).json({
-          status: "Status Failed",
+          status: 400,
           message: "Product not found",
         });
       } else {
-        res.status(200).json({
-          deletedProduct: product,
-        });
         await product.remove();
         res.status(200).json({
-          status: "Status Success",
-          message: "Product deleted",
+          status: 200,
+          message: "Product Deleted",
+          deletedProduct: product,
         });
       }
     } catch (error) {
       console.log(error.message);
       res.status(500).json({
-        status: "Status Failed",
+        status: 500,
         message: "Server error",
       });
     }
@@ -294,7 +314,7 @@ const ProductsController = {
         $or: [
           { name: { $regex: search, $options: "i" } },
           { description: { $regex: search, $options: "i" } },
-          { category: { $regex: category || search, $options: "i" } },
+          { category: { $regex: search, $options: "i" } },
         ],
       });
       // if (category) {
@@ -344,6 +364,68 @@ const ProductsController = {
         status: "Status Failed",
         message: "Server error",
       });
+    }
+  },
+  createPayment: async (req, res) => {
+    const { products } = req.body;
+    console.log("createPaymentInController", products);
+    console.log("createPaymentInController", products.cartItems.quantity);
+    try {
+      // Perform any necessary validation or data processing here
+      // const { id, amount, currency, userId, paymentMethod, status } = req.body;
+
+      const lineItems = products.cartItems.map((product) => ({
+        price_data: {
+          currency: "pkr",
+          product_data: {
+            name: product.name,
+          },
+          unit_amount: product.price * 100,
+        },
+        quantity: product.quantity,
+      }));
+      const session = await stripe.checkout.sessions.create({
+        payment_method_types: ["card"],
+        line_items: lineItems,
+        mode: "payment",
+        shipping_address_collection: {
+          allowed_countries: ["US"],
+        },
+        custom_text: {
+          shipping_address: {
+            message:
+              "Please note that we can't guarantee 2-day delivery for PO boxes at this time.",
+          },
+          submit: {
+            message: "We'll email you instructions on how to get started.",
+          },
+        },
+        success_url: "http://localhost:3000/successPayment",
+        cancel_url: "http://localhost:3000/cancelPayment",
+      });
+
+      // Save payment data to your MongoDB using Mongoose
+      const { id, amount_total, currency, payment_status } = session;
+      const payment = new paymentModel({
+        // Map Stripe session data to your schema
+        // e.g., session_id, user_id, product details, etc.
+
+        id: id,
+        amount: amount_total,
+        currency: currency,
+        // userId, // Include the user who made the payment
+        // paymentMethod:payment_status, // Include the payment method used
+        // status, // Include the payment status
+        sessionId: session.id, // Map Stripe session ID
+        // Add other fields as needed
+      });
+      await payment.save();
+      console.log("SESSSSSSIIIIIOOOOONNNNN", JSON.stringify(session));
+
+      res.status(200).json({ status: 200, id: session.id });
+    } catch (error) {
+      console.error("Payment error:", error);
+      res.status(500).json({ status: 500, error: "Payment failed" });
     }
   },
 };

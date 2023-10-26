@@ -4,7 +4,7 @@ import storage from "redux-persist/lib/storage"; // You can choose the storage m
 import cartReducer from "../slicers/cartSlice";
 import productReducer from "../slicers/productSlice";
 import authReducer from "../slicers/authSlice";
-
+import paymentReducer from "../slicers/paymentSlice";
 // Define the persist config for each slice
 const cartPersistConfig = {
   key: "cart",
@@ -19,6 +19,10 @@ const authPersistConfig = {
   key: "auth",
   storage, // Use the same storage mechanism
 };
+const paymentPersistConfig = {
+  key: "payment",
+  storage, // Use the same storage mechanism
+};
 
 // Wrap each reducer with persistReducer
 const persistedCartReducer = persistReducer(cartPersistConfig, cartReducer);
@@ -27,12 +31,17 @@ const persistedProductReducer = persistReducer(
   productReducer
 );
 const persistedAuthReducer = persistReducer(authPersistConfig, authReducer);
+const persistedPaymentReducer = persistReducer(
+  paymentPersistConfig,
+  paymentReducer
+);
 
 export const store = configureStore({
   reducer: {
     cart: persistedCartReducer,
     product: persistedProductReducer,
     auth: persistedAuthReducer,
+    payment: persistedPaymentReducer,
   },
 });
 

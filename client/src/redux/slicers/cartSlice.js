@@ -9,26 +9,58 @@ const cartSlice = createSlice({
   },
   reducers: {
     // add your non-async reducers here
-    increment: (state) => {
-      state.count += 1;
+
+    increment: (state, action) => {
+      const productId = action.payload;
+
+      const productIndex = state.items.findIndex(
+        (item) => item._id === productId
+      );
+
+      if (productIndex >= 0) {
+        console.log("Matched");
+        state.items[productIndex].quantity += 1;
+        // Dispatch the setTotal action to recalculate the total
+        setTotal(state);
+      }
     },
-    decrement: (state) => {
-      state.count -= 1;
-    },
-    incrementByAmount: (state, action) => {
-      state.count += action.payload;
-    },
-    decrementByAmount: (state, action) => {
-      state.count -= action.payload;
+    decrement: (state, action) => {
+      const productId = action.payload;
+
+      const productIndex = state.items.findIndex(
+        (item) => item._id === productId
+      );
+
+      if (productIndex !== -1) {
+        if (state.items[productIndex].quantity > 0) {
+          state.items[productIndex].quantity -= 1;
+          setTotal(state);
+        }
+      }
     },
     addItem: (state, action) => {
-      state.items.push(action.payload);
+      const ItemIndex = state.items.findIndex(
+        (item) => item._id === action.payload._id
+      );
+
+      if (ItemIndex >= 0) {
+        state.items[ItemIndex].quantity += 1;
+        setTotal();
+      } else {
+        const temp = { ...action.payload, quantity: 1 };
+        state.items = [...state.items, temp];
+        setTotal();
+      }
+
+      const products = state.items;
+      console.log("PRODUCTS QUANTITY", products);
+      // state.items.push(productWithQuantity);
       state.count = state.items.length;
       state.total = state.items.reduce((acc, item) => {
         console.log("Item Price", acc + item.price);
         return acc + item.price;
       }, 0);
-      console.log("state", state);
+      console.log("state Items", state.items);
       localStorage.setItem(
         "cart",
         JSON.stringify({
@@ -48,26 +80,35 @@ const cartSlice = createSlice({
         state.total = state.items.reduce((acc, item) => {
           return acc + item.price;
         }, 0); // Recalculate the total
-
         localStorage.setItem(
           "cart",
           JSON.stringify({
             items: state.items,
             count: state.count,
-            total: state.total,
           })
         );
       } else {
         console.warn("Invalid index to remove item:", indexToRemove);
       }
     },
-    setTotal: (state, action) => {
-      state.total = action.payload;
+    setTotal: (state) => {
+      console.log("Setting total");
+      let totalPrice = 0;
+      let products = state.items;
+      console.log(products);
+      products.map((ele, ind) => {
+        totalPrice = ele.price * ele.quantity + totalPrice;
+      });
+      state.total = totalPrice;
     },
     saveToLocalCache: (state, action) => {
       localStorage.setItem("cart", JSON.stringify(state.items));
     },
+    clearCart: (state) => {
+      state.items = [];
+    },
   },
+
   extraReducers: {
     // add your async reducers here
   },
@@ -86,8 +127,10 @@ export const {
   addItem,
   removeItem,
   setTotal,
+  clearCart,
 } = cartSlice.actions;
 export default cartSlice.reducer;
 
 // store items in local storage
 // const cartItems = JSON.parse(localStorage.getItem("cartItems")) || [];
+// add to cart

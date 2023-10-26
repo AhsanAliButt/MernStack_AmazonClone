@@ -4,15 +4,20 @@ import {
   fetchNewProduct,
   fetchProducts,
   fetchProductsByUserId,
+  fetchUpdateProductByUser,
+  fetchDeleteProductByUser,
 } from "../../redux/slicers/productSlice";
 import useStates from "../../components/hooks/useStates";
 import { useNavigate } from "react-router-dom";
+import { fetchPayment } from "../../redux/slicers/paymentSlice";
 
 const useProducts = () => {
   const dispatch = useDispatch();
-  const { authToken, user } = useStates();
+  const { authToken, user, cartAmount, cartItems } = useStates();
   const userId = user._id;
   const navigate = useNavigate();
+
+  const cart = "";
 
   const [productData, setProductData] = useState({
     name: "",
@@ -77,14 +82,13 @@ const useProducts = () => {
       // Handle the error, e.g., show an error message to the user
     }
   };
-  const updateProduct = async (id) => {
+  const updateProduct = async () => {
     const data = {
       productData: productData,
       authToken,
-      id: id,
     };
     console.log("Use Products", data);
-    const resultAction = await dispatch(fetchNewProduct(data));
+    const resultAction = await dispatch(fetchUpdateProductByUser(data));
     if (
       // isLogin === true
       fetchNewProduct.fulfilled.match(resultAction)
@@ -92,20 +96,74 @@ const useProducts = () => {
       // This code will run if resultAction matches the fulfilled action of loginUser
       // You can safely access resultAction.payload here
       navigate("/"); // Redirect to the last route
-      console.log("Product Created successful");
+      console.log("Product Updated successful");
     } else if (fetchNewProduct.rejected.match(resultAction)) {
       // This code will run if there was an error during authentication
       const error = resultAction.error;
-      console.error("Product not Added:", error);
+      console.error("Product not Updated:", error);
       // Handle the error, e.g., show an error message to the user
     }
   };
+
+  const deleteProduct = async (id) => {
+    console.log("id In use Products", id);
+    const data = {
+      id,
+      authToken,
+    };
+    console.log("Delete Product Id", data);
+    const resultAction = await dispatch(fetchPayment(data));
+    if (
+      // isLogin === true
+      fetchDeleteProductByUser.fulfilled.match(resultAction)
+    ) {
+      // This code will run if resultAction matches the fulfilled action of loginUser
+      // You can safely access resultAction.payload here
+      // navigate("/"); // Redirect to the last route
+      console.log("User Products Fetched");
+    } else if (fetchDeleteProductByUser.rejected.match(resultAction)) {
+      // This code will run if there was an error during authentication
+      const error = resultAction.error;
+      console.error("Product not Deleted:", error);
+      // Handle the error, e.g., show an error message to the user
+    }
+  };
+  const createPayment = async (stripe) => {
+    console.log("Stripe Payments", stripe);
+    const cart = {
+      cartItems: cartItems,
+    };
+    const data = {
+      stripe: stripe,
+      cart: cart,
+    };
+
+    console.log("Payment Data in UseProducts", data);
+    const resultAction = await dispatch(fetchPayment(data));
+    if (
+      // isLogin === true
+      fetchPayment.fulfilled.match(resultAction)
+    ) {
+      // This code will run if resultAction matches the fulfilled action of loginUser
+      // You can safely access resultAction.payload here
+      // navigate("/"); // Redirect to the last route
+      console.log("User Products Fetched");
+    } else if (fetchPayment.rejected.match(resultAction)) {
+      // This code will run if there was an error during authentication
+      const error = resultAction.error;
+      console.error("Product not Deleted:", error);
+      // Handle the error, e.g., show an error message to the user
+    }
+  };
+
   return {
     createNewProduct,
     productData,
     addProductData,
     getMyAllProducts,
     updateProduct,
+    deleteProduct,
+    createPayment,
   };
 };
 

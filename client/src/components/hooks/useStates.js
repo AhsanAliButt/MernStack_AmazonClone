@@ -10,7 +10,17 @@ const useStates = () => {
   const productLoading = useSelector(selectProductsLoading);
   const user = useSelector(selectUser);
   const userProducts = useSelector(selectUserProducts);
-  return { authToken, productLoading, user, userProducts };
+  const cartAmount = useSelector((state) => state.cart.total.toFixed(2));
+  const cartItems = useSelector((state) => state.cart.items);
+
+  return {
+    authToken,
+    productLoading,
+    user,
+    userProducts,
+    cartItems,
+    cartAmount,
+  };
 };
 
 export default useStates;

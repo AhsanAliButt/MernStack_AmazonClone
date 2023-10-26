@@ -16,8 +16,8 @@ const Products = ({ searchQuery, category }) => {
   const dispatch = useDispatch();
   const allProducts = useSelector(selectProducts);
   const filteredProducts = useSelector(selectfilteredProducts);
-
-  const products = filteredProducts || allProducts;
+  const products =
+    filteredProducts.length <= 0 ? allProducts : filteredProducts;
 
   useEffect(() => {
     if (searchQuery || category) {

@@ -1,22 +1,29 @@
-import React from "react";
+import React, { useEffect } from "react";
 import CheckOutItems from "../../components/checkOutItems/CheckOutItems";
 import "./styles.css";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
-import { autocompleteClasses, Typography } from "@mui/material";
+import { Typography } from "@mui/material";
 import getSymbolFromCurrency from "currency-symbol-map";
 import ButtonWithLabel from "../../components/buttons/ButtonWithLabel";
 import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
 import { useSelector, useDispatch } from "react-redux";
 import { ArrowDropDown } from "@mui/icons-material";
-import { red } from "@mui/material/colors";
-import { useParams } from "react-router-dom";
+import { loadStripe } from "@stripe/stripe-js";
+import useProducts from "../../components/hooks/useProducts";
+import { setTotal } from "../../redux/slicers/cartSlice";
 
 const CheckOutPage = () => {
-  const dispatch = useDispatch();
-  const amount = useSelector((state) => state.cart.total);
+  const { createPayment } = useProducts();
   const items = useSelector((state) => state.cart.items);
-  const grandTotal = amount.toFixed(2);
+  const calculateTotal = (items) =>
+    items.reduce((acc, item) => acc + item.quantity * item.price, 0);
+  const handlePayments = async () => {
+    const stripe = await loadStripe(
+      "pk_test_51O4QRMIXiyixalhgAWATTpSnrqDhM6oVzTLiXdVOOUrcypbIDevbYCDPExbV0geNWjmO3yCdBYuKUCjqktB9GWZM00pQs7TKBi"
+    );
+    createPayment(stripe);
+  };
   return (
     <Box className="checkOutPage__container">
       <Grid container>
@@ -70,7 +77,7 @@ const CheckOutPage = () => {
               >
                 Subtotal
               </span>
-              : {grandTotal}
+              {/* : {grandTotal} */}:{calculateTotal(items).toFixed(2)}
             </Typography>
           </Box>
           <Box
@@ -150,6 +157,7 @@ const CheckOutPage = () => {
               style={{
                 backgroundColor: "#ffa418",
               }}
+              onClick={handlePayments}
             />
           </Box>
         </Grid>

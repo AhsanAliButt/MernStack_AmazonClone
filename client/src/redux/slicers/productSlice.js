@@ -7,6 +7,8 @@ import {
   addProduct,
   getCategorisedProducts,
   getProductsOfUser,
+  updateProduct,
+  deleteProduct,
 } from "../../components/constant/productApiCalls";
 
 const fetchProducts = createAsyncThunk("product/fetchProducts", async () => {
@@ -112,6 +114,54 @@ const fetchProductsByUserId = createAsyncThunk(
   }
 );
 
+const fetchUpdateProductByUser = createAsyncThunk(
+  "product/fetchUpdateProductByUser",
+  async (data, thunkApi) => {
+    console.log("Product Slice New Product Update User", data);
+    try {
+      const newProduct = await updateProduct(data);
+      console.log("UserAUTH", newProduct);
+      if (newProduct.status === 200) {
+        return thunkApi.fulfillWithValue();
+      } else if (newProduct.status === 400) {
+        console.log("Authentication failed:", newProduct.message);
+        return thunkApi.rejectWithValue(newProduct.message);
+      } else {
+        // Handle other status codes as needed
+        console.error("Unexpected status code:", newProduct.status);
+        return thunkApi.rejectWithValue("Unexpected status code");
+      }
+      // localStorage.setItem("usersdatatoken", user.token);
+    } catch (error) {
+      console.error("Error", error);
+    }
+  }
+);
+
+const fetchDeleteProductByUser = createAsyncThunk(
+  "product/fetchUpdateProductByUser",
+  async (data, thunkApi) => {
+    console.log("Product Slice New Product Update User", data);
+    try {
+      const deletedProduct = await deleteProduct(data);
+      console.log("Deleted Product", deletedProduct);
+      if (deletedProduct.status === 200) {
+        return thunkApi.fulfillWithValue(deletedProduct.product);
+      } else if (deletedProduct.status === 400) {
+        console.log("Authentication failed:", deletedProduct.message);
+        return thunkApi.rejectWithValue(deletedProduct.message);
+      } else {
+        // Handle other status codes as needed
+        console.error("Unexpected status code:", deletedProduct.status);
+        return thunkApi.rejectWithValue("Unexpected status code");
+      }
+      // localStorage.setItem("usersdatatoken", user.token);
+    } catch (error) {
+      console.error("Error", error);
+    }
+  }
+);
+
 // const fetchProductByID = createAsyncThunk(
 //   "product/fetchProduct",
 //   async (id) => {
@@ -142,6 +192,9 @@ const initialState = {
   products: [],
   filteredProducts: [],
   userProducts: [],
+  newProduct: [],
+  deletedProduct: [],
+  updatedProduct: [],
   loading: false,
   error: null,
   newProductAdded: false,
@@ -161,7 +214,7 @@ const productSlice = createSlice({
     [fetchNewProduct.fulfilled]: (state, action) => {
       state.loading = false;
       state.newProductAdded = true; // Set this flag to true
-      // state.products.push(action.payload);
+      state.newProduct = action.payload;
     },
     [fetchNewProduct.rejected]: (state, action) => {
       state.loading = false;
@@ -223,6 +276,31 @@ const productSlice = createSlice({
       state.loading = false;
       state.error = action.payload;
     },
+    [fetchUpdateProductByUser.pending]: (state, action) => {
+      state.loading = true;
+    },
+    [fetchUpdateProductByUser.fulfilled]: (state, action) => {
+      console.log("Fetched User Products Action Payload", action.payload);
+      state.loading = false;
+      state.updatedProduct = action.payload;
+    },
+    [fetchUpdateProductByUser.rejected]: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    },
+    [fetchDeleteProductByUser.pending]: (state, action) => {
+      state.loading = true;
+    },
+    [fetchDeleteProductByUser.fulfilled]: (state, action) => {
+      console.log("Fetched User Products Action Payload", action.payload);
+      state.loading = false;
+      // state.deletedProduct = action.payload;
+    },
+    [fetchDeleteProductByUser.rejected]: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    },
+
     // [fetchProductByID.pending]: (state, action) => {
     //   state.loading = true;
     // },
@@ -271,6 +349,8 @@ export {
   fetchNewProduct,
   fetchProductsByCategory,
   fetchProductsByUserId,
+  fetchUpdateProductByUser,
+  fetchDeleteProductByUser,
   // fetchProductByID,
   // fetchProductByCategory,
   // deleteProduct,
@@ -279,9 +359,9 @@ export {
 // export states
 export default productSlice.reducer;
 
-const selectProductState = (state) => state.product; // Define a selector function to get the product state.
+const selectProductState = (state) => state.product; // selector function to get the product state.
 
-// Create a selector that extracts the properties want to access
+// a selector that extracts the properties want to access
 export const selectProducts = createSelector(
   selectProductState,
   (productState) => productState.products

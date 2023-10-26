@@ -11,6 +11,7 @@ const Product = require("./src/models/product"); // Import your Mongoose model
 const pluralize = require("pluralize");
 const User = require("./src/models/User");
 const fileUpload = require("express-fileupload");
+const cookieParser = require("cookie-parser");
 // Import the necessary modules and your Mongoose model
 
 // async function updateBrandsForProducts() {

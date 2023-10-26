@@ -11,6 +11,8 @@ import SignUp from "../pages/auth/SignUp";
 import ForgetPassword from "../pages/auth/ForgetPassword";
 import ProductForm from "../pages/ProductForm/ProductForm";
 import MyProducts from "../pages/myProducts/MyProducts";
+import SuccessPayment from "../pages/successPayment/SuccessPayment";
+import CancelPayment from "../pages/cancelPayment/CancelPayment";
 
 const Routing = () => {
   return (
@@ -26,6 +28,8 @@ const Routing = () => {
         <Route path="/forgetPassword" element={<ForgetPassword />} />
         <Route path="/productForm" element={<ProductForm />} />
         <Route path="/productEditForm/:id" element={<ProductForm />} />
+        <Route path="/successPayment" element={<SuccessPayment />} />
+        <Route path="/cancelPayment" element={<CancelPayment />} />
         <Route path="/" element={<MainPage />} />
       </Routes>
     </Router>

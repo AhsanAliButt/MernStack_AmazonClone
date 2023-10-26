@@ -19,13 +19,13 @@ import axios from "axios";
 const ProductOrderPage = () => {
   const { data } = useProductOrder();
   const [productDetails, setProductDetails] = useState([]);
-
   const dispatch = useDispatch();
   const count = useSelector((state) => state.cart.count);
   const items = useSelector((state) => state.cart.items);
 
   let { id } = useParams();
   useEffect(() => {
+    // console.log("ITEMSSSSSSSSSSSSSSS", items);
     data.filter((product) => {
       if (product._id === id) {
         setProductDetails(product);
@@ -34,7 +34,8 @@ const ProductOrderPage = () => {
   }, [data, id]);
 
   const addToCart = () => {
-    dispatch(addItem(productDetails));
+    const productWithQuantity = { ...productDetails, quantity: 0 };
+    dispatch(addItem(productWithQuantity));
   };
 
   return (

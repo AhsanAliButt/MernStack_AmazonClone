@@ -14,3 +14,9 @@ const paymentSchema = new mongoose.Schema({
     required: true,
   },
 });
+
+// Create a model based on the schema
+const PaymentModel = mongoose.model("Payment", paymentSchema);
+
+// Export the model
+module.exports = PaymentModel;
