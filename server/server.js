@@ -7,6 +7,7 @@ const cors = require("cors");
 const connectDB = require("./src/config/connectdb");
 const userRoutes = require("./src/routes/userRoutes");
 const productRoutes = require("./src/routes/productRoutes");
+const cartRoutes = require("./src/routes/cartRoutes");
 const Product = require("./src/models/product"); // Import your Mongoose model
 const pluralize = require("pluralize");
 const User = require("./src/models/User");
@@ -122,6 +123,8 @@ const cookieParser = require("cookie-parser");
 app.use(cors());
 //JSON Parser
 app.use(express.json());
+//Cookie Parser
+app.use(cookieParser());
 app.use(
   fileUpload({
     useTempFiles: true,
@@ -134,6 +137,7 @@ connectDB();
 //Routes
 app.use("/api/user", userRoutes);
 app.use("/api/product", productRoutes);
+app.use("/api/cart", cartRoutes);
 // app.use("/api/order", orderRoutes);
 
 //RUn Server

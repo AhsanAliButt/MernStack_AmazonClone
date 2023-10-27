@@ -14,7 +14,6 @@ cloudinary.config({
 
 const UserController = {
   register: async (req, res) => {
-    
     const file = req.files?.photo;
     console.log("File Object:", file); // Log the file object to verify its contents
 
@@ -72,6 +71,11 @@ const UserController = {
             expiresIn: "1d",
           });
 
+          res.cookie("AmazonWeb", token, {
+            expires: new Date(Date.now() + 900000),
+            httpOnly: true,
+          });
+
           res.status(200).json({
             status: 200,
             message: "User registered successfully",
@@ -108,49 +112,53 @@ const UserController = {
           status: 400,
           message: "Please fill all fields",
         });
-      } else {
-        const user = await UserModel.findOne({ email: email });
-        if (!user) {
-          return res.status(400).json({
-            status: 400,
-            message: "User not found",
-          });
-        } else {
-          const isMatch = await bcrypt.compare(password, user.password);
-          if (!isMatch) {
-            return res.status(400).json({
-              status: 400,
-              message: "Invalid credentials",
-            });
-          } else {
-            const token = jwt.sign({ _id: user._id }, secret, {
-              expiresIn: "15d",
-            });
-            // Retrieve the user's cart items
-            // const cart = await CartModel.findOne({ user: user._id });
-
-            return res.status(200).json({
-              status: 200,
-              message: "Login successful",
-              token: token,
-              user: {
-                firstname: user?.firstName,
-                lastName: user?.lastName,
-                imageUrl: user?.imageUrl,
-                name: user?.name,
-                _id: user?._id,
-                email: user?.email,
-                dob: user?.dob,
-                zipcode: user?.zipCode,
-                country: user?.country,
-
-                // Include other user data as needed
-              },
-              // cart: cart, // Include cart items
-            });
-          }
-        }
       }
+
+      const user = await UserModel.findOne({ email: email });
+      if (!user) {
+        return res.status(400).json({
+          status: 400,
+          message: "User not found",
+        });
+      }
+
+      const isMatch = await bcrypt.compare(password, user.password);
+      if (!isMatch) {
+        return res.status(400).json({
+          status: 400,
+          message: "Invalid credentials",
+        });
+      }
+
+      const token = jwt.sign({ _id: user._id }, secret, {
+        expiresIn: "15d",
+      });
+
+      // Set the cookie before sending the JSON response
+      res.cookie("AmazonWeb", token, {
+        expires: new Date(Date.now() + 900000),
+        httpOnly: true,
+      });
+
+      // Now, send the JSON response
+      return res.status(200).json({
+        status: 200,
+        message: "Login successful",
+        token: token,
+        user: {
+          firstname: user?.firstName,
+          lastName: user?.lastName,
+          imageUrl: user?.imageUrl,
+          name: user?.name,
+          _id: user?._id,
+          email: user?.email,
+          dob: user?.dob,
+          zipcode: user?.zipCode,
+          country: user?.country,
+          // Include other user data as needed
+        },
+        // cart: cart, // Include cart items
+      });
     } catch (error) {
       return res.status(500).json({
         message: error.message,
