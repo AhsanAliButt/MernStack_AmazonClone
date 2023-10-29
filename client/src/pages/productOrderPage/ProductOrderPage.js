@@ -35,7 +35,7 @@ const ProductOrderPage = () => {
 
   const addToCart = () => {
     const productWithQuantity = { ...productDetails, quantity: 0 };
-    dispatch(addItem(productWithQuantity));
+    // dispatch(addItem(productWithQuantity));
   };
 
   return (

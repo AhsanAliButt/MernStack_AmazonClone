@@ -3,20 +3,20 @@ import { createSelector } from "reselect"; // its normaly use to memorize the se
 import { createPayment } from "../../components/constant/productApiCalls";
 
 const fetchPayment = createAsyncThunk(
-  "product/fetchPayment",
+  "payment/fetchPayment",
   async (data, thunkApi) => {
     console.log("Payment Slice New Payment", data);
     try {
-      const newProduct = await createPayment(data);
-      console.log("UserAUTH", newProduct);
-      if (newProduct.status === 200) {
+      const newPayment = await createPayment(data);
+      console.log("UserAUTH", newPayment);
+      if (newPayment.status === 200) {
         return thunkApi.fulfillWithValue();
-      } else if (newProduct.status === 400) {
-        console.log("Authentication failed:", newProduct.message);
-        return thunkApi.rejectWithValue(newProduct.message);
+      } else if (newPayment.status === 400) {
+        console.log("Authentication failed:", newPayment.message);
+        return thunkApi.rejectWithValue(newPayment.message);
       } else {
         // Handle other status codes as needed
-        console.error("Unexpected status code:", newProduct.status);
+        console.error("Unexpected status code:", newPayment.status);
         return thunkApi.rejectWithValue("Unexpected status code");
       }
       // localStorage.setItem("usersdatatoken", user.token);
@@ -43,8 +43,8 @@ const paymentSlice = createSlice({
     },
     [fetchPayment.fulfilled]: (state, action) => {
       state.loading = false;
-      state.newProductAdded = true; // Set this flag to true
-      state.newProduct = action.payload;
+      state.newPaymentAdded = true; // Set this flag to true
+      state.newPayment = action.payload;
     },
     [fetchPayment.rejected]: (state, action) => {
       state.loading = false;
@@ -59,16 +59,16 @@ export const {
 } = paymentSlice.actions;
 // export your async action creators here
 export {
-  //   fetchProducts,
+  //   fetchPayments,
   fetchPayment,
 };
 // export states
 export default paymentSlice.reducer;
 
-const selectPaymentState = (state) => state.payment; // selector function to get the product state.
+const selectPaymentState = (state) => state.payment; // selector function to get the Payment state.
 
 // a selector that extracts the properties want to access
-export const selectProducts = createSelector(
+export const selectPayments = createSelector(
   selectPaymentState,
   (paymentState) => paymentState.sessionId
 );
