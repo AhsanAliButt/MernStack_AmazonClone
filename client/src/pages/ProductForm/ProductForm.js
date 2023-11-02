@@ -29,49 +29,6 @@ const ProductForm = () => {
       setPreviousUserData(id);
     }
   }, [id]);
-  // const {
-  //   createNewProduct,
-  //   productData,
-  //   addProductData,
-  //   showError,
-  //   showSuccess,
-  //   setShowError,
-  //   setShowSuccess,
-  // } = useProducts();
-  // const { authToken, productLoading } = useStates();
-  // const [uploadedImage, setUploadedImage] = useState(null);
-  // const [editor, setEditor] = useState(null);
-  // const handleImageDrop = (acceptedFiles) => {
-  //   if (acceptedFiles && acceptedFiles.length > 0) {
-  //     setUploadedImage(acceptedFiles[0]);
-  //   }
-  // };
-
-  // const handleImageUpload = () => {
-  //   if (editor) {
-  //     const canvas = editor.getImageScaledToCanvas();
-  //     //Export as Blob
-  //     canvas.toBlob((blob) => {
-  //       addProductData({ ...productData, picture: blob });
-  //     }, "image/jpeg");
-  //     console.log("Canvas", canvas);
-  //     // const dataURL = canvas.toDataURL("image/jpeg");
-  //     // // You can send the dataURL to your server or do further processing here.
-  //     // setCredentials({ ...credentials, photo: dataURL });
-  //     // console.log(dataURL);
-  //   } else {
-  //     console.log("Avatar editor not ready.");
-  //   }
-  // };
-  // const handleCreateProduct = async () => {
-  //   try {
-  //     await createNewProduct();
-  //     // Handle success or reset the form
-  //   } catch (error) {
-  //     console.error("An error occurred:", error);
-  //     // Handle the error gracefully, e.g., set an error state or show an error message
-  //   }
-  // };
   const options = [
     { value: "mobiles", label: "Mobiles" },
     { value: "property", label: "Property" },

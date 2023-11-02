@@ -3,10 +3,12 @@ import { useNavigate } from "react-router-dom";
 import { routes } from "../../constant/routes";
 import useAuth from "../../hooks/useAuth";
 import { useDispatch } from "react-redux";
+import useStates from "../../hooks/useStates";
 const useAuthContainer = () => {
   const dispatch = useDispatch();
   const [showDropdown, setShowDropdown] = useState(false);
   const navigate = useNavigate();
+  const { authToken } = useStates();
   const handleFocus = () => {
     alert("Focus");
   };
@@ -34,6 +36,12 @@ const useAuthContainer = () => {
     console.log("SignOutTriiggered"); //
     dispatch(signOutUser());
   };
+  const handleEditProfile = (user) => {
+    const userId = user._id;
+    const token = authToken;
+    console.log("editProfileTriiggered", userId, authToken); //
+    navigate(`/editProfile/${userId}/${token}`);
+  };
   return {
     handleMouseEnter,
     handleMouseLeave,
@@ -42,6 +50,7 @@ const useAuthContainer = () => {
     handleMyProducts,
     handleSignOutButton,
     showDropdown,
+    handleEditProfile,
   };
 };
 export default useAuthContainer;

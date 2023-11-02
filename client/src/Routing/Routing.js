@@ -39,6 +39,7 @@ const Routing = () => {
           path="/sendRecoveryEmail"
           element={<SendPasswordRecoveryEmail />}
         />
+        <Route path="/editProfile/:userId/:token" element={<SignUp />} />
         <Route path="/" element={<MainPage />} />
       </Routes>
     </Router>

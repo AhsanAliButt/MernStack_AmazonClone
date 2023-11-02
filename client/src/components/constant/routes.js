@@ -7,5 +7,6 @@ export const routes = {
   productEditForm: `/productEditForm`,
   resetPassword: `/reset-password/:userId/:token`,
   sendRecoveryEmail: `/sendRecoveryEmail`,
+  editProfile: "/editProfile/:userId/:token",
   // Add other route definitions here
 };

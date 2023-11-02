@@ -1,13 +1,16 @@
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 // import { useTheme } from "@mui/material/styles";
 import InputBase from "@mui/material/InputBase";
 import Alert from "@mui/material/Alert";
 import { Link } from "react-router-dom";
 import useAuth from "../../../components/hooks/useAuth";
-import { selectLoading, setPreviousRoute } from "../../../redux/slicers/authSlice";
+import {
+  selectLoading,
+  setPreviousRoute,
+} from "../../../redux/slicers/authSlice";
 import InputField from "../../../components/reuseableComponents/InputField";
 import Header from "../../../components/reuseableComponents/Header";
 import { signUpPageData } from "../../../components/constant/data/signUpPageData";
@@ -21,6 +24,9 @@ import Checkbox from "@mui/material/Checkbox";
 import Select from "react-select";
 import countryList from "react-select-country-list";
 import { useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
+import useSignUp from "./useSignUp";
+import useStates from "../../../components/hooks/useStates";
 
 const initialState = {
   firstName: "",
@@ -46,8 +52,26 @@ const SignUp = () => {
   const [editor, setEditor] = useState(null);
   const [checked, setChecked] = useState(true);
   const loading = useSelector(selectLoading);
+  let { userId, token } = useParams();
+  const { setVal } = useSignUp();
+  const { user } = useStates();
   // ...
 
+  console.log("User: IN SIGNUP PAGE " + userId, token);
+  // const data = {
+  //   userId: userId,
+  //   token: token,
+  // };
+  useEffect(() => {
+    console.log("Product ID by ", userId);
+    if (userId) {
+      // Get user data stored in redux state and store it in initial state
+      setCredentials({
+        ...credentials,
+        ...user,
+      });
+    }
+  }, [userId]);
   const options = useMemo(() => countryList().getData(), []);
 
   const handleImageDrop = (acceptedFiles) => {
