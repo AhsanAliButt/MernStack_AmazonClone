@@ -4,11 +4,13 @@ import AdvertiseOne from "../advertiseOne/AdvertiseOne";
 import TopCarasol from "../topCarasol/TopCarasol";
 import useMainContent from "./useMainContent";
 import { useSelector } from "react-redux";
-import { selectUser } from "../../redux/slicers/authSlice";
+import { selectUser, selectUserId } from "../../redux/slicers/authSlice";
 
 const MainContent = () => {
   const user = useSelector(selectUser);
+  const userId = useSelector(selectUserId);
   console.log("USER DATA", user);
+  console.log("USER ID", userId);
   const { data } = useMainContent();
   return (
     <div

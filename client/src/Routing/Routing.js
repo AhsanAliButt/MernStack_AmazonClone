@@ -6,13 +6,14 @@ import CheckOutPage from "../pages/checkOutPage/CheckOutPage";
 import DisplayItemPage from "../pages/displayItemPage/DisplayItemPage";
 import MainPage from "../pages/homePage/MainPage";
 import ProductOrderPage from "../pages/productOrderPage/ProductOrderPage";
-import SignIn from "../pages/auth/SignIn";
-import SignUp from "../pages/auth/SignUp";
-import ForgetPassword from "../pages/auth/ForgetPassword";
+import SignIn from "../pages/auth/signIn/SignIn";
+import SignUp from "../pages/auth/signUp/SignUp";
+import ForgetPassword from "../pages/auth/forgetPassword/ForgetPassword";
 import ProductForm from "../pages/ProductForm/ProductForm";
 import MyProducts from "../pages/myProducts/MyProducts";
 import SuccessPayment from "../pages/successPayment/SuccessPayment";
 import CancelPayment from "../pages/cancelPayment/CancelPayment";
+import SendPasswordRecoveryEmail from "../pages/auth/sendPasswordRecoveryEmail/sendPasswordRecoveryEmail";
 
 const Routing = () => {
   return (
@@ -30,6 +31,14 @@ const Routing = () => {
         <Route path="/productEditForm/:id" element={<ProductForm />} />
         <Route path="/successPayment" element={<SuccessPayment />} />
         <Route path="/cancelPayment" element={<CancelPayment />} />
+        <Route
+          path="/reset-password/:userId/:token"
+          element={<ForgetPassword />}
+        />
+        <Route
+          path="/sendRecoveryEmail"
+          element={<SendPasswordRecoveryEmail />}
+        />
         <Route path="/" element={<MainPage />} />
       </Routes>
     </Router>

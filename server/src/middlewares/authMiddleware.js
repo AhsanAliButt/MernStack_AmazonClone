@@ -16,7 +16,7 @@ const authMiddleware = async (req, res, next) => {
       console.log("USER", user);
       if (!user) {
         return res.status(404).json({
-          status: "Status Failed",
+          status: 404,
           message: "User not found",
         });
       }
@@ -24,16 +24,24 @@ const authMiddleware = async (req, res, next) => {
       next();
     } catch (error) {
       return res.status(500).json({
-        status: "Status Failed",
+        status: 500,
         message: "Unable to authenticate user",
       });
     }
   }
   if (!authorization) {
     return res.status(401).json({
-      status: "Status Failed",
+      status: 401,
       message: "No token, authorization denied",
     });
   }
+};
+
+const localVariables = (req, res, next) => {
+  req.app.locals = {
+    OTP: null,
+    resetSession: false,
+  };
+  next();
 };
 module.exports = authMiddleware;

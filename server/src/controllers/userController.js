@@ -4,6 +4,7 @@ const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
 const secret = process.env.JWT_SECRET;
 const transporter = require("../config/nodeMailer");
+const otpGenerator = require("otp-generator");
 const cloudinary = require("cloudinary").v2;
 const cloudinarySecret = process.env.CLOUDNARY_API_SECRET;
 cloudinary.config({
@@ -258,6 +259,7 @@ const UserController = {
   sendEmailPasswordReset: async (req, res) => {
     try {
       const { email } = req.body;
+      console.log("EMAILLLLLL", email);
       if (!email) {
         return res.status(400).json({
           status: 400,
@@ -275,11 +277,11 @@ const UserController = {
           const token = jwt.sign({ _id: user._id }, topSecret, {
             expiresIn: "1h",
           });
-          const link = `http:///127.0.0.1:3000/api/user/reset-password/${user._id}/${token}`;
-          console.log(link);
+          const link = `http://localhost:3000/reset-password/${user._id}/${token}`;
+          console.log("Link", link);
           const mailOptions = {
-            from: process.env.EMAIL_FROM,
-            to: user.email,
+            from: '"Fred Foo 👻" <ahsanbutt515@gmail.com>',
+            to: "ahsanbutt515@gmail.com",
             subject: "Password Reset",
             html: `<h1>Password Reset</h1>
             <p>Click this link to reset your password</p>
@@ -308,15 +310,16 @@ const UserController = {
   },
   userPasswordReset: async (req, res) => {
     try {
-      const { newPassword, newPassword_confirm } = req.body;
+      const { newPassword, confirmNewPassword } = req.body;
+      console.log(`User password reset`, newPassword, confirmNewPassword);
       const { token } = req.params;
-      if (!newPassword_confirm || !newPassword) {
+      if (!confirmNewPassword || !newPassword) {
         return res.status(400).json({
           status: 400,
           message: "Please fill all fields",
         });
       } else {
-        if (newPassword !== newPassword_confirm) {
+        if (newPassword !== confirmNewPassword) {
           return res.status(400).json({
             status: 400,
             message: "New Passwords do not match",
@@ -348,6 +351,72 @@ const UserController = {
       });
     }
   },
-};
 
+  OtpGenerator: async (req, res) => {
+    try {
+      let otp = await otpGenerator.generate(6, {
+        upperCaseAlphabets: false,
+        specialChars: false,
+      });
+
+      const { email, password } = req.body;
+      if (!email || !password) {
+        return res.status(400).json({
+          status: 400,
+          message: "Please fill all fields",
+        });
+      }
+
+      const user = await UserModel.findOne({ email: email });
+      if (!user) {
+        return res.status(400).json({
+          status: 400,
+          message: "User not found",
+        });
+      }
+
+      const isMatch = await bcrypt.compare(password, user.password);
+      if (!isMatch) {
+        return res.status(400).json({
+          status: 400,
+          message: "Invalid credentials",
+        });
+      }
+
+      const token = jwt.sign({ _id: user._id }, secret, {
+        expiresIn: "15d",
+      });
+
+      // Set the cookie before sending the JSON response
+      res.cookie("AmazonWeb", token, {
+        expires: new Date(Date.now() + 900000),
+        httpOnly: true,
+      });
+
+      // Now, send the JSON response
+      return res.status(200).json({
+        status: 200,
+        message: "Login successful",
+        token: token,
+        user: {
+          firstname: user?.firstName,
+          lastName: user?.lastName,
+          imageUrl: user?.imageUrl,
+          name: user?.name,
+          _id: user?._id,
+          email: user?.email,
+          dob: user?.dob,
+          zipcode: user?.zipCode,
+          country: user?.country,
+          // Include other user data as needed
+        },
+        // cart: cart, // Include cart items
+      });
+    } catch (error) {
+      return res.status(500).json({
+        message: error.message,
+      });
+    }
+  },
+};
 module.exports = UserController;

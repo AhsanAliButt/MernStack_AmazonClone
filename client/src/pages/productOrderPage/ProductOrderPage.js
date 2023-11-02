@@ -12,7 +12,7 @@ import { ArrowDropDown } from "@mui/icons-material";
 import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
 import { Link, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { addItem } from "../../redux/slicers/cartSlice";
+import { addItem, fetchAddItemToCart } from "../../redux/slicers/cartSlice";
 import useProductOrder from "./useProductOrder";
 import axios from "axios";
 
@@ -34,8 +34,10 @@ const ProductOrderPage = () => {
   }, [data, id]);
 
   const addToCart = () => {
-    const productWithQuantity = { ...productDetails, quantity: 0 };
+    // const productWithQuantity = { ...productDetails, quantity: 0 };
     // dispatch(addItem(productWithQuantity));
+    const item = { ...productDetails, quantity: 0 };
+    dispatch(fetchAddItemToCart(item));
   };
 
   return (

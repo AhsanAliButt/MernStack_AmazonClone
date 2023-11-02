@@ -85,3 +85,63 @@ export const signUpUser = async (credentials) => {
     throw error;
   }
 };
+
+export const resetPassword = async (data) => {
+  const requestOptions = {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
+    },
+  };
+  const { userId, newPassword, confirmNewPassword, token } = data;
+  requestOptions.body = JSON.stringify({
+    newPassword,
+    confirmNewPassword,
+  });
+  try {
+    console.log("Request Options:", requestOptions);
+
+    const response = await fetch(
+      `${authApi}/resetPassword/${userId}/${token}`,
+      requestOptions
+    );
+
+    const result = await response.json();
+
+    return result; // API response contains a "userDetails" array
+  } catch (error) {
+    console.log("Error:", error);
+    throw error;
+  }
+};
+
+export const resetPasswordEmail = async (email) => {
+  const requestOptions = {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
+    },
+  };
+  requestOptions.body = JSON.stringify({
+    email,
+  });
+  try {
+    console.log("Request Options:", requestOptions);
+
+    const response = await fetch(
+      `${authApi}/sendEmailPasswordReset`,
+      requestOptions
+    );
+
+    const result = await response.json();
+
+    return result; // API response contains a "userDetails" array
+  } catch (error) {
+    console.log("Error:", error);
+    throw error;
+  }
+};

@@ -4,12 +4,14 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { createSelector } from "reselect";
 import { selectUser } from "./authSlice";
 import { addItemToCart } from "../../components/constant/cartApiCalls";
-export const fetchAddItemToCart = createAsyncThunk(
-  "cart/addItemToCart",
+const fetchAddItemToCart = createAsyncThunk(
+  "cart/fetchAddItemToCart",
   async (item, thunkAPI) => {
     // Always add the item to local storage
     const state = thunkAPI.getState();
     const localCart = state.cart;
+    const userId = state.auth.userId;
+    const userToken = state.auth.token;
 
     // Add the item to local storage
     const localItemIndex = localCart.items.findIndex(
@@ -38,11 +40,13 @@ export const fetchAddItemToCart = createAsyncThunk(
     );
 
     // If there's a user, send the API request and update the state
-    const user = selectUser(state);
+    // const user = selectUser(state);
 
-    if (user) {
+    if (userId) {
+      const item = localCart.items;
       try {
-        const response = await addItemToCart(item, user);
+        const response = await addItemToCart(item, userId, userToken);
+        console.log("RESPONSE FOR CART API", response);
         if (response.status === 200) {
           // Scenario 1: If the status is 200, it's a successful response
           // You can handle it here and potentially return some data if needed
@@ -103,40 +107,40 @@ const cartSlice = createSlice({
         }
       }
     },
-    // addItem: (state, action) => {
-    //   // const reduxStore = store.getState();
-    //   // console.log("GET STATE", reduxStore);
-    //   const ItemIndex = state.items.findIndex(
-    //     (item) => item._id === action.payload._id
-    //   );
+    addItem: (state, action) => {
+      // const reduxStore = store.getState();
+      // console.log("GET STATE", reduxStore);
+      const ItemIndex = state.items.findIndex(
+        (item) => item._id === action.payload._id
+      );
 
-    //   if (ItemIndex >= 0) {
-    //     state.items[ItemIndex].quantity += 1;
-    //     setTotal();
-    //   } else {
-    //     const temp = { ...action.payload, quantity: 1 };
-    //     state.items = [...state.items, temp];
-    //     setTotal();
-    //   }
+      if (ItemIndex >= 0) {
+        state.items[ItemIndex].quantity += 1;
+        setTotal();
+      } else {
+        const temp = { ...action.payload, quantity: 1 };
+        state.items = [...state.items, temp];
+        setTotal();
+      }
 
-    //   const products = state.items;
-    //   console.log("PRODUCTS QUANTITY", products);
-    //   // state.items.push(productWithQuantity);
-    //   state.count = state.items.length;
-    //   state.total = state.items.reduce((acc, item) => {
-    //     console.log("Item Price", acc + item.price);
-    //     return acc + item.price;
-    //   }, 0);
-    //   console.log("state Items", state.items);
-    //   localStorage.setItem(
-    //     "cart",
-    //     JSON.stringify({
-    //       items: state.items,
-    //       count: state.count,
-    //       total: state.total,
-    //     })
-    //   );
-    // },
+      const products = state.items;
+      console.log("PRODUCTS QUANTITY", products);
+      // state.items.push(productWithQuantity);
+      state.count = state.items.length;
+      state.total = state.items.reduce((acc, item) => {
+        console.log("Item Price", acc + item.price);
+        return acc + item.price;
+      }, 0);
+      console.log("state Items", state.items);
+      localStorage.setItem(
+        "cart",
+        JSON.stringify({
+          items: state.items,
+          count: state.count,
+          total: state.total,
+        })
+      );
+    },
     removeItem: (state, action) => {
       const indexToRemove = action.payload; // Assuming action.payload contains the index of the item to remove
 
@@ -196,6 +200,8 @@ export const {
   setTotal,
   clearCart,
 } = cartSlice.actions;
+
+export { fetchAddItemToCart };
 
 export default cartSlice.reducer;
 

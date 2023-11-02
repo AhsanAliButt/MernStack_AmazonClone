@@ -1,6 +1,11 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 // import { isRejectedWithValue, rejectWithValue } from "@reduxjs/toolkit";
-import { signInUser, signUpUser } from "../../components/constant/authApiCalls";
+import {
+  resetPassword,
+  resetPasswordEmail,
+  signInUser,
+  signUpUser,
+} from "../../components/constant/authApiCalls";
 import { createSelector } from "reselect"; // its normaly use to memorize the selectors used in the component
 import { useNavigate } from "react-router-dom";
 const loginUser = createAsyncThunk(
@@ -50,11 +55,61 @@ const createUser = createAsyncThunk(
   }
 );
 
+const resetPasssword = createAsyncThunk(
+  "auth/resetPassword",
+  async (data, thunkApi) => {
+    try {
+      const response = await resetPassword(data);
+      // localStorage.setItem("usersdatatoken", user.token);
+      console.log("From Api", response);
+      if (response.status === 200) {
+        return thunkApi.fulfillWithValue(response);
+      } else if (response.status === 400) {
+        console.log("Authentication failed:", response.message);
+        return thunkApi.rejectWithValue(response.message);
+      } else {
+        // Handle other status codes as needed
+        console.error("Unexpected status code:", response.status);
+        return thunkApi.rejectWithValue("Unexpected status code");
+      }
+    } catch (error) {
+      console.error("Error", error);
+
+      return thunkApi.rejectWithValue(error); // Use rejectWithValue to handle rejections
+    }
+  }
+);
+const sendResetPassswordEmail = createAsyncThunk(
+  "auth/resetPassword",
+  async (email, thunkApi) => {
+    try {
+      const response = await resetPasswordEmail(email);
+      // localStorage.setItem("usersdatatoken", user.token);
+      console.log("From Api", response);
+      if (response.status === 200) {
+        return thunkApi.fulfillWithValue(response);
+      } else if (response.status === 400) {
+        console.log("Authentication failed:", response.message);
+        return thunkApi.rejectWithValue(response.message);
+      } else {
+        // Handle other status codes as needed
+        console.error("Unexpected status code:", response.status);
+        return thunkApi.rejectWithValue("Unexpected status code");
+      }
+    } catch (error) {
+      console.error("Error", error);
+
+      return thunkApi.rejectWithValue(error); // Use rejectWithValue to handle rejections
+    }
+  }
+);
+
 const authSlice = createSlice({
   name: "auth",
   initialState: {
     user: "",
     token: null,
+    userId: null,
     isAuthenticated: false,
 
     lastRoute: null, // Initialize lastRoute as null
@@ -73,6 +128,7 @@ const authSlice = createSlice({
       // isLogin: AsyncStorage.getItem("isLogin").then() === "ture" ? true : false,
       state.loading = false;
       state.error = null;
+      state.userId = null;
     },
     setPreviousRoute: (state, action) => {
       state.lastRoute = action.payload;
@@ -89,6 +145,7 @@ const authSlice = createSlice({
       state.isAuthenticated = true;
       state.loading = false;
       state.error = null;
+      state.userId = action.payload.user._id;
       // Store the last route
     },
     [loginUser.rejected]: (state, action) => {
@@ -110,12 +167,44 @@ const authSlice = createSlice({
       state.loading = false;
       state.error = action.payload;
     },
+    [resetPasssword.pending]: (state, action) => {
+      state.loading = true;
+    },
+    [resetPasssword.fulfilled]: (state, action) => {
+      // state.user = action.payload.user;
+      // state.token = action.payload.token;
+      // state.isAuthenticated = true;
+      state.loading = false;
+      // state.error = null;
+      // state.userId = action.payload.user._id;
+      // Store the last route
+    },
+    [resetPasssword.rejected]: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    },
+    [sendResetPassswordEmail.pending]: (state, action) => {
+      state.loading = true;
+    },
+    [sendResetPassswordEmail.fulfilled]: (state, action) => {
+      // state.user = action.payload.user;
+      // state.token = action.payload.token;
+      // state.isAuthenticated = true;
+      state.loading = false;
+      // state.error = null;
+      // state.userId = action.payload.user._id;
+      // Store the last route
+    },
+    [sendResetPassswordEmail.rejected]: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    },
   },
 });
 
 // Action creators
 export const { clearErrors, clearUser, setPreviousRoute } = authSlice.actions;
-export { loginUser, createUser };
+export { loginUser, createUser, resetPasssword, sendResetPassswordEmail };
 // export states
 export default authSlice.reducer;
 
@@ -147,4 +236,8 @@ export const selectError = createSelector(
 export const selectlastRoute = createSelector(
   [selectAuthState],
   (auth) => auth.lastRoute
+);
+export const selectUserId = createSelector(
+  [selectAuthState],
+  (auth) => auth.userId
 );
