@@ -4,6 +4,7 @@ import {
   clearErrors,
   clearUser,
   createUser,
+  fetchUpdateUserDetails,
   loginUser,
   resetPasssword,
   selectIsAuthenticated,
@@ -126,6 +127,28 @@ const useAuth = () => {
     }
   };
 
+  const updateUserHandler = async (credentials, locationPath) => {
+    try {
+      console.log("Credentials is UseAuth", credentials);
+      // Perform authentication logic, e.g., make an API request to verify credentials
+      // If authentication is successful, dispatch the loginUser action
+      dispatch(setPreviousRoute(locationPath));
+      const resultAction = await dispatch(fetchUpdateUserDetails(credentials));
+      if (fetchUpdateUserDetails.fulfilled.match(resultAction)) {
+        console.log("UPDATE USER RESULT ACTION PAYLOAD", resultAction.payload);
+        navigate("/"); // Redirect to the last route
+      } else if (fetchUpdateUserDetails.rejected.match(resultAction)) {
+        // This code will run if there was an error during authentication
+        const error = resultAction.error;
+        console.error("Authentication failed:", error);
+        // Handle the error, e.g., show an error message to the user
+      }
+      console.log("Authentication successful");
+    } catch (error) {
+      console.error("Authentication failed:", error);
+    }
+  };
+
   const checkUser = async (user) => {
     try {
     } catch (error) {}
@@ -138,6 +161,7 @@ const useAuth = () => {
     signOutUser,
     forgotPassword,
     recoverPasswordEmail,
+    updateUserHandler,
   };
 };
 

@@ -42,6 +42,12 @@ const useAuthContainer = () => {
     console.log("editProfileTriiggered", userId, authToken); //
     navigate(`/editProfile/${userId}/${token}`);
   };
+  const handleChangePassword = (user) => {
+    const userId = user._id;
+    const token = authToken;
+    console.log("editProfileTriiggered", userId, authToken); //
+    navigate(`/reset-password/${userId}/${token}`);
+  };
   return {
     handleMouseEnter,
     handleMouseLeave,
@@ -51,6 +57,7 @@ const useAuthContainer = () => {
     handleSignOutButton,
     showDropdown,
     handleEditProfile,
+    handleChangePassword,
   };
 };
 export default useAuthContainer;

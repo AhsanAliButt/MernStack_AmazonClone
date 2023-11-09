@@ -145,3 +145,58 @@ export const resetPasswordEmail = async (email) => {
     throw error;
   }
 };
+
+export const updateUserDetails = async (credentials) => {
+  const requestOptions = {
+    method: "POST",
+    headers: {
+      // "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
+      Authorization: `Bearer ${credentials.token}`,
+    },
+  };
+  console.log("Updating user details", credentials);
+  const {
+    name,
+    email,
+    password,
+    dob,
+    tc,
+    photo,
+    country,
+    recoveryEmail,
+    firstName,
+    lastName,
+    zipCode,
+    _id,
+  } = credentials;
+  const formData = new FormData();
+  formData.append("name", name);
+  formData.append("email", email);
+  formData.append("password", password);
+  formData.append("dob", dob);
+  formData.append("tc", tc);
+  formData.append("country", country);
+  formData.append("recoveryEmail", recoveryEmail);
+  formData.append("firstName", firstName);
+  formData.append("lastName", lastName);
+  formData.append("zipCode", zipCode);
+  formData.append("photo", photo); // Append the photo as a file
+  formData.append("userId", _id);
+  requestOptions.body = formData;
+  try {
+    console.log("Request Options:", requestOptions.body);
+
+    const response = await fetch(`${authApi}/updateUser`, requestOptions);
+
+    const result = await response.json();
+
+    console.log("Response Body:", result);
+
+    return result; // API response contains a "userDetails" array
+  } catch (error) {
+    console.log("Error:", error);
+    throw error;
+  }
+};

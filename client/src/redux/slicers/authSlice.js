@@ -5,6 +5,8 @@ import {
   resetPasswordEmail,
   signInUser,
   signUpUser,
+  changeUserDetails,
+  updateUserDetails,
 } from "../../components/constant/authApiCalls";
 import { createSelector } from "reselect"; // its normaly use to memorize the selectors used in the component
 import { useNavigate } from "react-router-dom";
@@ -84,6 +86,30 @@ const sendResetPassswordEmail = createAsyncThunk(
   async (email, thunkApi) => {
     try {
       const response = await resetPasswordEmail(email);
+      // localStorage.setItem("usersdatatoken", user.token);
+      console.log("From Api", response);
+      if (response.status === 200) {
+        return thunkApi.fulfillWithValue(response);
+      } else if (response.status === 400) {
+        console.log("Authentication failed:", response.message);
+        return thunkApi.rejectWithValue(response.message);
+      } else {
+        // Handle other status codes as needed
+        console.error("Unexpected status code:", response.status);
+        return thunkApi.rejectWithValue("Unexpected status code");
+      }
+    } catch (error) {
+      console.error("Error", error);
+
+      return thunkApi.rejectWithValue(error); // Use rejectWithValue to handle rejections
+    }
+  }
+);
+const fetchUpdateUserDetails = createAsyncThunk(
+  "auth/resetPassword",
+  async (credentials, thunkApi) => {
+    try {
+      const response = await updateUserDetails(credentials);
       // localStorage.setItem("usersdatatoken", user.token);
       console.log("From Api", response);
       if (response.status === 200) {
@@ -199,12 +225,33 @@ const authSlice = createSlice({
       state.loading = false;
       state.error = action.payload;
     },
+    [fetchUpdateUserDetails.pending]: (state, action) => {
+      state.loading = true;
+    },
+    [fetchUpdateUserDetails.fulfilled]: (state, action) => {
+      state.user = action.payload.user;
+      state.token = action.payload.token;
+      state.isAuthenticated = true;
+      state.loading = false;
+      state.error = null;
+      // Store the last route
+    },
+    [fetchUpdateUserDetails.rejected]: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    },
   },
 });
 
 // Action creators
 export const { clearErrors, clearUser, setPreviousRoute } = authSlice.actions;
-export { loginUser, createUser, resetPasssword, sendResetPassswordEmail };
+export {
+  loginUser,
+  createUser,
+  resetPasssword,
+  sendResetPassswordEmail,
+  fetchUpdateUserDetails,
+};
 // export states
 export default authSlice.reducer;
 

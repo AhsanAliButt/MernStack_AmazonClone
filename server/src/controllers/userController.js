@@ -147,15 +147,17 @@ const UserController = {
         message: "Login successful",
         token: token,
         user: {
-          firstname: user?.firstName,
+          firstName: user?.firstName,
           lastName: user?.lastName,
           imageUrl: user?.imageUrl,
           name: user?.name,
           _id: user?._id,
           email: user?.email,
           dob: user?.dob,
-          zipcode: user?.zipCode,
+          zipCode: user?.zipCode,
           country: user?.country,
+          recoveryEmail: user?.recoveryEmail,
+          gender: user?.gender,
           // Include other user data as needed
         },
         // cart: cart, // Include cart items
@@ -163,6 +165,73 @@ const UserController = {
     } catch (error) {
       return res.status(500).json({
         message: error.message,
+      });
+    }
+  },
+  updateUserDetails: async (req, res) => {
+    console.log("Received Information", req.body);
+    const file = req.files?.photo;
+    console.log("File Object:", file); // Log the file object to verify its contents
+    try {
+      const result = await cloudinary.uploader.upload(file.tempFilePath, {
+        folder: "productPictures",
+      });
+      const {
+        firstName,
+        lastName,
+        name,
+        recoveryEmail,
+        country,
+        zipCode,
+        dob,
+        photo,
+        userId,
+      } = req.body;
+      req.body;
+      console.log("NAME", name);
+      // update only provided fields
+
+      const user = await UserModel.findOne({ _id: userId });
+      if (!user) {
+        return res.status(400).json({
+          status: 400,
+          message: "User not found",
+        });
+      } else {
+        user.firstName = firstName || user.firstName;
+        user.lastName = lastName || user.lastName;
+        user.imageUrl = result.url || user.imageUrl;
+        user.name = name || user.name;
+
+        user.dob = dob || user.dob;
+        user.zipCode = zipCode || user.zipCode;
+        user.country = country || user.country;
+        user.email = user.email;
+        user.recoveryEmail = recoveryEmail || user.recoveryEmail;
+
+        await user.save();
+        res.status(200).json({
+          status: 200,
+          message: "User updated",
+          user: {
+            firstname: user?.firstName,
+            lastName: user?.lastName,
+            imageUrl: user?.imageUrl,
+            name: user?.name,
+            _id: user?._id,
+            email: user?.email,
+            dob: user?.dob,
+            zipcode: user?.zipCode,
+            country: user?.country,
+            // Include other user data as needed
+          },
+        });
+      }
+    } catch (error) {
+      console.log(error.message);
+      res.status(500).json({
+        status: 500,
+        message: "Server error",
       });
     }
   },

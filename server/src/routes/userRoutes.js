@@ -24,5 +24,6 @@ router.post("/changePassword", UserController.changePassword); //Change password
 router.get("/currentUser", UserController.currentUser); //Get current user
 router.get("/getAllUsers", UserController.getAllUsers); //Get all users
 router.delete("/deleteUser/:id", UserController.deleteUser); //Delete user
+router.post("/updateUser", UserController.updateUserDetails); //Change password
 
 module.exports = router;

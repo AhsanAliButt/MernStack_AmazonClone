@@ -27,6 +27,9 @@ import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import useSignUp from "./useSignUp";
 import useStates from "../../../components/hooks/useStates";
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+import SaveIcon from "@mui/icons-material/Save";
+import LoadingButton from "@mui/lab/LoadingButton";
 
 const initialState = {
   firstName: "",
@@ -56,14 +59,12 @@ const SignUp = () => {
   const { setVal } = useSignUp();
   const { user } = useStates();
   // ...
-
-  console.log("User: IN SIGNUP PAGE " + userId, token);
   // const data = {
   //   userId: userId,
   //   token: token,
   // };
+  console.log(credentials);
   useEffect(() => {
-    console.log("Product ID by ", userId);
     if (userId) {
       // Get user data stored in redux state and store it in initial state
       setCredentials({
@@ -87,17 +88,16 @@ const SignUp = () => {
       canvas.toBlob((blob) => {
         setCredentials({ ...credentials, photo: blob });
       }, "image/jpeg");
-      console.log("Canvas", canvas);
+      // console.log("Canvas", canvas);
       // const dataURL = canvas.toDataURL("image/jpeg");
       // // You can send the dataURL to your server or do further processing here.
       // setCredentials({ ...credentials, photo: dataURL });
       // console.log(dataURL);
     } else {
-      console.log("Avatar editor not ready.");
+      // console.log("Avatar editor not ready.");
     }
   };
-  const { signUpHandler } = useAuth();
-  console.log("credentials", credentials);
+  const { signUpHandler, updateUserHandler } = useAuth();
   const handleSignUp = () => {
     const {
       zipCode,
@@ -147,6 +147,20 @@ const SignUp = () => {
       }, 4000);
     }
   };
+  const handleUpdateUser = () => {
+    setCredentials({
+      ...credentials,
+      name: credentials.firstName + " " + credentials.lastName,
+      token: token,
+    });
+
+    const locationPath = window.location.pathname;
+    updateUserHandler(credentials, locationPath);
+    setShowSuccess(true);
+    setTimeout(() => {
+      setShowSuccess(false);
+    }, 4000);
+  };
 
   const handleCloseAlert = () => {
     setShowError(false);
@@ -193,7 +207,7 @@ const SignUp = () => {
                 color={"#49515A"}
                 fontWeight={600}
               >
-                Welcome to our SignUp Page
+                {userId ? "update form" : "Welcome to our SignUp Page"}
               </Typography>
               <Box
                 mt={4}
@@ -277,7 +291,7 @@ const SignUp = () => {
                     />
                   </Box>
                 </Box>
-                <Box display={"flex"}>
+                <Box display={userId ? "none" : "flex"}>
                   <Box>
                     <Header tag="Password" />
                     <InputField
@@ -309,22 +323,12 @@ const SignUp = () => {
                 </Box>
                 <Box display={"flex"}>
                   <Box
+                    display={userId ? "none" : "flex"}
                     sx={{
                       flexGrow: 1,
                       minWidth: "500px",
                     }}
                   >
-                    {/* <Header tag={"Country"} />
-                    <InputField
-                      value={credentials.country}
-                      onChange={(e) =>
-                        setCredentials({
-                          ...credentials,
-                          country: e.target.value,
-                        })
-                      }
-                      placeholder={"please enter your country"}
-                    /> */}
                     <Header tag={"Country"} />
                     <Select
                       className="react-select"
@@ -340,7 +344,10 @@ const SignUp = () => {
                       }
                     />
                   </Box>
-                  <Box margin="0px 0px 0px 20px">
+                  <Box
+                    margin="0px 0px 0px 20px"
+                    display={userId ? "none" : "flex"}
+                  >
                     <Header tag="ZipCode" />
                     <InputField
                       value={credentials.zipCode}
@@ -357,6 +364,7 @@ const SignUp = () => {
                 </Box>
                 <Box display={"flex"}>
                   <Box
+                    display={userId ? "none" : "flex"}
                     sx={{
                       flexGrow: 1,
                       minWidth: "500px",
@@ -394,7 +402,10 @@ const SignUp = () => {
                       </RadioGroup>
                     </FormControl>{" "}
                   </Box>
-                  <Box margin="0px 0px 0px 20px">
+                  <Box
+                    display={userId ? "none" : "block"}
+                    margin="0px 0px 0px 20px"
+                  >
                     <Header tag="Age" />
                     <InputField
                       value={credentials.dob}
@@ -414,12 +425,10 @@ const SignUp = () => {
               <Box
                 mt={4}
                 width="300px"
+                height="250px"
                 textAlign="left"
                 justifyContent="space-between"
               >
-                {/* Previous input fields go here */}
-                {/* ... */}
-                <Header tag="Upload Profile Picture" />
                 <Dropzone onDrop={handleImageDrop} accept="image/*">
                   {({ getRootProps, getInputProps }) => (
                     <div {...getRootProps()}>
@@ -434,13 +443,19 @@ const SignUp = () => {
                           scale={1.2}
                         />
                       ) : (
-                        <p>Click to select an image or drop one here.</p>
+                        <Button
+                          component="label"
+                          variant="contained"
+                          startIcon={<CloudUploadIcon />}
+                        >
+                          Upload file
+                        </Button>
                       )}
                     </div>
                   )}
                 </Dropzone>
               </Box>
-              <Box mt={4} display="flex" justifyContent="space-between">
+              <Box mt={4} display={"flex"} justifyContent="space-between">
                 <Button
                   variant="contained"
                   onClick={handleImageUpload}
@@ -451,7 +466,7 @@ const SignUp = () => {
                   Upload Image
                 </Button>
               </Box>
-              <Box display={"flex"} alignItems={"center"}>
+              <Box display={userId ? "none" : "flex"} alignItems={"center"}>
                 <Checkbox
                   checked={credentials.tc}
                   onChange={(e) =>
@@ -465,15 +480,25 @@ const SignUp = () => {
                 <Header tag={"Accept terms and conditions"} />
               </Box>
               <Box mt={4} display={"flex"} justifyContent={"space-between"}>
-                <Button
+                {/* <Button
                   variant="contained"
-                  onClick={handleSignUp}
+                  onClick={userId ? handleUpdateUser : handleSignUp}
                   sx={{
                     width: "200px",
                   }}
                 >
                   Submit
-                </Button>
+                </Button> */}
+                <LoadingButton
+                  color="secondary"
+                  onClick={userId ? handleUpdateUser : handleSignUp}
+                  loading={loading}
+                  loadingPosition="start"
+                  startIcon={<SaveIcon />}
+                  variant="contained"
+                >
+                  {userId ? <span>Update</span> : <span> Submit</span>}
+                </LoadingButton>
               </Box>
             </Box>
           </Box>

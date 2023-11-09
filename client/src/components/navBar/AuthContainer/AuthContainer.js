@@ -12,6 +12,7 @@ const AuthContainer = ({ isLogin, user }) => {
     handleSignInButton,
     showDropdown,
     handleEditProfile,
+    handleChangePassword,
   } = useAuthContainer();
 
   return (
@@ -126,6 +127,23 @@ const AuthContainer = ({ isLogin, user }) => {
                     onClick={handleMyProducts}
                   >
                     My All Products
+                  </Button>
+                  <Button
+                    sx={{
+                      minWidth: "250px",
+                      borderRadius: "5px",
+                      color: "white",
+                      backgroundColor: "skyblue",
+                      marginTop: "10px",
+                      fontWeight: "bold",
+                      "&:hover": {
+                        color: "white",
+                        backgroundColor: "black",
+                      },
+                    }}
+                    onClick={() => handleChangePassword(user)}
+                  >
+                    Change Password
                   </Button>
                 </Box>
               </>
