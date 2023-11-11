@@ -13,6 +13,7 @@ import TopCarasol from "../topCarasol/TopCarasol";
 import useStates from "../hooks/useStates";
 import AdvertiseOne from "../advertiseOne/AdvertiseOne";
 import { useNavigate } from "react-router-dom";
+import FeedCarsol from "../feedCarsol/FeedCarsol";
 
 const MainContent = () => {
   const { allProducts } = useStates();
@@ -102,6 +103,8 @@ const MainContent = () => {
                         variant="h6"
                         paddingLeft={2}
                         sx={{
+                          width: "auto",
+                          display: "inline-block", // Allow hover effect only on text
                           "&:hover": {
                             color: "red",
                             cursor: "pointer",
@@ -145,6 +148,7 @@ const MainContent = () => {
             </Grid>
           </Box>
         </Box>
+        <FeedCarsol allProducts={allProducts} />
       </Box>
     </Box>
   );
