@@ -1,8 +1,10 @@
 import React from "react";
 import "./AdvertiseOne.css";
+import useStates from "../hooks/useStates";
 
 const AdvertiseOne = ({ data }) => {
   // console.log("data in advertise one", data?._id);
+  const { allProducts } = useStates();
   return (
     <>
       <div className="advertiseOne_container">
