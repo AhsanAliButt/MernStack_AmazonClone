@@ -9,6 +9,11 @@ import AvatarEditor from "react-avatar-editor";
 import Select from "react-select";
 import useProductForm from "./useProductForm";
 import { useParams } from "react-router-dom";
+import LoadingButton from "@mui/lab/LoadingButton";
+import { selectLoading } from "../../redux/slicers/authSlice";
+import { useSelector } from "react-redux";
+import { selectProductsLoading } from "../../redux/slicers/productSlice";
+import SaveIcon from "@mui/icons-material/Save";
 const ProductForm = () => {
   const {
     handleCreateProduct,
@@ -34,22 +39,9 @@ const ProductForm = () => {
     { value: "property", label: "Property" },
     { value: "electronics", label: "Electronics" },
   ];
-
-  // const loading = productLoading;
+  const loading = useSelector(selectProductsLoading);
   return (
     <Box>
-      {/* {loading && <p>Loading...</p>} */}
-      {/* {showError && (
-        <Alert
-          severity="error"
-          action={<Button onClick={handleCloseAlert}>OK</Button>}
-        >
-          Please fill out all fields before signIn.
-        </Alert>
-      )}
-      {showSuccess && (
-        <Alert severity="success">Congrats you are successfully signedIn</Alert>
-      )} */}
       <Box display={"flex"} alignItems={"center"} justifyContent={"center"}>
         <Box
           className="mainPage"
@@ -160,7 +152,7 @@ const ProductForm = () => {
                 />
               </Box>
               <Box mt={4} display={"flex"} justifyContent={"space-between"}>
-                <Button
+                {/* <Button
                   variant="contained"
                   onClick={id ? handleUpdateProduct : handleCreateProduct}
                   sx={{
@@ -168,7 +160,21 @@ const ProductForm = () => {
                   }}
                 >
                   {id ? "Update Product" : "Create Product"}
-                </Button>
+                </Button> */}
+                <LoadingButton
+                  color="secondary"
+                  onClick={id ? handleUpdateProduct : handleCreateProduct}
+                  loading={loading}
+                  loadingPosition="start"
+                  startIcon={<SaveIcon />}
+                  variant="contained"
+                >
+                  {id ? (
+                    <span>Update Product</span>
+                  ) : (
+                    <span> create product</span>
+                  )}
+                </LoadingButton>
               </Box>
             </Box>
           </Box>
@@ -187,7 +193,7 @@ const ProductForm = () => {
                   fontSize={22}
                   tag={"Add Picture"}
                 />
-                <Avatar src={productData?.imageUrl} />
+
                 <Dropzone onDrop={handleImageDrop} accept="image/*">
                   {({ getRootProps, getInputProps }) => (
                     <div {...getRootProps()}>
@@ -196,10 +202,10 @@ const ProductForm = () => {
                         <AvatarEditor
                           ref={(editor) => handleSetEditor(editor)}
                           image={uploadedImage}
-                          width={400}
-                          height={400}
-                          border={10}
-                          scale={1.2}
+                          width={350} // Set width to match the uploaded image's width
+                          height={500} // Set height to match the uploaded image's height
+                          scale={1} // Set scale to 1 to display the full image
+                          border={0} // Set border to 0 to remove any border
                         />
                       ) : (
                         <Box width={200} height={200} border="1px solid black">

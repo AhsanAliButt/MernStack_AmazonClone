@@ -14,6 +14,7 @@ import useStates from "../hooks/useStates";
 import AdvertiseOne from "../advertiseOne/AdvertiseOne";
 import { useNavigate } from "react-router-dom";
 import FeedCarsol from "../feedCarsol/FeedCarsol";
+import ButtonWithLabel from "../buttons/ButtonWithLabel";
 
 const MainContent = () => {
   const { allProducts } = useStates();
@@ -91,7 +92,7 @@ const MainContent = () => {
             position={"relative"}
           >
             <Grid container spacing={2}>
-              {randomProducts.map((product, index) => (
+              {randomProducts?.map((product, index) => (
                 <Grid item key={product.category} xs={12} md={6} lg={4}>
                   <Card
                     sx={{
@@ -134,13 +135,25 @@ const MainContent = () => {
                         {expandedStates[index]
                           ? product.description
                           : product.description.slice(0, 20) + " ..."}
+                        <Button
+                          onClick={() => toggleExpanded(index)}
+                          color="primary"
+                        >
+                          {expandedStates[index] ? "Show Less" : "Show More"}
+                        </Button>
                       </Typography>
-                      <Button
-                        onClick={() => toggleExpanded(index)}
-                        color="primary"
-                      >
-                        {expandedStates[index] ? "Show Less" : "Show More"}
-                      </Button>
+                      <Box display={"flex"} justifyContent={"space-between"}>
+                        <ButtonWithLabel
+                          label="Add to Cart"
+                          ButtonWidth={"150px"}
+                          backgroundColor={"green"}
+                        />
+                        <ButtonWithLabel
+                          label="Buy Now"
+                          ButtonWidth={"150px"}
+                          backgroundColor={"red"}
+                        />
+                      </Box>
                     </CardContent>
                   </Card>
                 </Grid>

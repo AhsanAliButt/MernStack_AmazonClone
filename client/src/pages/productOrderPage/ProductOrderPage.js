@@ -20,8 +20,6 @@ const ProductOrderPage = () => {
   const { data } = useProductOrder();
   const [productDetails, setProductDetails] = useState([]);
   const dispatch = useDispatch();
-  const count = useSelector((state) => state.cart.count);
-  const items = useSelector((state) => state.cart.items);
 
   let { id } = useParams();
   useEffect(() => {

@@ -112,7 +112,7 @@ const useProducts = () => {
       authToken,
     };
     console.log("Delete Product Id", data);
-    const resultAction = await dispatch(fetchPayment(data));
+    const resultAction = await dispatch(fetchDeleteProductByUser(data));
     if (
       // isLogin === true
       fetchDeleteProductByUser.fulfilled.match(resultAction)

@@ -10,6 +10,8 @@ import {
   updateProduct,
   deleteProduct,
 } from "../../components/constant/productApiCalls";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const fetchProducts = createAsyncThunk("product/fetchProducts", async () => {
   try {
@@ -120,11 +122,11 @@ const fetchUpdateProductByUser = createAsyncThunk(
     console.log("Product Slice New Product Update User", data);
     try {
       const newProduct = await updateProduct(data);
-      console.log("UserAUTH", newProduct);
+      console.log("Updated Product", newProduct);
       if (newProduct.status === 200) {
         return thunkApi.fulfillWithValue();
       } else if (newProduct.status === 400) {
-        console.log("Authentication failed:", newProduct.message);
+        console.log("Update Product failed:", newProduct.message);
         return thunkApi.rejectWithValue(newProduct.message);
       } else {
         // Handle other status codes as needed
@@ -142,22 +144,37 @@ const fetchDeleteProductByUser = createAsyncThunk(
   "product/fetchUpdateProductByUser",
   async (data, thunkApi) => {
     console.log("Product Slice New Product Update User", data);
-    try {
-      const deletedProduct = await deleteProduct(data);
-      console.log("Deleted Product", deletedProduct);
-      if (deletedProduct.status === 200) {
-        return thunkApi.fulfillWithValue(deletedProduct.product);
-      } else if (deletedProduct.status === 400) {
-        console.log("Authentication failed:", deletedProduct.message);
-        return thunkApi.rejectWithValue(deletedProduct.message);
-      } else {
-        // Handle other status codes as needed
-        console.error("Unexpected status code:", deletedProduct.status);
-        return thunkApi.rejectWithValue("Unexpected status code");
+
+    // Display a confirmation dialog using window.confirm
+    const confirmed = window.confirm(
+      "Are you sure you want to delete this product?"
+    );
+
+    if (confirmed) {
+      try {
+        // If user confirms, proceed with the deletion
+        const deletedProduct = await deleteProduct(data);
+        console.log("Deleted Product", deletedProduct);
+
+        if (deletedProduct.status === 200) {
+          // Show a success toast
+          toast.success("Product deleted successfully");
+
+          return thunkApi.fulfillWithValue(deletedProduct.product);
+        } else if (deletedProduct.status === 400) {
+          console.log("delete Product failed:", deletedProduct.message);
+          return thunkApi.rejectWithValue(deletedProduct.message);
+        } else {
+          // Handle other status codes as needed
+          console.error("Unexpected status code:", deletedProduct.status);
+          return thunkApi.rejectWithValue("Unexpected status code");
+        }
+      } catch (error) {
+        console.error("Error", error);
       }
-      // localStorage.setItem("usersdatatoken", user.token);
-    } catch (error) {
-      console.error("Error", error);
+    } else {
+      // If user cancels, do nothing and return a fulfilled action
+      return thunkApi.fulfillWithValue();
     }
   }
 );
