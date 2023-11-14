@@ -22,7 +22,7 @@ const ButtonWithLabel = ({
         variant="contained"
         href={href}
         sx={{
-          // width: ButtonWidth || 220,
+          width: ButtonWidth || 220,
           marginBottom: "5px",
           borderRadius: "10px",
           height: "30px",
@@ -36,7 +36,6 @@ const ButtonWithLabel = ({
         }}
         onClick={onClick}
         style={style}
-        width={ButtonWidth || 220}
       >
         <Typography color={color || "white"} fontSize={fontSize || ""}>
           {" "}
