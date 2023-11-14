@@ -23,7 +23,6 @@ const ProductOrderPage = () => {
 
   let { id } = useParams();
   useEffect(() => {
-    // console.log("ITEMSSSSSSSSSSSSSSS", items);
     data.filter((product) => {
       if (product._id === id) {
         setProductDetails(product);

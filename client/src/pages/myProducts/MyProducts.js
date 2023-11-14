@@ -7,8 +7,16 @@ import { Link } from "react-router-dom";
 import Rating from "@mui/material/Rating";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
+import {
+  Card,
+  CardContent,
+  Typography,
+  Button,
+  CardMedia,
+} from "@mui/material";
 import "./myProducts.css";
 import useMyProducts from "./useMyProducts";
+import ButtonWithLabel from "../../components/buttons/ButtonWithLabel";
 const MyProducts = () => {
   const [value, setValue] = useState(2);
   const { userProducts } = useStates();
@@ -29,18 +37,18 @@ const MyProducts = () => {
         padding: "30px",
       }}
     >
-      <Grid container spacing={4}>
+      <Grid container spacing={[4, 2, 2]}>
         <>
           {userProducts.map((product, key) => {
             try {
               return (
                 <>
-                  <Grid item xs={2} md={3}>
+                  {/* <Grid item key={product.category} xs={12} md={6} lg={2}>
                     <Box
-                      //   className="product_container"
-                      style={{
-                        width: "fit-content",
-                      }}
+                    //   className="product_container"
+                    // style={{
+                    //   width: "fit-content",
+                    // }}
                     >
                       <Box
                         className="product_image"
@@ -58,7 +66,7 @@ const MyProducts = () => {
                             <img
                               src={product.imageUrl}
                               alt={product.name}
-                              width={300}
+                              width={250}
                               height={250}
                             />
                           </Box>
@@ -114,6 +122,76 @@ const MyProducts = () => {
                         </Box>
                       </Link>
                     </Box>
+                  </Grid> */}
+
+                  <Grid item key={product.category} xs={12} md={4} lg={3}>
+                    <Card
+                      sx={{
+                        padding: "10px",
+                      }}
+                    >
+                      <Box>
+                        <Typography
+                          variant="h6"
+                          paddingLeft={2}
+                          sx={{
+                            width: "auto",
+                            display: "inline-block", // Allow hover effect only on text
+                            "&:hover": {
+                              color: "red",
+                              cursor: "pointer",
+                            },
+                          }}
+                          fontWeight="bold"
+                        >
+                          {product.category}
+                        </Typography>
+                      </Box>
+                      <Box padding={2}>
+                        <CardMedia
+                          sx={{
+                            height: 0,
+                            width: "auto",
+                            objectFit: "cover",
+                            paddingTop: "75%",
+                            backgroundSize: "contain",
+                          }}
+                          marginTop={"10px"}
+                          image={product.imageUrl}
+                          title="product"
+                        />
+                      </Box>
+                      <CardContent>
+                        <Box display={"flex"} justifyContent={"space-between"}>
+                          <ButtonWithLabel
+                            label="Edit Product"
+                            ButtonWidth={{ xs: "100%", sm: "60px" }} // Adjust the values based on your design
+                            backgroundColor={"green"}
+                            fontSize={{
+                              xs: "0.5rem",
+                              md: "0.7rem",
+                              lg: "1rem",
+                            }}
+                            onClick={() => {
+                              handleEditProduct(product._id);
+                            }}
+                          />
+                          <ButtonWithLabel
+                            label="Delete Product"
+                            ButtonWidth={{ xs: "100%", sm: "60px" }} // Adjust the values based on your design
+                            backgroundColor={"red"}
+                            fontSize={{
+                              xs: "0.5rem",
+                              md: "0.7rem",
+                              lg: "1rem",
+                            }}
+                            onClick={() => {
+                              handleDeleteProduct(product._id);
+                            }}
+                          />
+                        </Box>
+                      </CardContent>
+                    </Card>
                   </Grid>
                 </>
               );

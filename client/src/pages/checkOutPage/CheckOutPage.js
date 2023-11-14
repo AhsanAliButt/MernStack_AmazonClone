@@ -15,7 +15,9 @@ import { setTotal } from "../../redux/slicers/cartSlice";
 
 const CheckOutPage = () => {
   const { createPayment } = useProducts();
+
   const items = useSelector((state) => state.cart.items);
+  console.log("items in Checkout Page", items);
   const calculateTotal = (items) =>
     items.reduce((acc, item) => acc + item.quantity * item.price, 0);
   const handlePayments = async () => {

@@ -103,6 +103,10 @@ export default Navbar;
 // import Tooltip from "@mui/material/Tooltip";
 // import MenuItem from "@mui/material/MenuItem";
 // import AdbIcon from "@mui/icons-material/Adb";
+// import PlaceIcon from "@mui/icons-material/Place";
+// import { Link } from "react-router-dom";
+// import InputBase from "@mui/material/InputBase";
+// import "./NavBar.css";
 
 // const pages = ["Products", "Pricing", "Blog"];
 // const settings = ["Profile", "Account", "Dashboard", "Logout"];
@@ -131,11 +135,21 @@ export default Navbar;
 //       position="static"
 //       sx={{
 //         backgroundColor: "black",
+//         margin: "0",
 //       }}
 //     >
-//       <Container maxWidth="xl">
-//         <Toolbar disableGutters>
-//           <AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />
+//       <Container
+//         maxWidth="xl"
+//         sx={{
+//           margin: 0,
+//           flexDirection: "space-between",
+//         }}
+//       >
+//         <Toolbar disableGutters margin={0}>
+//           <Link to={"/"}>
+//             <Box className="navbar_logo"></Box>
+//           </Link>
+//           <PlaceIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />
 //           <Typography
 //             variant="h6"
 //             noWrap
@@ -151,8 +165,14 @@ export default Navbar;
 //               textDecoration: "none",
 //             }}
 //           >
-//             LOGO
+//             Faisalabad
 //           </Typography>
+//           <InputBase
+//             sx={{
+//               backgroundColor: "white",
+//               borderRadius: "10px",
+//             }}
+//           />
 
 //           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
 //             <IconButton

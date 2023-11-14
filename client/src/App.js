@@ -3,11 +3,12 @@ import MainPage from "./pages/homePage/MainPage";
 import Routing from "./Routing/Routing";
 import { PersistGate } from "redux-persist/integration/react";
 import { store, persistor } from "./redux/store/store";
-import { Provider, useSelector } from "react-redux";
+import { Provider, useDispatch, useSelector } from "react-redux";
 import {
   selectIsAuthenticated,
   selectlastRoute,
 } from "./redux/slicers/authSlice";
+import { useEffect } from "react";
 
 // console.log("Last Route: " + selectlastRoute);
 

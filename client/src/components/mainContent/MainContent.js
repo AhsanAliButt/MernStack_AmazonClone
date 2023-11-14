@@ -15,9 +15,11 @@ import AdvertiseOne from "../advertiseOne/AdvertiseOne";
 import { useNavigate } from "react-router-dom";
 import FeedCarsol from "../feedCarsol/FeedCarsol";
 import ButtonWithLabel from "../buttons/ButtonWithLabel";
+import useProducts from "../hooks/useProducts";
 
 const MainContent = () => {
   const { allProducts } = useStates();
+  const { addToCart, fetchProductDetails } = useProducts();
   console.log("Main Content", allProducts);
 
   const navigate = useNavigate();
@@ -66,8 +68,16 @@ const MainContent = () => {
     setExpandedStates(newExpandedStates);
   };
   const handleSearch = (category) => {
-    console.log("Category", category);
+    // console.log("Category", category);
     navigate(`/search?term=${category}&category=${category}`);
+  };
+
+  const handleAddToCart = (product) => {
+    addToCart(product);
+  };
+  const handleBuyNow = (product) => {
+    addToCart(product);
+    navigate(`/checkOutPage`);
   };
 
   return (
@@ -147,11 +157,17 @@ const MainContent = () => {
                           label="Add to Cart"
                           ButtonWidth={"150px"}
                           backgroundColor={"green"}
+                          onClick={() => {
+                            handleAddToCart(product);
+                          }}
                         />
                         <ButtonWithLabel
                           label="Buy Now"
                           ButtonWidth={"150px"}
                           backgroundColor={"red"}
+                          onClick={() => {
+                            handleBuyNow(product);
+                          }}
                         />
                       </Box>
                     </CardContent>

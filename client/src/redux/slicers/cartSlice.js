@@ -1,6 +1,4 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-// import useStates from "../../components/hooks/useStates";
-// import { store } from "../store/store";
 import { createSelector } from "reselect";
 import { selectUser } from "./authSlice";
 import { addItemToCart } from "../../components/constant/cartApiCalls";
@@ -9,41 +7,12 @@ const fetchAddItemToCart = createAsyncThunk(
   async (item, thunkAPI) => {
     // Always add the item to local storage
     const state = thunkAPI.getState();
-    const localCart = state.cart;
     const userId = state.auth.userId;
     const userToken = state.auth.token;
-
-    // Add the item to local storage
-    const localItemIndex = localCart.items.findIndex(
-      (cartItem) => cartItem._id === item._id
-    );
-
-    if (localItemIndex >= 0) {
-      localCart.items[localItemIndex].quantity += 1;
-    } else {
-      const temp = { ...item, quantity: 1 };
-      localCart.items = [...localCart.items, temp];
-    }
-
-    localCart.count = localCart.items.length;
-    localCart.total = localCart.items.reduce(
-      (acc, cartItem) => acc + cartItem.price,
-      0
-    );
-    localStorage.setItem(
-      "cart",
-      JSON.stringify({
-        items: localCart.items,
-        count: localCart.count,
-        total: localCart.total,
-      })
-    );
-
-    // If there's a user, send the API request and update the state
-    // const user = selectUser(state);
-
+    const localCart = state.cart;
+    // Perform local actions
+    thunkAPI.dispatch(addItem(item));
     if (userId) {
-      const item = localCart.items;
       try {
         const response = await addItemToCart(item, userId, userToken);
         console.log("RESPONSE FOR CART API", response);
@@ -56,7 +25,7 @@ const fetchAddItemToCart = createAsyncThunk(
         } else if (response.status === 400) {
           // Scenario 2: If the status is 400, it's an error response
           // You can handle it here and reject with a message
-          console.log("Payment failed:", response.message);
+          console.log("Item Add to Cart failed:", response.message);
           return thunkAPI.rejectWithValue(response.message);
         } else {
           // Scenario 3: Handle other status codes as needed
@@ -110,6 +79,8 @@ const cartSlice = createSlice({
     addItem: (state, action) => {
       // const reduxStore = store.getState();
       // console.log("GET STATE", reduxStore);
+      // const user = selectUser(state);
+      // console.log(user, "User", user);
       const ItemIndex = state.items.findIndex(
         (item) => item._id === action.payload._id
       );
@@ -204,9 +175,3 @@ export const {
 export { fetchAddItemToCart };
 
 export default cartSlice.reducer;
-
-// store items in local storage
-// const cartItems = JSON.parse(localStorage.getItem("cartItems")) || [];
-// add to cart
-
-const selectAuthUser = createSelector([selectUser], (user) => user);

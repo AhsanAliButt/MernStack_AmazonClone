@@ -10,15 +10,16 @@ import {
 import useStates from "../../components/hooks/useStates";
 import { useNavigate } from "react-router-dom";
 import { fetchPayment } from "../../redux/slicers/paymentSlice";
+import { fetchAddItemToCart } from "../../redux/slicers/cartSlice";
 
 const useProducts = () => {
   const dispatch = useDispatch();
-  const { authToken, user, cartAmount, cartItems } = useStates();
+  const { authToken, user, cartAmount, cartItems, allProducts } = useStates();
   const userId = user._id;
   const navigate = useNavigate();
 
   const cart = "";
-
+  const [productDetails, setProductDetails] = useState([]);
   const [productData, setProductData] = useState({
     name: "",
     price: "",
@@ -155,7 +156,14 @@ const useProducts = () => {
       // Handle the error, e.g., show an error message to the user
     }
   };
-
+  const addToCart = (product) => {
+    if (product) {
+      const item = { ...product, quantity: 0 };
+      dispatch(fetchAddItemToCart(item));
+    } else {
+      alert("Please select Product To Add to Cart");
+    }
+  };
   return {
     createNewProduct,
     productData,
@@ -164,6 +172,8 @@ const useProducts = () => {
     updateProduct,
     deleteProduct,
     createPayment,
+    addToCart,
+    // fetchProductDetails,
   };
 };
 
