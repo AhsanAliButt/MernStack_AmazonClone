@@ -9,6 +9,8 @@ import {
   selectlastRoute,
 } from "./redux/slicers/authSlice";
 import { useEffect } from "react";
+import { ThemeProvider } from "@emotion/react";
+import { customTheme } from "./theme";
 
 // console.log("Last Route: " + selectlastRoute);
 
@@ -19,10 +21,12 @@ function App() {
 // eslint-disable-next-line import/no-anonymous-default-export
 export default () => {
   return (
-    <Provider store={store}>
-      <PersistGate loading={null} persistor={persistor}>
-        <App />
-      </PersistGate>
-    </Provider>
+    <ThemeProvider theme={customTheme}>
+      <Provider store={store}>
+        <PersistGate loading={null} persistor={persistor}>
+          <App />
+        </PersistGate>
+      </Provider>
+    </ThemeProvider>
   );
 };

@@ -19,7 +19,7 @@ const customTheme = createTheme({
     values: {
       xs: 0,
       sm: 600,
-      md: 768, // Customize your breakpoints as needed
+      md: 900, // Customize your breakpoints as needed
       lg: 1450,
       xl: 1980,
     },
@@ -51,7 +51,14 @@ const MyProducts = () => {
               try {
                 return (
                   <>
-                    <Grid item key={product.category} xs={12} md={4} lg={3}>
+                    <Grid
+                      item
+                      key={product.category}
+                      xs={12}
+                      sm={6}
+                      md={4}
+                      lg={3}
+                    >
                       <Card
                         sx={{
                           padding: "10px",
@@ -102,8 +109,8 @@ const MyProducts = () => {
                               label="Edit Product"
                               ButtonWidth={{
                                 xs: "100%",
-                                sm: "60px",
-                                md: "120px",
+                                sm: "100px",
+                                md: "110px",
                                 lg: "180px",
                               }} // Adjust the values based on your design
                               backgroundColor={"green"}
@@ -120,8 +127,8 @@ const MyProducts = () => {
                               label="Delete Product"
                               ButtonWidth={{
                                 xs: "100%",
-                                sm: "60px",
-                                md: "130px",
+                                sm: "110px",
+                                md: "125px",
                                 lg: "180px",
                               }} // Adjust the values based on your design
                               backgroundColor={"red"}

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Grid from "@mui/material/Grid";
-import { Box } from "@mui/material";
+import { Box, Card, CardContent, CardMedia, Typography } from "@mui/material";
 import getSymbolFromCurrency from "currency-symbol-map";
 import Rating from "@mui/material/Rating";
 import { Link } from "react-router-dom";
@@ -50,49 +50,82 @@ const Products = ({ searchQuery, category }) => {
             try {
               return (
                 <>
-                  <Grid item xs={3} md={3}>
-                    <Link
-                      to={"/productOrderPage/" + product._id}
-                      // className="product_container"
+                  <Grid
+                    item
+                    key={product.category}
+                    xs={12}
+                    sm={6}
+                    md={4}
+                    lg={3}
+                  >
+                    <Card
+                      sx={{
+                        padding: "10px",
+                      }}
                     >
-                      <Box
-                      // className="product_container"
+                      <Link
+                        to={"/productOrderPage/" + product._id}
+                        // className="product_container"
                       >
-                        <Box className="product_image">
-                          <img
-                            src={product.imageUrl}
-                            alt={product.name}
-                            width={200}
-                            height={250}
-                          />
+                        <Box>
+                          <Typography
+                            variant="h6"
+                            paddingLeft={2}
+                            sx={{
+                              width: "auto",
+                              display: "inline-block", // Allow hover effect only on text
+                              "&:hover": {
+                                color: "red",
+                                cursor: "pointer",
+                              },
+                            }}
+                            fontWeight="bold"
+                          >
+                            {product.name}
+                          </Typography>
                         </Box>
-                        <Box className="product_details">
-                          <Box className="product_name">{product.name}</Box>
-                          <Box className="product_ratings">
-                            <Rating
-                              name="read-only"
-                              value={value}
-                              readOnly
-                              style={{
-                                fontSize: "20px",
-                              }}
-                            />
-                            ,{product.ratings}
-                          </Box>
-                          <Box className="product_price">
-                            {getSymbolFromCurrency("PKR")} {product.price}
-                          </Box>
-                          <Box className="product_availability">
-                            {product.stock.value === 0
-                              ? "Out of Stock"
-                              : "In Stock"}
-                          </Box>
-
-                          <Box className="product_ship">{product.ship}</Box>
-                          <Box className="product_stock">{product.stock}</Box>
-                        </Box>
+                      </Link>
+                      <Box padding={2}>
+                        <CardMedia
+                          sx={{
+                            height: 0,
+                            width: "auto",
+                            objectFit: "cover",
+                            backgroundPosition: "left",
+                            paddingTop: "45%",
+                            backgroundSize: "contain",
+                          }}
+                          marginTop={"10px"}
+                          image={product.imageUrl}
+                          title="product"
+                        />
                       </Box>
-                    </Link>
+                      <CardContent>
+                        <Box>{product.description}</Box>
+                        <Box className="product_ratings">
+                          <Rating
+                            name="read-only"
+                            value={value}
+                            readOnly
+                            style={{
+                              fontSize: "20px",
+                            }}
+                          />
+                          {product.ratings}
+                        </Box>
+                        <Box className="product_price">
+                          {getSymbolFromCurrency("PKR")} {product.price}
+                        </Box>
+                        <Box className="product_availability">
+                          {product.stock.value === 0
+                            ? "Out of Stock"
+                            : "In Stock"}
+                        </Box>
+
+                        <Box className="product_ship">{product.ship}</Box>
+                        <Box className="product_stock">{product.stock}</Box>
+                      </CardContent>
+                    </Card>
                   </Grid>
                 </>
               );
