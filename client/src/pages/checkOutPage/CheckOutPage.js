@@ -27,8 +27,26 @@ const CheckOutPage = () => {
     createPayment(stripe);
   };
   return (
-    <Box className="checkOutPage__container">
-      <Grid container>
+    <Box
+      className="checkOutPage__container"
+      // sx={{
+      //   "@media (min-width:400px)": {
+      //     flexDirection: "column",
+      //     maxWidth: "100wv",
+      //   },
+      // }}
+    >
+      <Grid
+        container
+        sx={{
+          flexDirection: "row", // Default direction
+          "@media (max-width: 600px)": {
+            display: "flex",
+            flexDirection: "column", // Change to column on screens 600px or less
+            width: "100%", // Set width to 100%
+          },
+        }}
+      >
         <Grid item xs={9}>
           <Typography>
             <Box className="checkOutPage__title">Check Out</Box>
@@ -39,7 +57,10 @@ const CheckOutPage = () => {
         </Grid>
         <Grid
           item
-          xs={3}
+          xs={12}
+          sm={12}
+          md={6}
+          lg={3}
           style={{
             border: "1px solid #e0e0e0",
             padding: "20px",

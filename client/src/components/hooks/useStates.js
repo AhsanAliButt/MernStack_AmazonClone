@@ -1,14 +1,21 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { selectToken, selectUser } from "../../redux/slicers/authSlice";
+import {
+  selectAuthLoading,
+  selectLoading,
+  selectToken,
+  selectUser,
+} from "../../redux/slicers/authSlice";
 
 import {
   selectProducts,
   selectProductsLoading,
   selectUserProducts,
+  selectfilteredProducts,
 } from "../../redux/slicers/productSlice";
 const useStates = () => {
   const authToken = useSelector(selectToken);
+  const authLoading = useSelector(selectAuthLoading);
   const productLoading = useSelector(selectProductsLoading);
   const user = useSelector(selectUser);
   // const userId = useSelector(selectUserId);
@@ -16,6 +23,7 @@ const useStates = () => {
   const cartAmount = useSelector((state) => state.cart.total.toFixed(2));
   const cartItems = useSelector((state) => state.cart.items);
   const allProducts = useSelector(selectProducts);
+  const filteredProducts = useSelector(selectfilteredProducts);
 
   return {
     authToken,
@@ -25,6 +33,8 @@ const useStates = () => {
     cartItems,
     cartAmount,
     allProducts,
+    filteredProducts,
+    authLoading,
   };
 };
 

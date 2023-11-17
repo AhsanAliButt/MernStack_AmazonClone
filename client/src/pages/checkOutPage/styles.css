@@ -1,6 +1,6 @@
 .checkOutPage__container {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   width: 80%;
   background-color: whitesmoke;
   height: 100%;
@@ -11,4 +11,12 @@
   font-weight: bold;
   padding-left: 20px;
   margin-top: 10px !important;
+}
+@media only screen and (max-width: 600px) {
+  .checkOutPage__container {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    width: 100vw;
+  }
 }

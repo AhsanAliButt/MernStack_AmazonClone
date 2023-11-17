@@ -7,6 +7,8 @@ import InputField from "../../../components/reuseableComponents/InputField";
 import Header from "../../../components/reuseableComponents/Header";
 import { routes } from "../../../components/constant/routes";
 import useSignIn from "./useSignIn";
+import LoadingButton from "@mui/lab/LoadingButton";
+import useStates from "../../../components/hooks/useStates";
 const SignIn = () => {
   const {
     email,
@@ -18,7 +20,7 @@ const SignIn = () => {
     showError,
     showSuccess,
   } = useSignIn();
-
+  const { authLoading } = useStates();
 
   return (
     <>
@@ -30,9 +32,7 @@ const SignIn = () => {
           Please fill out all fields before signIn.
         </Alert>
       )}
-      {showSuccess && (
-        <Alert severity="success">Congrats you are successfully signedIn</Alert>
-      )}
+      {showSuccess && <Alert severity="success"> Please wait </Alert>}
       <Box display={"flex"} alignItems={"center"} justifyContent={"center"}>
         <Box
           className="mainPage"
@@ -81,15 +81,15 @@ const SignIn = () => {
                 <Link to={routes.signUp}>SignUp</Link>
                 <Link to={routes.sendRecoveryEmail}>Forgot Password</Link>
 
-                <Button
-                  variant="contained"
+                <LoadingButton
+                  color="secondary"
                   onClick={handleSignIn}
-                  sx={{
-                    width: "200px",
-                  }}
+                  loading={authLoading}
+                  loadingPosition="start"
+                  variant="contained"
                 >
-                  SignIn
-                </Button>
+                  Sign In
+                </LoadingButton>
               </Box>
             </Box>
           </Box>

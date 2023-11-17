@@ -82,7 +82,7 @@ const resetPasssword = createAsyncThunk(
   }
 );
 const sendResetPassswordEmail = createAsyncThunk(
-  "auth/resetPassword",
+  "auth/sendResetPassswordEmail",
   async (email, thunkApi) => {
     try {
       const response = await resetPasswordEmail(email);
@@ -106,7 +106,7 @@ const sendResetPassswordEmail = createAsyncThunk(
   }
 );
 const fetchUpdateUserDetails = createAsyncThunk(
-  "auth/resetPassword",
+  "auth/fetchUpdateUserDetails",
   async (credentials, thunkApi) => {
     try {
       const response = await updateUserDetails(credentials);
@@ -142,6 +142,7 @@ const authSlice = createSlice({
     // isLogin: AsyncStorage.getItem("isLogin").then() === "ture" ? true : false,
     loading: false,
     error: null,
+    success: null,
   },
   reducers: {
     clearErrors: (state) => {
@@ -200,6 +201,7 @@ const authSlice = createSlice({
       // state.user = action.payload.user;
       // state.token = action.payload.token;
       // state.isAuthenticated = true;
+      state.success = action.payload;
       state.loading = false;
       // state.error = null;
       // state.userId = action.payload.user._id;
@@ -217,6 +219,7 @@ const authSlice = createSlice({
       // state.token = action.payload.token;
       // state.isAuthenticated = true;
       state.loading = false;
+      state.success = action.payload;
       // state.error = null;
       // state.userId = action.payload.user._id;
       // Store the last route
@@ -271,12 +274,12 @@ export const selectIsAuthenticated = createSelector(
   (auth) => auth.isAuthenticated
 );
 
-export const selectLoading = createSelector(
+export const selectAuthLoading = createSelector(
   [selectAuthState],
   (auth) => auth.loading
 );
 
-export const selectError = createSelector(
+export const selectAuthError = createSelector(
   [selectAuthState],
   (auth) => auth.error
 );

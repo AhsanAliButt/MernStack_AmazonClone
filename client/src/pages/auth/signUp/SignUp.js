@@ -7,10 +7,6 @@ import InputBase from "@mui/material/InputBase";
 import Alert from "@mui/material/Alert";
 import { Link } from "react-router-dom";
 import useAuth from "../../../components/hooks/useAuth";
-import {
-  selectLoading,
-  setPreviousRoute,
-} from "../../../redux/slicers/authSlice";
 import InputField from "../../../components/reuseableComponents/InputField";
 import Header from "../../../components/reuseableComponents/Header";
 import { signUpPageData } from "../../../components/constant/data/signUpPageData";
@@ -54,7 +50,7 @@ const SignUp = () => {
   const [uploadedImage, setUploadedImage] = useState(null);
   const [editor, setEditor] = useState(null);
   const [checked, setChecked] = useState(true);
-  const loading = useSelector(selectLoading);
+  const { authLoading } = useStates();
   let { userId, token } = useParams();
   const { setVal } = useSignUp();
   const { user } = useStates();
@@ -63,6 +59,7 @@ const SignUp = () => {
   //   userId: userId,
   //   token: token,
   // };
+
   console.log(credentials);
   useEffect(() => {
     if (userId) {
@@ -168,7 +165,7 @@ const SignUp = () => {
 
   return (
     <>
-      {loading && <p>Loading...</p>}
+      {authLoading && <p>Loading...</p>}
       {showError && (
         <Alert
           severity="error"
@@ -492,7 +489,7 @@ const SignUp = () => {
                 <LoadingButton
                   color="secondary"
                   onClick={userId ? handleUpdateUser : handleSignUp}
-                  loading={loading}
+                  loading={authLoading}
                   loadingPosition="start"
                   startIcon={<SaveIcon />}
                   variant="contained"

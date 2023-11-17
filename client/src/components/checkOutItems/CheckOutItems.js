@@ -30,27 +30,28 @@ const CheckOutItems = ({ item, index }) => {
   // console.log("IDDDDDDDD", id);
   const dispatch = useDispatch();
   const handleRemoveItem = (index) => {
-    console.log(index);
+    // console.log(index);
     dispatch(removeItem(index));
   };
   const handleIncrement = (e) => {
-    console.log("ID OF PRODUCT", e);
+    // console.log("ID OF PRODUCT", e);
     dispatch(increment(e));
   };
   const handleDecrement = (e) => {
-    console.log("ID OF PRODUCT", e);
+    // console.log("ID OF PRODUCT", e);
     dispatch(decrement(e));
   };
   // console.log("INDEX", index);
   return (
     <Grid container mt={2}>
-      <Grid item xs={2}>
+      <Grid item xs={12} sm={12} md={3} lg={2}>
         <CardMedia
           component="img"
           alt="green iguana"
           style={{
-            minWidth: "230px",
-
+            // minWidth: "230px",
+            margin: 0,
+            minHeight: "200px",
             maxHeight: "200px",
             objectFit: "contain",
             marginTop: "-1px",
@@ -58,8 +59,14 @@ const CheckOutItems = ({ item, index }) => {
           image={item.imageUrl}
         />
       </Grid>
-      <Grid item xs={6}>
-        <Card sx={{ maxWidth: 600 }} index={index}>
+      <Grid item xs={12} sm={12} md={4} lg={6}>
+        <Card
+          // sx={{ maxWidth: 600 }}
+          sx={{
+            margin: 0,
+          }}
+          index={index}
+        >
           <CardContent>
             <Box>
               <Typography gutterBottom variant="h5" component="div">

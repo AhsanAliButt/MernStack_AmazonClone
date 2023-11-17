@@ -13,6 +13,58 @@ const pluralize = require("pluralize");
 const User = require("./src/models/User");
 const fileUpload = require("express-fileupload");
 const cookieParser = require("cookie-parser");
+const { faker } = require("@faker-js/faker");
+// faker.context.aspect();
+
+///////////////
+// Function to generate random product data
+// Function to generate random product data
+// const generateProduct = () => ({
+//   user: "62f12f9296b98b652b6cac93",
+//   brand: faker.commerce.product,
+//   keywords: faker.lorem.words(3), // Generates an array of 3 random words
+//   company: faker.company.name,
+//   name: faker.commerce.productName(),
+//   description: faker.commerce.productDescription(),
+//   price: faker.commerce.price(),
+//   category: faker.commerce.department(),
+//   imageUrl: faker.image.imageUrl(),
+//   reviews: [
+//     {
+//       user: "62f12f9296b98b652b6cac93",
+//       name: "Ahsan",
+//       comment: faker.lorem.sentence(),
+//       rating: Math.floor(Math.random() * 5) + 1,
+//     },
+//   ],
+//   stock: Math.floor(Math.random() * 100) + 1,
+// });
+
+// // Array to store 100 products
+// const products = [];
+
+// // Generate 100 products
+// for (let i = 0; i < 100; i++) {
+//   products.push(generateProduct());
+// }
+
+// // Insert products into the database
+// Product.insertMany(products)
+//   .then((result) => {
+//     console.log(`${result.length} products inserted successfully.`);
+//   })
+//   .catch((error) => {
+//     console.error("Error inserting products:", error);
+//   })
+//   .finally(() => {
+//     // Close the MongoDB connection
+//     mongoose.connection.close();
+//   });
+// const randomName = faker.commerce.productName(); // Rowan Nikolaus
+// console.log("Successfully inserted products", randomName);
+
+////////////////
+
 // Import the necessary modules and your Mongoose model
 
 // async function updateBrandsForProducts() {

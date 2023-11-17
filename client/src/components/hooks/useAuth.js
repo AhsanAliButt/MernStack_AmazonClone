@@ -13,6 +13,8 @@ import {
   setPreviousRoute,
 } from "../../redux/slicers/authSlice";
 import { useNavigate } from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 const useAuth = () => {
   const dispatch = useDispatch();
   const user = useSelector(selectUser);
@@ -36,14 +38,16 @@ const useAuth = () => {
         // isLogin === true
         loginUser.fulfilled.match(resultAction)
       ) {
-        // This code will run if resultAction matches the fulfilled action of loginUser
-        // You can safely access resultAction.payload here
-        navigate("/"); // Redirect to the last route
-        console.log("Authentication successful");
+        const successMessage = resultAction.payload.message;
+        toast.success(successMessage);
+        setTimeout(() => {
+          navigate("/");
+        }, 1000);
       } else if (loginUser.rejected.match(resultAction)) {
         // This code will run if there was an error during authentication
-        const error = resultAction.error;
-        console.error("Authentication failed:", error);
+        const error = resultAction.error.message;
+        console.log("ERRORRRRRRRRR", error);
+        toast.error(error);
         // Handle the error, e.g., show an error message to the user
       }
     } catch (error) {
@@ -89,13 +93,15 @@ const useAuth = () => {
       const resultAction = await dispatch(resetPasssword(data));
 
       if (resetPasssword.fulfilled.match(resultAction)) {
-        // This code will run if resultAction matches the fulfilled action of signUpUser
-        // You can safely access resultAction.payload here
-        navigate("/"); // Redirect to the last route
+        const successMessage = `${resultAction.payload.message}!`;
+        toast.success(successMessage);
+        setTimeout(() => {
+          navigate("/signIn");
+        }, 1000);
       } else if (resetPasssword.rejected.match(resultAction)) {
         // This code will run if there was an error during authentication
-        const error = resultAction.error;
-        console.error("Authentication failed:", error);
+        const error = resultAction.error.message;
+        toast.error(error);
         // Handle the error, e.g., show an error message to the user
       }
       console.log("Authentication successful");
@@ -112,12 +118,13 @@ const useAuth = () => {
       const resultAction = await dispatch(sendResetPassswordEmail(email));
 
       if (sendResetPassswordEmail.fulfilled.match(resultAction)) {
-        // This code will run if resultAction matches the fulfilled action of signUpUser
-        // You can safely access resultAction.payload here
-        navigate("/"); // Redirect to the last route
+        const successMessage = `${resultAction.payload.message}`;
+        toast.success(successMessage);
+        setTimeout(() => {
+          navigate("/");
+        }, 1000);
       } else if (sendResetPassswordEmail.rejected.match(resultAction)) {
-        // This code will run if there was an error during authentication
-        const error = resultAction.error;
+        const error = resultAction.error.message;
         console.error("Authentication failed:", error);
         // Handle the error, e.g., show an error message to the user
       }

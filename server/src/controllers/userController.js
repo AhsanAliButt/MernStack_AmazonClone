@@ -348,20 +348,37 @@ const UserController = {
           });
           const link = `http://localhost:3000/reset-password/${user._id}/${token}`;
           console.log("Link", link);
+          const recoveryEmail = user.recoveryEmail;
           const mailOptions = {
             from: '"Fred Foo 👻" <ahsanbutt515@gmail.com>',
-            to: "ahsanbutt515@gmail.com",
+            to: recoveryEmail,
             subject: "Password Reset",
-            html: `<h1>Password Reset</h1>
+            html: `
+            <h1>Password Reset</h1>
             <p>Click this link to reset your password</p>
-            <a href="${link}">${link}</a>`,
+            <button style="background-color: #4CAF50; /* Green */
+                      border: none;
+                      color: white;
+                      padding: 15px 32px;
+                      text-align: center;
+                      text-decoration: none;
+                      display: inline-block;
+                      font-size: 16px;
+                      margin: 4px 2px;
+                      cursor: pointer;">
+            Reset Password
+          </button>
+            
+            
+            
+            `,
           };
           console.log("MAIL OPTIONS", mailOptions);
           try {
             await transporter.sendMail(mailOptions);
             return res.status(200).json({
               status: 200,
-              message: "Email sent",
+              message: `Hey ${user.name}. Please check your email`,
             });
           } catch (error) {
             return res.status(500).json({

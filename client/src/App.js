@@ -11,6 +11,8 @@ import {
 import { useEffect } from "react";
 import { ThemeProvider } from "@emotion/react";
 import { customTheme } from "./theme";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 // console.log("Last Route: " + selectlastRoute);
 
@@ -25,6 +27,7 @@ export default () => {
       <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>
           <App />
+          <ToastContainer />
         </PersistGate>
       </Provider>
     </ThemeProvider>

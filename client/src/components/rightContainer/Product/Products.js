@@ -5,17 +5,14 @@ import getSymbolFromCurrency from "currency-symbol-map";
 import Rating from "@mui/material/Rating";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  fetchProducts,
-  selectProducts,
-  selectfilteredProducts,
-  fetchProductBySearch,
-} from "../../../redux/slicers/productSlice";
+import { fetchProductBySearch } from "../../../redux/slicers/productSlice";
+
+import CircularProgress from "@mui/material/CircularProgress";
+import useStates from "../../hooks/useStates";
 const Products = ({ searchQuery, category }) => {
   const [value, setValue] = useState(2);
   const dispatch = useDispatch();
-  const allProducts = useSelector(selectProducts);
-  const filteredProducts = useSelector(selectfilteredProducts);
+  const { allProducts, filteredProducts } = useStates();
   const products =
     filteredProducts.length <= 0 ? allProducts : filteredProducts;
 
@@ -23,7 +20,7 @@ const Products = ({ searchQuery, category }) => {
     if (searchQuery || category) {
       const data = { searchQuery: searchQuery, category: category };
       // Fetch searched products if searchQuery is available
-      console.log("DATA BEFORE SEND TO BACKEND", data);
+      // console.log("DATA BEFORE SEND TO BACKEND", data);
 
       dispatch(fetchProductBySearch(data));
     } else {
@@ -31,17 +28,6 @@ const Products = ({ searchQuery, category }) => {
       // dispatch(fetchProducts());
     }
   }, [searchQuery, category]);
-  // useEffect(() => {
-  //   if (!searchQuery) {
-  //     // Fetch searched products if searchQuery is available
-
-  //     dispatch(fetchProductBySearch(searchQuery));
-  //   } else {
-  //     dispatch(fetchProductBySearch(""));
-  //     dispatch(fetchProducts());
-  //   }
-  // }, [searchQuery]);
-
   return (
     <Box>
       <Grid container spacing={2} padding={2}>
