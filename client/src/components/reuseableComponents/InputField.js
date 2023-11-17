@@ -20,7 +20,7 @@ const InputField = ({
           borderRadius: "6px",
           marginTop: "8px",
           padding: "8px",
-          width: width || "500px",
+          width: width || "100%",
         }}
         placeholder={placeholder || "please enter a username"}
         defaultValue={value || "Please enter a username"}

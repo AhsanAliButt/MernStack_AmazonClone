@@ -26,6 +26,7 @@ import useStates from "../../../components/hooks/useStates";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import SaveIcon from "@mui/icons-material/Save";
 import LoadingButton from "@mui/lab/LoadingButton";
+import { Grid } from "@mui/material";
 
 const initialState = {
   firstName: "",
@@ -177,307 +178,317 @@ const SignUp = () => {
       {showSuccess && (
         <Alert severity="success">Congrats you are successfully signedIn</Alert>
       )}
-      <Box display={"flex"} alignItems={"center"} justifyContent={"center"}>
-        <Box
-          className="mainPage"
-          style={{
-            height: "auto",
-            width: "80%",
-            backgroundColor: "rgb(245, 245, 245)",
-            borderRadius: "10px",
-            padding: "4px",
-            display: "flex",
-            justifyContent: "center",
-            marginTop: "40px",
-            boxShadow: "0 11px 21px 0 rgba(34,90,182,.12)",
-          }}
-        >
+      <Grid container justifyContent="center">
+        <Grid item xs={12} md={8} lg={8}>
           <Box
-            sx={{
-              width: "80%",
+            className="mainPage"
+            style={{
+              height: "auto",
+              // width: "80%",
+              backgroundColor: "rgb(245, 245, 245)",
+              borderRadius: "10px",
+              padding: "4px",
+              display: "flex",
+              justifyContent: "center",
+              marginTop: "40px",
+              boxShadow: "0 11px 21px 0 rgba(34,90,182,.12)",
             }}
           >
-            <Box mt={2}>
-              <Typography
-                variant="h5"
-                component="h2"
-                color={"#49515A"}
-                fontWeight={600}
-              >
-                {userId ? "update form" : "Welcome to our SignUp Page"}
-              </Typography>
-              <Box
-                mt={4}
-                width={"600px"}
-                textAlign={"left"}
-                justifyContent={"space-between"}
-              >
-                {/* {signUpPageData.map((data) => {
-                  return (
-                    <>
-                      <Header tag={data.tag} />
+            <Box
+              sx={{
+                width: "80%",
+              }}
+            >
+              <Box mt={2}>
+                <Typography
+                  variant="h5"
+                  component="h2"
+                  color={"#49515A"}
+                  fontWeight={600}
+                >
+                  {userId ? "update form" : "Welcome to our SignUp Page"}
+                </Typography>
+                <Box
+                  mt={4}
+                  width={"100%"}
+                  textAlign={"left"}
+                  justifyContent={"space-between"}
+                >
+                  <Box display={"flex"}>
+                    <Box
+                      sx={{
+                        flexGrow: 1,
+                      }}
+                    >
+                      <Header tag={"First Name"} />
                       <InputField
-                        value={data.value}
-                        onChange={data.onChange}
-                        placeholder={data.placeholder}
-                        type={data.type ? data.type : "text"}
-                      />
-                    </>
-                  );
-                })} */}
-                <Box display={"flex"}>
-                  <Box
-                    sx={{
-                      flexGrow: 1,
-                    }}
-                  >
-                    <Header tag={"First Name"} />
-                    <InputField
-                      value={credentials.firstName}
-                      onChange={(e) =>
-                        setCredentials({
-                          ...credentials,
-                          firstName: e.target.value,
-                        })
-                      }
-                    />
-                  </Box>
-                  <Box margin="0px 0px 0px 20px">
-                    <Header tag="Last Name" />
-                    <InputField
-                      value={credentials.lastName}
-                      onChange={(e) =>
-                        setCredentials({
-                          ...credentials,
-                          lastName: e.target.value,
-                        })
-                      }
-                      placeholder="Enter your lastname"
-                    />
-                  </Box>
-                </Box>
-                <Box display={"flex"}>
-                  <Box
-                    sx={{
-                      flexGrow: 1,
-                    }}
-                  >
-                    <Header tag={"Email"} />
-                    <InputField
-                      value={credentials.email}
-                      onChange={(e) =>
-                        setCredentials({
-                          ...credentials,
-                          email: e.target.value,
-                        })
-                      }
-                      placeholder={"enter email u want to use"}
-                    />
-                  </Box>
-                  <Box margin="0px 0px 0px 20px">
-                    <Header tag="Recovery Email" />
-                    <InputField
-                      value={credentials.recoveryEmail}
-                      onChange={(e) =>
-                        setCredentials({
-                          ...credentials,
-                          recoveryEmail: e.target.value,
-                        })
-                      }
-                      placeholder="Enter your recoveryEmail address"
-                    />
-                  </Box>
-                </Box>
-                <Box display={userId ? "none" : "flex"}>
-                  <Box>
-                    <Header tag="Password" />
-                    <InputField
-                      value={credentials.password}
-                      onChange={(e) =>
-                        setCredentials({
-                          ...credentials,
-                          password: e.target.value,
-                        })
-                      }
-                      placeholder="Enter your password"
-                      type="password"
-                    />
-                  </Box>
-                  <Box margin="0px 0px 0px 20px">
-                    <Header tag="Confirm Password" />
-                    <InputField
-                      value={credentials.confirmPassword}
-                      onChange={(e) =>
-                        setCredentials({
-                          ...credentials,
-                          confirmPassword: e.target.value,
-                        })
-                      }
-                      placeholder="Enter your password"
-                      type="password"
-                    />
-                  </Box>
-                </Box>
-                <Box display={"flex"}>
-                  <Box
-                    display={userId ? "none" : "flex"}
-                    sx={{
-                      flexGrow: 1,
-                      minWidth: "500px",
-                    }}
-                  >
-                    <Header tag={"Country"} />
-                    <Select
-                      className="react-select"
-                      options={options}
-                      value={options.find(
-                        (option) => option.label === credentials.country
-                      )}
-                      onChange={(value) =>
-                        setCredentials({
-                          ...credentials,
-                          country: value.label,
-                        })
-                      }
-                    />
-                  </Box>
-                  <Box
-                    margin="0px 0px 0px 20px"
-                    display={userId ? "none" : "flex"}
-                  >
-                    <Header tag="ZipCode" />
-                    <InputField
-                      value={credentials.zipCode}
-                      onChange={(e) =>
-                        setCredentials({
-                          ...credentials,
-                          zipCode: parseInt(e.target.value, 10),
-                        })
-                      }
-                      type="number"
-                      placeholder="Enter your zipCode"
-                    />
-                  </Box>
-                </Box>
-                <Box display={"flex"}>
-                  <Box
-                    display={userId ? "none" : "flex"}
-                    sx={{
-                      flexGrow: 1,
-                      minWidth: "500px",
-                    }}
-                  >
-                    <FormControl>
-                      <Header tag={"Gender"} />
-                      <RadioGroup
-                        row
-                        aria-labelledby="demo-row-radio-buttons-group-label"
-                        name="row-radio-buttons-group"
-                        value={credentials.gender}
+                        value={credentials.firstName}
                         onChange={(e) =>
                           setCredentials({
                             ...credentials,
-                            gender: e.target.value,
+                            firstName: e.target.value,
                           })
                         }
-                      >
-                        <FormControlLabel
-                          value="male"
-                          control={<Radio />}
-                          label="Male"
-                        />
-                        <FormControlLabel
-                          value="female"
-                          control={<Radio />}
-                          label="Female"
-                        />
-                        <FormControlLabel
-                          value="other"
-                          control={<Radio />}
-                          label="Other"
-                        />
-                      </RadioGroup>
-                    </FormControl>{" "}
+                      />
+                    </Box>
+                    <Box
+                      margin="0px 0px 0px 20px"
+                      sx={{
+                        flexGrow: 1,
+                      }}
+                    >
+                      <Header tag="Last Name" />
+                      <InputField
+                        value={credentials.lastName}
+                        onChange={(e) =>
+                          setCredentials({
+                            ...credentials,
+                            lastName: e.target.value,
+                          })
+                        }
+                        placeholder="Enter your lastname"
+                      />
+                    </Box>
                   </Box>
-                  <Box
-                    display={userId ? "none" : "block"}
-                    margin="0px 0px 0px 20px"
-                  >
-                    <Header tag="Age" />
-                    <InputField
-                      value={credentials.dob}
-                      onChange={(e) =>
-                        setCredentials({
-                          ...credentials,
-                          dob: e.target.value,
-                        })
-                      }
-                      type={"date"}
-                      placeholder="Enter your age"
-                    />
+                  <Box display={"flex"}>
+                    <Box
+                      sx={{
+                        flexGrow: 1,
+                      }}
+                    >
+                      <Header tag={"Email"} />
+                      <InputField
+                        value={credentials.email}
+                        onChange={(e) =>
+                          setCredentials({
+                            ...credentials,
+                            email: e.target.value,
+                          })
+                        }
+                        placeholder={"enter email u want to use"}
+                      />
+                    </Box>
+                    <Box
+                      margin="0px 0px 0px 20px"
+                      sx={{
+                        flexGrow: 1,
+                      }}
+                    >
+                      <Header tag="Recovery Email" />
+                      <InputField
+                        value={credentials.recoveryEmail}
+                        onChange={(e) =>
+                          setCredentials({
+                            ...credentials,
+                            recoveryEmail: e.target.value,
+                          })
+                        }
+                        placeholder="Enter your recoveryEmail address"
+                      />
+                    </Box>
+                  </Box>
+                  <Box display={userId ? "none" : "flex"}>
+                    <Box
+                      sx={{
+                        flexGrow: 1,
+                      }}
+                    >
+                      <Header tag="Password" />
+                      <InputField
+                        value={credentials.password}
+                        onChange={(e) =>
+                          setCredentials({
+                            ...credentials,
+                            password: e.target.value,
+                          })
+                        }
+                        placeholder="Enter your password"
+                        type="password"
+                      />
+                    </Box>
+                    <Box
+                      margin="0px 0px 0px 20px"
+                      sx={{
+                        flexGrow: 1,
+                      }}
+                    >
+                      <Header tag="Confirm Password" />
+                      <InputField
+                        value={credentials.confirmPassword}
+                        onChange={(e) =>
+                          setCredentials({
+                            ...credentials,
+                            confirmPassword: e.target.value,
+                          })
+                        }
+                        placeholder="Enter your password"
+                        type="password"
+                      />
+                    </Box>
+                  </Box>
+                  <Box display={"flex"}>
+                    <Box
+                      display={userId ? "none" : "flex"}
+                      flexDirection={"column"}
+                      sx={{
+                        flexGrow: 1,
+                      }}
+                    >
+                      <Header tag={"Country"} />
+                      <Select
+                        className="react-select"
+                        options={options}
+                        value={options.find(
+                          (option) => option.label === credentials.country
+                        )}
+                        onChange={(value) =>
+                          setCredentials({
+                            ...credentials,
+                            country: value.label,
+                          })
+                        }
+                      />
+                    </Box>
+                    <Box
+                      margin="0px 0px 0px 120px"
+                      display={userId ? "none" : "flex"}
+                      flexDirection={"column"}
+                      sx={{
+                        flexGrow: 1,
+                      }}
+                    >
+                      <Header tag="ZipCode" />
+                      <InputField
+                        value={credentials.zipCode}
+                        onChange={(e) =>
+                          setCredentials({
+                            ...credentials,
+                            zipCode: parseInt(e.target.value, 10),
+                          })
+                        }
+                        type="number"
+                        placeholder="Enter your zipCode"
+                      />
+                    </Box>
+                  </Box>
+                  <Box display={"flex"}>
+                    <Box
+                      display={userId ? "none" : "flex"}
+                      sx={{
+                        flexGrow: 1,
+                      }}
+                    >
+                      <FormControl>
+                        <Header tag={"Gender"} />
+                        <RadioGroup
+                          row
+                          aria-labelledby="demo-row-radio-buttons-group-label"
+                          name="row-radio-buttons-group"
+                          value={credentials.gender}
+                          onChange={(e) =>
+                            setCredentials({
+                              ...credentials,
+                              gender: e.target.value,
+                            })
+                          }
+                        >
+                          <FormControlLabel
+                            value="male"
+                            control={<Radio />}
+                            label="Male"
+                          />
+                          <FormControlLabel
+                            value="female"
+                            control={<Radio />}
+                            label="Female"
+                          />
+                          <FormControlLabel
+                            value="other"
+                            control={<Radio />}
+                            label="Other"
+                          />
+                        </RadioGroup>
+                      </FormControl>{" "}
+                    </Box>
+                    <Box
+                      display={userId ? "none" : "block"}
+                      margin="0px 0px 0px 20px"
+                    >
+                      <Header tag="Age" />
+                      <InputField
+                        value={credentials.dob}
+                        onChange={(e) =>
+                          setCredentials({
+                            ...credentials,
+                            dob: e.target.value,
+                          })
+                        }
+                        type={"date"}
+                        placeholder="Enter your age"
+                      />
+                    </Box>
                   </Box>
                 </Box>
-              </Box>
 
-              <Box
-                mt={4}
-                width="300px"
-                height="250px"
-                textAlign="left"
-                justifyContent="space-between"
-              >
-                <Dropzone onDrop={handleImageDrop} accept="image/*">
-                  {({ getRootProps, getInputProps }) => (
-                    <div {...getRootProps()}>
-                      <input {...getInputProps()} />
-                      {uploadedImage ? (
-                        <AvatarEditor
-                          ref={(editor) => setEditor(editor)}
-                          image={uploadedImage}
-                          width={200}
-                          height={200}
-                          border={10}
-                          scale={1.2}
-                        />
-                      ) : (
-                        <Button
-                          component="label"
-                          variant="contained"
-                          startIcon={<CloudUploadIcon />}
-                        >
-                          Upload file
-                        </Button>
-                      )}
-                    </div>
-                  )}
-                </Dropzone>
-              </Box>
-              <Box mt={4} display={"flex"} justifyContent="space-between">
-                <Button
-                  variant="contained"
-                  onClick={handleImageUpload}
-                  sx={{
-                    width: "200px",
-                  }}
+                <Box
+                  mt={4}
+                  width="300px"
+                  height="250px"
+                  textAlign="left"
+                  justifyContent="space-between"
                 >
-                  Upload Image
-                </Button>
-              </Box>
-              <Box display={userId ? "none" : "flex"} alignItems={"center"}>
-                <Checkbox
-                  checked={credentials.tc}
-                  onChange={(e) =>
-                    setCredentials({
-                      ...credentials,
-                      tc: !credentials.tc,
-                    })
-                  }
-                  inputProps={{ "aria-label": "controlled" }}
-                />
-                <Header tag={"Accept terms and conditions"} />
-              </Box>
-              <Box mt={4} display={"flex"} justifyContent={"space-between"}>
-                {/* <Button
+                  <Dropzone onDrop={handleImageDrop} accept="image/*">
+                    {({ getRootProps, getInputProps }) => (
+                      <div {...getRootProps()}>
+                        <input {...getInputProps()} />
+                        {uploadedImage ? (
+                          <AvatarEditor
+                            ref={(editor) => setEditor(editor)}
+                            image={uploadedImage}
+                            width={200}
+                            height={200}
+                            border={10}
+                            scale={1.2}
+                          />
+                        ) : (
+                          <Button
+                            component="label"
+                            variant="contained"
+                            startIcon={<CloudUploadIcon />}
+                          >
+                            Upload file
+                          </Button>
+                        )}
+                      </div>
+                    )}
+                  </Dropzone>
+                </Box>
+                <Box mt={4} display={"flex"} justifyContent="space-between">
+                  <Button
+                    variant="contained"
+                    onClick={handleImageUpload}
+                    sx={{
+                      width: "200px",
+                    }}
+                  >
+                    Upload Image
+                  </Button>
+                </Box>
+                <Box display={userId ? "none" : "flex"} alignItems={"center"}>
+                  <Checkbox
+                    checked={credentials.tc}
+                    onChange={(e) =>
+                      setCredentials({
+                        ...credentials,
+                        tc: !credentials.tc,
+                      })
+                    }
+                    inputProps={{ "aria-label": "controlled" }}
+                  />
+                  <Header tag={"Accept terms and conditions"} />
+                </Box>
+                <Box mt={4} display={"flex"} justifyContent={"space-between"}>
+                  {/* <Button
                   variant="contained"
                   onClick={userId ? handleUpdateUser : handleSignUp}
                   sx={{
@@ -486,21 +497,22 @@ const SignUp = () => {
                 >
                   Submit
                 </Button> */}
-                <LoadingButton
-                  color="secondary"
-                  onClick={userId ? handleUpdateUser : handleSignUp}
-                  loading={authLoading}
-                  loadingPosition="start"
-                  startIcon={<SaveIcon />}
-                  variant="contained"
-                >
-                  {userId ? <span>Update</span> : <span> Submit</span>}
-                </LoadingButton>
+                  <LoadingButton
+                    color="secondary"
+                    onClick={userId ? handleUpdateUser : handleSignUp}
+                    loading={authLoading}
+                    loadingPosition="start"
+                    startIcon={<SaveIcon />}
+                    variant="contained"
+                  >
+                    {userId ? <span>Update</span> : <span> Submit</span>}
+                  </LoadingButton>
+                </Box>
               </Box>
             </Box>
           </Box>
-        </Box>
-      </Box>
+        </Grid>
+      </Grid>
     </>
   );
 };
