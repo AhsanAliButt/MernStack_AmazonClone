@@ -214,7 +214,14 @@ const SignUp = () => {
                   textAlign={"left"}
                   justifyContent={"space-between"}
                 >
-                  <Box display={"flex"}>
+                  <Box
+                    display={"flex"}
+                    flexDirection={{
+                      xs: "column",
+                      sm: "column",
+                      md: "row",
+                    }}
+                  >
                     <Box
                       sx={{
                         flexGrow: 1,
@@ -232,7 +239,10 @@ const SignUp = () => {
                       />
                     </Box>
                     <Box
-                      margin="0px 0px 0px 20px"
+                      margin={{
+                        sm: "0px 0px 0px 0px",
+                        md: "0px 0px 0px 20px",
+                      }}
                       sx={{
                         flexGrow: 1,
                       }}
