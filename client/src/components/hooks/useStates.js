@@ -16,7 +16,6 @@ const useStates = () => {
   const cartAmount = useSelector((state) => state.cart.total.toFixed(2));
   const cartItems = useSelector((state) => state.cart.items);
   const allProducts = useSelector(selectProducts);
-  console.log("SELECT ALL PRODUCTS", allProducts);
 
   return {
     authToken,

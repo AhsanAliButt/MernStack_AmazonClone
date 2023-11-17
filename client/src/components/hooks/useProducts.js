@@ -66,7 +66,7 @@ const useProducts = () => {
       userId,
       authToken,
     };
-    console.log("Use Products", data);
+    // console.log("Use Products", data);
     const resultAction = await dispatch(fetchProductsByUserId(data));
     if (
       // isLogin === true

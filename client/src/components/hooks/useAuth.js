@@ -23,7 +23,7 @@ const useAuth = () => {
     setIsLogin(!false);
   }, [user]);
 
-  console.log(isLogin);
+  // console.log(isLogin);
 
   const loginHandler = async (credentials, locationPath) => {
     try {

@@ -28,7 +28,7 @@ const Products = ({ searchQuery, category }) => {
       dispatch(fetchProductBySearch(data));
     } else {
       dispatch(fetchProductBySearch(""));
-      dispatch(fetchProducts());
+      // dispatch(fetchProducts());
     }
   }, [searchQuery, category]);
   // useEffect(() => {
@@ -44,7 +44,7 @@ const Products = ({ searchQuery, category }) => {
 
   return (
     <Box>
-      <Grid container spacing={2}>
+      <Grid container spacing={2} padding={2}>
         <>
           {products.map((product, key) => {
             try {
@@ -91,7 +91,7 @@ const Products = ({ searchQuery, category }) => {
                             height: 0,
                             width: "auto",
                             objectFit: "cover",
-                            backgroundPosition: "left",
+                            // backgroundPosition: "left",
                             paddingTop: "45%",
                             backgroundSize: "contain",
                           }}

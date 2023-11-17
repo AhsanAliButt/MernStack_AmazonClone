@@ -25,15 +25,22 @@ export const getAllProducts = async () => {
   }
 };
 export const getSearchedProducts = async (data) => {
-  console.log("searchQuery", data.searchQuery);
-  console.log("category Query", data.category);
+  console.log(
+    "search Query IN PRODUCT API",
+    data.searchQuery,
+    "Category in Api Call",
+    data.category
+  );
+  // console.log("category Query", data.category);
   try {
     const response = await fetch(
-      `http://localhost:8001/api/product/getProductsBySearch/${data.searchQuery}`,
+      `http://localhost:8001/api/product/getProductsBySearch/${
+        data.searchQuery || data.category
+      }`,
       requestOptions
     );
     const result = await response.json();
-    // console.log("SEARCHED RESULT", result);
+    console.log("SEARCHED RESULT FROM NODE JS", result);
     return result.product; // API response contains a "products" array
   } catch (error) {
     console.log("error", error);

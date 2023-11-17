@@ -13,7 +13,8 @@ const LeftContainer = ({ searchQuery, category }) => {
   const [productCategory, setProductCategory] = useState("");
   const allProducts = useSelector(selectProducts);
   const filteredProducts = useSelector(selectfilteredProducts);
-
+  const [searchedQuery, setSearchedQuery] = useState(searchQuery);
+  const [loading, setLoading] = useState(false);
   // console.log("PorductsCategory", productCategory);
 
   const products = filteredProducts || allProducts;
@@ -40,12 +41,18 @@ const LeftContainer = ({ searchQuery, category }) => {
 
   // Use useEffect to dispatch selectedBrands whenever it changes
   useEffect(() => {
+    console.log("Selected Brands:", selectedBrands);
+    console.log("Search Query in Left Container:", searchedQuery);
+
     if (selectedBrands.length > 0) {
       // Dispatch the selected brands to Redux whenever the checkboxes change
       dispatch(fetchProductByBrand(selectedBrands));
     } else {
       // If no brands are selected, fetch products based on the search query
-      dispatch(fetchProductBySearch(searchQuery));
+      const data = {
+        searchQuery: searchQuery,
+      };
+      dispatch(fetchProductBySearch(data));
     }
   }, [selectedBrands, searchQuery]);
 

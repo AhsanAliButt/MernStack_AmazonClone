@@ -310,6 +310,7 @@ const ProductsController = {
   getProductBySearch: async (req, res) => {
     try {
       const { search, category } = req.params;
+
       const product = await ProductModel.find({
         $or: [
           { name: { $regex: search, $options: "i" } },
