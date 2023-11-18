@@ -1,5 +1,7 @@
-@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600&family=Roboto:ital,wght@0,500;1,500&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600&family=Roboto:ital,wght@0,500;1,500&display=swap");
 
-body{
-    font-family: 'Open Sans', sans-serif;
+body {
+  height: 100vh;
+  width: 100vw;
+  font-family: "Open Sans", sans-serif;
 }

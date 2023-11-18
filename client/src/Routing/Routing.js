@@ -14,6 +14,7 @@ import MyProducts from "../pages/myProducts/MyProducts";
 import SuccessPayment from "../pages/successPayment/SuccessPayment";
 import CancelPayment from "../pages/cancelPayment/CancelPayment";
 import SendPasswordRecoveryEmail from "../pages/auth/sendPasswordRecoveryEmail/sendPasswordRecoveryEmail";
+import Footer from "../components/footer/Footer";
 
 const Routing = () => {
   return (
@@ -42,6 +43,7 @@ const Routing = () => {
         <Route path="/editProfile/:userId/:token" element={<SignUp />} />
         <Route path="/" element={<MainPage />} />
       </Routes>
+      <Footer />
     </Router>
   );
 };

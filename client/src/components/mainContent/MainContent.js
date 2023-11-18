@@ -89,6 +89,7 @@ const MainContent = () => {
         backgroundColor: "#EAEDED",
         height: "100%",
       }}
+      width={"100vw"}
     >
       <Box className="main_page_container">
         <Box>
@@ -134,6 +135,10 @@ const MainContent = () => {
                           objectFit: "cover",
                           paddingTop: "75%",
                           backgroundSize: "contain",
+                          transition: "transform 0.3s ease-in-out",
+                          "&:hover": {
+                            transform: "scale(1.1)", // You can adjust the scale factor as needed
+                          },
                         }}
                         marginTop={"10px"}
                         image={product.imageUrl}
