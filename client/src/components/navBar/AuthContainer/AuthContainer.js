@@ -2,6 +2,7 @@ import "../NavBar.css";
 import { Box, Button, Typography } from "@mui/material";
 import Avatar from "@mui/material/Avatar";
 import useAuthContainer from "./useAuthContainer";
+
 const AuthContainer = ({ isLogin, user }) => {
   const {
     handleCreateProduct,
@@ -45,14 +46,12 @@ const AuthContainer = ({ isLogin, user }) => {
         </Box>
         {showDropdown && (
           <Box
-            style={{
-              backgroundColor: "whitesmoke",
-              color: "black",
-              width: "300px",
-              display: "block",
-              marginTop: "7px",
-              padding: "10px",
-            }}
+            padding={"10px"}
+            marginTop={"7px"}
+            display={"block"}
+            width={"300px"}
+            color={"black"}
+            backgroundColor="whitesmoke"
           >
             {isLogin ? (
               <>
@@ -63,7 +62,11 @@ const AuthContainer = ({ isLogin, user }) => {
                 >
                   <Button
                     sx={{
-                      minWidth: "250px",
+                      width: {
+                        xs: "80px",
+                        sm: "200px",
+                        md: "300px",
+                      },
                       borderRadius: "5px",
                       color: "white",
                       backgroundColor: "skyblue",

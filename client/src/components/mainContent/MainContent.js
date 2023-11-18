@@ -102,12 +102,12 @@ const MainContent = () => {
             marginTop={-8}
             position={"relative"}
           >
-            <Grid container spacing={2}>
+            <Grid container spacing={{ xs: 1, sm: 2 }}>
               {randomProducts?.map((product, index) => (
-                <Grid item key={product.category} xs={6} md={4} lg={3}>
+                <Grid item key={product.category} xs={12} sm={6} md={4} lg={3}>
                   <Card
                     sx={{
-                      padding: "10px",
+                      padding: "8px",
                     }}
                   >
                     <Box onClick={(e) => handleSearch(product.category)}>
@@ -149,7 +149,7 @@ const MainContent = () => {
                       <Typography variant="body2">
                         {expandedStates[index]
                           ? product.description
-                          : product.description.slice(0, 20) + " ..."}
+                          : product.description.slice(0, 9) + " ..."}
                         <Button
                           onClick={() => toggleExpanded(index)}
                           color="primary"
@@ -161,13 +161,13 @@ const MainContent = () => {
                         <ButtonWithLabel
                           label="Add to Cart"
                           ButtonWidth={{
-                            xs: "40px",
+                            xs: "100px",
                             sm: "100px",
                             md: "100px",
                             lg: "120px",
                           }}
                           fontSize={{
-                            xs: "4px",
+                            xs: "8px",
                             sm: "8px",
                             md: "9px",
                             lg: "12px",
@@ -180,13 +180,13 @@ const MainContent = () => {
                         <ButtonWithLabel
                           label="Buy Now"
                           ButtonWidth={{
-                            xs: "40px",
+                            xs: "100px",
                             sm: "100px",
                             md: "90px",
                             lg: "120px",
                           }}
                           fontSize={{
-                            xs: "6px",
+                            xs: "8px",
                             sm: "8px",
                             md: "10px",
                             lg: "14px",

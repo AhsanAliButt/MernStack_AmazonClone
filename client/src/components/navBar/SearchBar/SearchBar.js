@@ -65,7 +65,14 @@ const SearchBar = () => {
   return (
     <Box>
       <Box className="navbar_searchcontainer">
-        <Box>
+        <Box
+          sx={{
+            display: {
+              xs: "none",
+              sm: "block",
+            },
+          }}
+        >
           <select
             className="navbar_dropdown"
             value={selectedCategory}
