@@ -89,7 +89,7 @@ const MainContent = () => {
         backgroundColor: "#EAEDED",
         height: "100%",
       }}
-      width={"100vw"}
+      // width={"100vw"}
     >
       <Box className="main_page_container">
         <Box>

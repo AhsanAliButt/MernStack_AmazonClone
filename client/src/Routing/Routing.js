@@ -15,11 +15,13 @@ import SuccessPayment from "../pages/successPayment/SuccessPayment";
 import CancelPayment from "../pages/cancelPayment/CancelPayment";
 import SendPasswordRecoveryEmail from "../pages/auth/sendPasswordRecoveryEmail/sendPasswordRecoveryEmail";
 import Footer from "../components/footer/Footer";
+import Navbar1 from "../components/navBar/Navbar1";
 
 const Routing = () => {
   return (
     <Router>
       <Navbar />
+      {/* <Navbar1 /> */}
       <Routes>
         <Route path="/search" element={<DisplayItemPage />} />
         <Route path="/myProducts" element={<MyProducts />} />
