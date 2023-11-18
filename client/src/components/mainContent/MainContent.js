@@ -104,7 +104,7 @@ const MainContent = () => {
           >
             <Grid container spacing={2}>
               {randomProducts?.map((product, index) => (
-                <Grid item key={product.category} xs={12} md={6} lg={4}>
+                <Grid item key={product.category} xs={6} md={4} lg={3}>
                   <Card
                     sx={{
                       padding: "10px",
@@ -160,7 +160,18 @@ const MainContent = () => {
                       <Box display={"flex"} justifyContent={"space-between"}>
                         <ButtonWithLabel
                           label="Add to Cart"
-                          ButtonWidth={"150px"}
+                          ButtonWidth={{
+                            xs: "40px",
+                            sm: "100px",
+                            md: "100px",
+                            lg: "120px",
+                          }}
+                          fontSize={{
+                            xs: "4px",
+                            sm: "8px",
+                            md: "9px",
+                            lg: "12px",
+                          }}
                           backgroundColor={"green"}
                           onClick={() => {
                             handleAddToCart(product);
@@ -168,7 +179,18 @@ const MainContent = () => {
                         />
                         <ButtonWithLabel
                           label="Buy Now"
-                          ButtonWidth={"150px"}
+                          ButtonWidth={{
+                            xs: "40px",
+                            sm: "100px",
+                            md: "90px",
+                            lg: "120px",
+                          }}
+                          fontSize={{
+                            xs: "6px",
+                            sm: "8px",
+                            md: "10px",
+                            lg: "14px",
+                          }}
                           backgroundColor={"red"}
                           onClick={() => {
                             handleBuyNow(product);

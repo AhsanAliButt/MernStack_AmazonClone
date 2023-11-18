@@ -28,20 +28,20 @@ const AuthContainer = ({ isLogin, user }) => {
         // onFocus={handleFocus}
         tabIndex="0"
       >
-        <Box
-          style={{
-            fontSize: "14px",
-          }}
-        >
-          Hellow, {user ? user.name : "sign in"}
+        <Box>
+          <Typography
+            fontSize={{ xs: "7px", sm: "10px", md: "12.5px", lg: "12.5px" }}
+          >
+            Hellow, {user ? user.name : "sign in"}
+          </Typography>
         </Box>
-        <Box
-          style={{
-            fontWeight: 700,
-            fontSize: "16px",
-          }}
-        >
-          Accounts & Lists
+        <Box>
+          <Typography
+            fontSize={{ xs: "7px", sm: "12px", md: "12.5px", lg: "15px" }}
+            fontWeight={"bold"}
+          >
+            Accounts & Lists
+          </Typography>
         </Box>
         {showDropdown && (
           <Box

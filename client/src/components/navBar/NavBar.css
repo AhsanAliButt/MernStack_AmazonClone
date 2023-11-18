@@ -32,11 +32,11 @@
   display: flex;
   margin: 20px 0px;
 }
-.navbar_searchbox {
-  width: 1050px;
+/* .navbar_searchbox {
+  width: 50vw;
   height: 38px;
   margin-top: 8px;
-}
+} */
 .navbar_searchicon {
   background: url("https://ik.imagekit.io/amazonClone/sprite_350x_yGip6ov_K.png?ik-sdk-version=javascript-1.4.3&updatedAt=1660049647468")
     no-repeat -9px -289px;

@@ -48,25 +48,39 @@ const Navbar = () => {
           <Box className="navbar_locator">
             <Box className="navbar_locator_image"></Box>
 
-            <Box className="navbar_location"> Faisalabad </Box>
+            <Box
+              className="navbar_location"
+              sx={{
+                display: {
+                  xs: "none",
+                  sm: "none",
+                  md: "block",
+                },
+              }}
+            >
+              {" "}
+              Faisalabad{" "}
+            </Box>
           </Box>
           <SearchBar />
           <AuthContainer isLogin={isLogin} user={user} />
 
           <Box className="navbar_returns">
-            <Box
-              style={{
-                fontSize: "14px",
-              }}
-            >
-              Returns
+            <Box>
+              <Typography
+                fontSize={{ xs: "9px", sm: "10px", md: "12.5px", lg: "12.5px" }}
+                fontWeight={"bold"}
+              >
+                Returns
+              </Typography>
             </Box>
-            <Box
-              style={{
-                fontWeight: "bold",
-              }}
-            >
-              & Orders
+            <Box>
+              <Typography
+                fontSize={{ xs: "10px", sm: "11px", md: "13.5px", lg: "15px" }}
+                fontWeight={"bold"}
+              >
+                & Orders
+              </Typography>
             </Box>
           </Box>
           <Box className="navbar_cart">
@@ -88,4 +102,3 @@ const Navbar = () => {
 };
 
 export default Navbar;
-
