@@ -104,3 +104,13 @@
   left: -23px;
   top: -3px;
 }
+
+@media screen and (max-width: 700px) {
+  .navbar_logo {
+    background: url("https://ik.imagekit.io/amazonClone/sprite_350x_yGip6ov_K.png?ik-sdk-version=javascript-1.4.3&updatedAt=1660049647468")
+      no-repeat -9px -50px;
+    width: 96px;
+    height: 21px;
+    margin: 18px;
+  }
+}

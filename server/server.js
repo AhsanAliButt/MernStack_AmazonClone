@@ -14,6 +14,8 @@ const User = require("./src/models/User");
 const fileUpload = require("express-fileupload");
 const cookieParser = require("cookie-parser");
 const { faker } = require("@faker-js/faker");
+const cookieSession = require("cookie-session");
+const passport = require("passport");
 // faker.context.aspect();
 
 ///////////////
@@ -171,8 +173,27 @@ const { faker } = require("@faker-js/faker");
 
 // const Product = require("./src/models/product"); // Import your Mongoose model
 
+// cookieStore
+app.use(
+  cookieSession({
+    name: "session",
+    keys: ["Matrix"],
+
+    // Cookie Options
+    maxAge: 24 * 60 * 60 * 1000, // 24 hours
+  })
+);
+//Passport
+app.use(passport.initialize());
+app.use(passport.session());
 // Cors Policy
-app.use(cors());
+app.use(
+  cors({
+    origin: [process.env.CLIENT_URL, process.env.CLIENT_URL + "/"],
+    methods: "GET,POST,PUT,PATCH,DELETE",
+    credentials: true,
+  })
+);
 //JSON Parser
 app.use(express.json());
 //Cookie Parser

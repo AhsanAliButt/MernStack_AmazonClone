@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "../NavBar.css";
-import { Box, InputBase, MenuItem, Select, Typography } from "@mui/material";
+import { Box, InputBase, MenuItem, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { selectProducts } from "../../../redux/slicers/productSlice";
@@ -77,8 +77,11 @@ const SearchBar = () => {
             className="navbar_dropdown"
             value={selectedCategory}
             onChange={handleCategoryChange}
+            // style={{
+            //   sm: "20px",
+            // }}
           >
-            <option value="">All</option>
+            <option value="All">All</option>
             {uniqueCategories.map((product, index) => {
               return (
                 <option key={index} value={product}>

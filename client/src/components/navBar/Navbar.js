@@ -68,7 +68,7 @@ const Navbar = () => {
           <Box className="navbar_returns">
             <Box>
               <Typography
-                fontSize={{ xs: "9px", sm: "10px", md: "12.5px", lg: "12.5px" }}
+                fontSize={{ xs: "9px", sm: "8px", md: "12.5px", lg: "12.5px" }}
                 fontWeight={"bold"}
               >
                 Returns
@@ -76,7 +76,7 @@ const Navbar = () => {
             </Box>
             <Box>
               <Typography
-                fontSize={{ xs: "10px", sm: "11px", md: "13.5px", lg: "15px" }}
+                fontSize={{ xs: "10px", sm: "7px", md: "13.5px", lg: "15px" }}
                 fontWeight={"bold"}
               >
                 & Orders

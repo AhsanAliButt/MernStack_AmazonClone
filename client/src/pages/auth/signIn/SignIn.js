@@ -106,6 +106,33 @@ const SignIn = () => {
                     Sign In
                   </LoadingButton>
                 </Box>
+                <Typography textAlign={"center"} fontWeight={700} mt={4} mb={2}>
+                  {" "}
+                  OR{" "}
+                </Typography>
+                <LoadingButton
+                  color="secondary"
+                  onClick={handleSignIn}
+                  loading={authLoading}
+                  loadingPosition="start"
+                  variant="contained"
+                  fullWidth
+                  style={{ marginTop: "10px" }}
+                >
+                  {/* < src={"./"} /> */}
+                  {/* <img
+                    
+                    alt="Google Icon"
+                    style={{
+                      marginRight: "8px",
+                      width: "24px",
+                      height: "24px",
+                    }} // Adjust the width and height as needed
+                  /> */}
+                  <Typography textTransform={"initial"}>
+                    Login with Google
+                  </Typography>
+                </LoadingButton>
               </Box>
             </Box>
           </Box>

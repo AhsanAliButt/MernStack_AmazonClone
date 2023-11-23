@@ -31,14 +31,14 @@ const AuthContainer = ({ isLogin, user }) => {
       >
         <Box>
           <Typography
-            fontSize={{ xs: "7px", sm: "10px", md: "12.5px", lg: "12.5px" }}
+            fontSize={{ xs: "7px", sm: "4px", md: "12.5px", lg: "12.5px" }}
           >
             Hellow, {user ? user.name : "sign in"}
           </Typography>
         </Box>
         <Box>
           <Typography
-            fontSize={{ xs: "7px", sm: "12px", md: "12.5px", lg: "15px" }}
+            fontSize={{ xs: "7px", sm: "10px", md: "12.5px", lg: "15px" }}
             fontWeight={"bold"}
           >
             Accounts & Lists
