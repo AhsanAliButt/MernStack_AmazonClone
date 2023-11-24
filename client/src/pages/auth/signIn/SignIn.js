@@ -10,6 +10,8 @@ import useSignIn from "./useSignIn";
 import LoadingButton from "@mui/lab/LoadingButton";
 import useStates from "../../../components/hooks/useStates";
 import { Grid } from "@mui/material";
+import GOOGLEICON from "../../../assets/google.png";
+import autoMergeLevel1 from "redux-persist/es/stateReconciler/autoMergeLevel1";
 const SignIn = () => {
   const {
     email,
@@ -22,6 +24,9 @@ const SignIn = () => {
     showSuccess,
   } = useSignIn();
   const { authLoading } = useStates();
+  const signInWithGoogle = () => {
+    window.open("http://localhost:8001/api/user/google", "_self");
+  };
 
   return (
     <>
@@ -51,7 +56,8 @@ const SignIn = () => {
               p: "4px",
               display: "flex",
               justifyContent: "center",
-              height: "400px",
+              height: "auto",
+              paddingBottom: "10px",
 
               boxShadow: "0 11px 21px 0 rgba(34,90,182,.12)",
             }}
@@ -112,24 +118,32 @@ const SignIn = () => {
                 </Typography>
                 <LoadingButton
                   color="secondary"
-                  onClick={handleSignIn}
+                  onClick={signInWithGoogle}
                   loading={authLoading}
                   loadingPosition="start"
-                  variant="contained"
+                  variant="outlined"
                   fullWidth
                   style={{ marginTop: "10px" }}
+                  sx={{
+                    backgroundColor: "white",
+                    borderRadius: "8px",
+                  }}
                 >
                   {/* < src={"./"} /> */}
-                  {/* <img
-                    
+                  <img
+                    src={GOOGLEICON}
                     alt="Google Icon"
                     style={{
                       marginRight: "8px",
-                      width: "24px",
-                      height: "24px",
+                      width: "28px",
+                      height: "28px",
                     }} // Adjust the width and height as needed
-                  /> */}
-                  <Typography textTransform={"initial"}>
+                  />
+                  <Typography
+                    textTransform={"initial"}
+                    color="black"
+                    fontWeight={"bold"}
+                  >
                     Login with Google
                   </Typography>
                 </LoadingButton>

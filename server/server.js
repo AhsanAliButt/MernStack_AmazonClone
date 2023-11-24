@@ -16,6 +16,7 @@ const cookieParser = require("cookie-parser");
 const { faker } = require("@faker-js/faker");
 const cookieSession = require("cookie-session");
 const passport = require("passport");
+require("./passport");
 // faker.context.aspect();
 
 ///////////////
@@ -215,5 +216,6 @@ app.use("/api/cart", cartRoutes);
 
 //RUn Server
 app.listen(port, (res, req) => {
-  console.log(`Server is running on port ${port}`);
+  console.log(`Server is running on port ${port} `);
+  console.log("error", process.env.CLIENT_URL);
 });

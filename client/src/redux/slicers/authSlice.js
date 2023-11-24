@@ -33,6 +33,29 @@ const loginUser = createAsyncThunk(
     }
   }
 );
+const loginWithGoogle = createAsyncThunk(
+  "auth/loginUser",
+  async (credentials, thunkApi) => {
+    try {
+      const user = await signInUser(credentials);
+      // localStorage.setItem("usersdatatoken", user.token);
+      if (user.status === 200) {
+        return thunkApi.fulfillWithValue(user);
+      } else if (user.status === 400) {
+        console.log("Authentication failed:", user.message);
+        return thunkApi.rejectWithValue(user.message);
+      } else {
+        // Handle other status codes as needed
+        console.error("Unexpected status code:", user.status);
+        return thunkApi.rejectWithValue("Unexpected status code");
+      }
+    } catch (error) {
+      console.error("Error", error);
+
+      return thunkApi.rejectWithValue(error); // Use rejectWithValue to handle rejections
+    }
+  }
+);
 const createUser = createAsyncThunk(
   "auth/createUser",
   async (credentials, thunkApi) => {

@@ -36,8 +36,10 @@ router.get(
 router.get(
   "/google/callback",
   passport.authenticate("google", {
-    successRedirect: process.env.CLIENT_SUCCESS_LOGIN_URL,
-    failureRedirect: process.env.CLIENT_FAIL_LOGIN_URL + "/?err=emailExists",
+    // successRedirect: process.env.CLIENT_SUCCESS_LOGIN_URL,
+    // failureRedirect: process.env.CLIENT_FAIL_LOGIN_URL + "/?err=emailExists",
+    successRedirect: "http:localhost:3000/",
+    failureRedirect: "http:localhost:3000/signIn/",
   })
 );
 
