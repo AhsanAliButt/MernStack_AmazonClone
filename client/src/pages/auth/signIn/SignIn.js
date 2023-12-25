@@ -11,7 +11,6 @@ import LoadingButton from "@mui/lab/LoadingButton";
 import useStates from "../../../components/hooks/useStates";
 import { Grid } from "@mui/material";
 import GOOGLEICON from "../../../assets/google.png";
-import autoMergeLevel1 from "redux-persist/es/stateReconciler/autoMergeLevel1";
 const SignIn = () => {
   const {
     email,
@@ -22,11 +21,9 @@ const SignIn = () => {
     handleSetPassword,
     showError,
     showSuccess,
+    handleSignInWithGoogle,
   } = useSignIn();
   const { authLoading } = useStates();
-  const signInWithGoogle = () => {
-    window.open("http://localhost:8001/api/user/google", "_self");
-  };
 
   return (
     <>
@@ -118,7 +115,7 @@ const SignIn = () => {
                 </Typography>
                 <LoadingButton
                   color="secondary"
-                  onClick={signInWithGoogle}
+                  onClick={handleSignInWithGoogle}
                   loading={authLoading}
                   loadingPosition="start"
                   variant="outlined"

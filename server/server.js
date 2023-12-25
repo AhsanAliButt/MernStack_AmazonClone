@@ -117,7 +117,7 @@ require("./passport");
 //   try {
 //     dob = "24-08-1988";
 //     country = "Pakistan";
-//     zipCode="12345";
+//     zipCode = "12345";
 //     recoveryEmail = "ahsanbutt515@gmail.com";
 
 //     // Update all documents with the new "company" field
@@ -126,7 +126,7 @@ require("./passport");
 //       {
 //         $set: {
 //           dob: dob,
-//           country: country
+//           country: country,
 //         },
 //       }
 //     );
@@ -170,9 +170,70 @@ require("./passport");
 
 // preprocessAndSaveProduct(productData);
 
-// const orderRoutes = require("./src/routes/orderRoutes");
+// // const orderRoutes = require("./src/routes/orderRoutes");
+// const updateExistingUsers = async () => {
+//   try {
+//     // Update all existing users to have fromGoogle with a default value of false
+//     const { nModified } = await User.updateMany(
+//       { fromGoogle: { $eq: undefined } },
+//       { $set: { fromGoogle: false } }
+//     );
 
-// const Product = require("./src/models/product"); // Import your Mongoose model
+//     if (nModified !== undefined) {
+//       console.log(`${nModified} existing users updated successfully.`);
+//     } else {
+//       console.log("No existing users found to update.");
+//     }
+//   } catch (error) {
+//     console.error("Error updating existing users:", error);
+//   }
+// };
+
+// // Call the function to update existing users
+// updateExistingUsers();
+
+// async function updateExistingUsers() {
+//   try {
+//     // Update all documents with the new "fromGoogle" field set to false
+//     const result = await User.updateMany(
+//       { fromGoogle: { $exists: false } },
+//       { $set: { fromGoogle: false } }
+//     );
+
+//     if (result.ok === 1) {
+//       console.log(`${result.nModified} Users were updated with the field.`);
+//     } else {
+//       console.log("Update operation did not succeed:", result);
+//     }
+//   } catch (error) {
+//     console.error("Error updating users:", error);
+//   }
+// }
+
+// updateExistingUsers();
+// Cors Policy
+// app.use(
+//   cors(
+//     {
+//     origin: [process.env.CLIENT_URL, process.env.CLIENT_URL + "/"],
+//     methods: "GET,POST,PUT,PATCH,DELETE",
+//     credentials: true,
+//   }
+//   )
+// );
+
+// app.use(
+//   cors(function (req, callback) {
+//     console.log(req.headers);
+//     let corsOptions;
+//     if (req.header("Origin") === process.env.CLIENT_URL) {
+//       corsOptions = { origin: true, credentials: true };
+//     } else {
+//       corsOptions = { origin: false };
+//     }
+//     callback(null, corsOptions);
+//   })
+// );
 
 // cookieStore
 app.use(
@@ -184,19 +245,13 @@ app.use(
     maxAge: 24 * 60 * 60 * 1000, // 24 hours
   })
 );
-//Passport
-app.use(passport.initialize());
-app.use(passport.session());
 // Cors Policy
-app.use(
-  cors({
-    origin: [process.env.CLIENT_URL, process.env.CLIENT_URL + "/"],
-    methods: "GET,POST,PUT,PATCH,DELETE",
-    credentials: true,
-  })
-);
+app.use(cors());
 //JSON Parser
 app.use(express.json());
+// // Passport middleware
+// app.use(passport.initialize());
+// app.use(passport.session());
 //Cookie Parser
 app.use(cookieParser());
 app.use(
@@ -204,10 +259,26 @@ app.use(
     useTempFiles: true,
   })
 );
-
+//Passport
+app.use(passport.initialize());
+app.use(passport.session());
 //Connect to MongoDB
 connectDB();
+// // Cors Policy
+// app.use(cors());
+// //JSON Parser
+// app.use(express.json());
+// app.use(
+//   fileUpload({
+//     useTempFiles: true,
+//   })
+// );
 
+// //Connect to MongoDB
+// connectDB();
+// Passport middleware
+// app.use(passport.initialize());
+// app.use(passport.session());
 //Routes
 app.use("/api/user", userRoutes);
 app.use("/api/product", productRoutes);

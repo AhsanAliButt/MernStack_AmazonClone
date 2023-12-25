@@ -1,11 +1,14 @@
 const authApi = process.env.REACT_APP_API_AUTH_ROUTE;
+const clientUrl = "http://localhost:3000";
 const requestOptions = {
   method: "POST",
   headers: {
+    // Origin: clientUrl,
     // "Content-Type": "multipart/form-data",
     "Access-Control-Allow-Origin": "*",
     "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
   },
+  // credentials: "include",
 };
 
 export const signInUser = async (credentials) => {
@@ -19,6 +22,24 @@ export const signInUser = async (credentials) => {
     console.log("Request Options:", requestOptions);
 
     const response = await fetch(`${authApi}/login`, requestOptions);
+
+    const result = await response.json();
+
+    console.log("Response Body:", result);
+
+    return result; // API response contains a "userDetails" array
+  } catch (error) {
+    console.log("Error:", error);
+    throw error;
+  }
+};
+export const signInWithGoogle = async (token) => {
+  console.log("Signing in with Google AUTHAPI", token);
+  try {
+    const response = await fetch(
+      `${authApi}/getUserByToken/${token}`,
+      requestOptions
+    );
 
     const result = await response.json();
 

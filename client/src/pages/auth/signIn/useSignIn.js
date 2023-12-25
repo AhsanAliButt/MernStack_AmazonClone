@@ -5,7 +5,7 @@ const useSignIn = () => {
   const [password, setPassword] = useState("");
   const [showSuccess, setShowSuccess] = useState(null);
   const [showError, setShowError] = useState(null);
-  const { loginHandler } = useAuth();
+  const { loginHandler, handleSignInWithGoogle } = useAuth();
 
   const handleSignIn = () => {
     if (!email || !password) {
@@ -48,6 +48,7 @@ const useSignIn = () => {
     handleSetPassword,
     email,
     password,
+    handleSignInWithGoogle,
   };
 };
 

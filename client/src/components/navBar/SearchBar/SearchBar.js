@@ -19,7 +19,7 @@ const SearchBar = () => {
     ...new Set(allProducts.map((product) => product.category)),
   ];
 
-  console.log("Categories: " + selectedCategory);
+  // console.log("Categories: " + selectedCategory);
 
   const handleInputChange = (event) => {
     const input = event.target.value;
@@ -38,7 +38,7 @@ const SearchBar = () => {
   };
 
   const handleResultClick = (result) => {
-    console.log("Result", result);
+    // console.log("Result", result);
     setSearchTerm(result);
     setSearchResults([]);
     setShowDropdown(false);

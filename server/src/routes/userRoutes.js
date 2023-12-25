@@ -3,6 +3,8 @@ const router = express.Router();
 const UserController = require("../controllers/userController");
 const authMiddleware = require("../middlewares/authMiddleware");
 const passport = require("passport");
+const jwt = require("jsonwebtoken");
+const UserModel = require("../models/User");
 
 // router Middleware
 //Auth Middleware
@@ -17,6 +19,7 @@ router.post("/register", UserController.register); //Register a new user
 router.post("/login", UserController.userLogin); //Login a user
 router.post("/sendEmailPasswordReset", UserController.sendEmailPasswordReset); //Send email to reset password
 router.post("/resetPassword/:id/:token", UserController.userPasswordReset); //Reset password
+router.post("/getUserByToken/:token", UserController.userDetailsByToken); //Get current user
 
 //Private Routes
 
@@ -32,15 +35,54 @@ router.get(
   passport.authenticate("google", { scope: ["email", "profile"] })
 );
 
-// google callback
-router.get(
-  "/google/callback",
-  passport.authenticate("google", {
-    // successRedirect: process.env.CLIENT_SUCCESS_LOGIN_URL,
-    // failureRedirect: process.env.CLIENT_FAIL_LOGIN_URL + "/?err=emailExists",
-    successRedirect: "http:localhost:3000/",
-    failureRedirect: "http:localhost:3000/signIn/",
-  })
-);
+// // google callback
+// router.get(
+//   "/google/callback",
+//   passport.authenticate("google", {
+//     // successRedirect: process.env.CLIENT_SUCCESS_LOGIN_URL,
+//     // failureRedirect: process.env.CLIENT_FAIL_LOGIN_URL + "/?err=emailExists",
+//     successRedirect: "http://localhost:3000/",
+//     failureRedirect: "http://localhost:3000/signIn/",
+//   })
+// );
+// router.get("/google/callback", (req, res, next) => {
+//   passport.authenticate("google", (err, user, info) => {
+//     if (err) {
+//       console.error(err);
+//       return res.redirect("/error");
+//     }
+//     if (!user) {
+//       console.error(info);
+//       return res.redirect("http://localhost:3000/signIn/");
+//     }
+
+//     // Update user information in the session
+//     req.session.user = user;
+//     console.log("User information:", user);
+
+//     return res.redirect("http://localhost:3000/");
+//   })(req, res, next);
+// });
+router.get("/google/callback", (req, res, next) => {
+  passport.authenticate("google", (err, user, info) => {
+    if (err) {
+      console.error(err);
+      return res.redirect("/error");
+    }
+    if (!user) {
+      console.error(info);
+      return res.redirect("http://localhost:3000/signIn/");
+    }
+
+    // Update user information in the session
+    console.log("User information:", user);
+    req.session.user = user;
+    console.log("User information:", user);
+    // Redirect with user data as query parameters
+    const redirectUrl = `http://localhost:3000/?token=${user}`;
+    return res.redirect(redirectUrl);
+    // return res.redirect("http://localhost:3000/");
+  })(req, res, next);
+});
 
 module.exports = router;

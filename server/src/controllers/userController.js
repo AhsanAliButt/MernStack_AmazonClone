@@ -4,6 +4,7 @@ const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
 const secret = process.env.JWT_SECRET;
 const transporter = require("../config/nodeMailer");
+const passport = require("passport");
 const otpGenerator = require("otp-generator");
 const cloudinary = require("cloudinary").v2;
 const cloudinarySecret = process.env.CLOUDNARY_API_SECRET;
@@ -437,6 +438,9 @@ const UserController = {
       });
     }
   },
+  googleLoginPage: async (req, res) => {
+    passport.authenticate("google", { scope: ["email", "profile"] });
+  },
 
   OtpGenerator: async (req, res) => {
     try {
@@ -494,6 +498,59 @@ const UserController = {
           dob: user?.dob,
           zipcode: user?.zipCode,
           country: user?.country,
+          // Include other user data as needed
+        },
+        // cart: cart, // Include cart items
+      });
+    } catch (error) {
+      return res.status(500).json({
+        message: error.message,
+      });
+    }
+  },
+  userDetailsByToken: async (req, res) => {
+    try {
+      const { token } = req.params;
+      console.log("User token: " + token);
+
+      // Verify the token and extract the user ID
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+      const userId = decoded._id;
+
+      // Find the user by ID
+      const user = await UserModel.findById(userId);
+
+      if (!user) {
+        return res.status(400).json({
+          status: 400,
+          message: "User not found",
+        });
+      }
+
+      // Set the cookie before sending the JSON response
+      res.cookie("AmazonWeb", token, {
+        expires: new Date(Date.now() + 900000),
+        httpOnly: true,
+      });
+
+      // Now, send the JSON response
+      return res.status(200).json({
+        status: 200,
+        message: "Login successful",
+        token: token,
+        user: {
+          firstName: user?.firstName,
+          lastName: user?.lastName,
+          imageUrl: user?.imageUrl,
+          name: user?.name,
+          _id: user?._id,
+          email: user?.email,
+          dob: user?.dob,
+          zipCode: user?.zipCode,
+          country: user?.country,
+          recoveryEmail: user?.recoveryEmail,
+          gender: user?.gender,
+          fromGoogle: user?.fromGoogle,
           // Include other user data as needed
         },
         // cart: cart, // Include cart items

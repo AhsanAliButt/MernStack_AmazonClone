@@ -32,7 +32,7 @@ const useProducts = () => {
     category: "",
   });
 
-  console.log(productData);
+  // console.log(productData);
   const addProductData = (value) => {
     setProductData((prevProductData) => ({
       ...prevProductData,

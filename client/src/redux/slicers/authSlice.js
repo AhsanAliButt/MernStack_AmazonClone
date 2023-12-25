@@ -7,6 +7,8 @@ import {
   signUpUser,
   changeUserDetails,
   updateUserDetails,
+  signInWithGoogle,
+  // userDetailsByToken,
 } from "../../components/constant/authApiCalls";
 import { createSelector } from "reselect"; // its normaly use to memorize the selectors used in the component
 import { useNavigate } from "react-router-dom";
@@ -34,10 +36,10 @@ const loginUser = createAsyncThunk(
   }
 );
 const loginWithGoogle = createAsyncThunk(
-  "auth/loginUser",
-  async (credentials, thunkApi) => {
+  "auth/loginWithGoogle",
+  async (token, thunkApi) => {
     try {
-      const user = await signInUser(credentials);
+      const user = await signInWithGoogle(token);
       // localStorage.setItem("usersdatatoken", user.token);
       if (user.status === 200) {
         return thunkApi.fulfillWithValue(user);
@@ -152,6 +154,29 @@ const fetchUpdateUserDetails = createAsyncThunk(
     }
   }
 );
+// const getUserDetailsByToken = createAsyncThunk(
+//   "auth/getUserDetailsByToken",
+//   async (token, thunkApi) => {
+//     try {
+//       const user = await userDetailsByToken(token);
+//       // localStorage.setItem("usersdatatoken", user.token);
+//       if (user.status === 200) {
+//         return thunkApi.fulfillWithValue(user);
+//       } else if (user.status === 400) {
+//         console.log("Authentication failed:", user.message);
+//         return thunkApi.rejectWithValue(user.message);
+//       } else {
+//         // Handle other status codes as needed
+//         console.error("Unexpected status code:", user.status);
+//         return thunkApi.rejectWithValue("Unexpected status code");
+//       }
+//     } catch (error) {
+//       console.error("Error", error);
+
+//       return thunkApi.rejectWithValue(error); // Use rejectWithValue to handle rejections
+//     }
+//   }
+// );
 
 const authSlice = createSlice({
   name: "auth",
@@ -199,6 +224,38 @@ const authSlice = createSlice({
       // Store the last route
     },
     [loginUser.rejected]: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    },
+    // [getUserDetailsByToken.pending]: (state, action) => {
+    //   state.loading = true;
+    // },
+    // [getUserDetailsByToken.fulfilled]: (state, action) => {
+    //   state.user = action.payload.user;
+    //   state.token = action.payload.token;
+    //   state.isAuthenticated = true;
+    //   state.loading = false;
+    //   state.error = null;
+    //   state.userId = action.payload.user._id;
+    //   // Store the last route
+    // },
+    // [getUserDetailsByToken.rejected]: (state, action) => {
+    //   state.loading = false;
+    //   state.error = action.payload;
+    // },
+    [loginWithGoogle.pending]: (state, action) => {
+      state.loading = true;
+    },
+    [loginWithGoogle.fulfilled]: (state, action) => {
+      state.user = action.payload.user;
+      state.token = action.payload.token;
+      state.isAuthenticated = true;
+      state.loading = false;
+      state.error = null;
+      state.userId = action.payload.user._id;
+      // Store the last route
+    },
+    [loginWithGoogle.rejected]: (state, action) => {
       state.loading = false;
       state.error = action.payload;
     },
@@ -277,6 +334,7 @@ export {
   resetPasssword,
   sendResetPassswordEmail,
   fetchUpdateUserDetails,
+  loginWithGoogle,
 };
 // export states
 export default authSlice.reducer;

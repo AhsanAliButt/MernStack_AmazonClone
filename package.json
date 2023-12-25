@@ -1,5 +1,6 @@
 {
   "dependencies": {
-    "otp-generator": "^4.0.1"
+    "otp-generator": "^4.0.1",
+    "passport": "^0.7.0"
   }
 }

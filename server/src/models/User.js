@@ -19,29 +19,52 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  fromGoogle: {
+    type: Boolean,
+    default: false,
+    required: true,
+    immutable: true,
+  },
   password: {
     type: String,
-    required: true,
+    required: function () {
+      return this.fromGoogle !== true;
+    },
   },
   dob: {
     type: String,
-    required: true,
+    required: function () {
+      // Set to false if logging in from Google, true otherwise
+      return !this.fromGoogle;
+    },
   },
   tc: {
     type: Boolean,
-    required: true,
+    required: function () {
+      // Set to false if logging in from Google, true otherwise
+      return !this.fromGoogle;
+    },
   },
   imageUrl: {
     type: String,
-    required: false,
+    required: function () {
+      // Set to false if logging in from Google, true otherwise
+      return !this.fromGoogle;
+    },
   },
   country: {
     type: String,
-    required: true,
+    required: function () {
+      // Set to false if logging in from Google, true otherwise
+      return !this.fromGoogle;
+    },
   },
   recoveryEmail: {
     type: String,
-    required: true,
+    required: function () {
+      // Set to false if logging in from Google, true otherwise
+      return !this.fromGoogle;
+    },
   },
   zipCode: {
     type: String,

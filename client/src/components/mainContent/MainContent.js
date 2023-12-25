@@ -20,7 +20,7 @@ import useProducts from "../hooks/useProducts";
 const MainContent = () => {
   const { allProducts } = useStates();
   const { addToCart, fetchProductDetails } = useProducts();
-  console.log("Main Content", allProducts);
+  // console.log("Main Content", allProducts);
 
   const navigate = useNavigate();
 

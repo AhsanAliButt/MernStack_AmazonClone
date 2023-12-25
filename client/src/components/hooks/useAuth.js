@@ -6,6 +6,7 @@ import {
   createUser,
   fetchUpdateUserDetails,
   loginUser,
+  loginWithGoogle,
   resetPasssword,
   selectIsAuthenticated,
   selectUser,
@@ -160,7 +161,36 @@ const useAuth = () => {
     try {
     } catch (error) {}
   };
+  const handleSignInWithGoogle = () => {
+    window.open("http://localhost:8001/api/user/google", "_self");
+  };
 
+  const getUserByToken = async (token) => {
+    try {
+      // Perform authentication logic, e.g., make an API request to verify credentials
+      // If authentication is successful, dispatch the loginUser action
+      const userToken = token;
+      const resultAction = await dispatch(loginWithGoogle(token));
+      if (
+        // isLogin === true
+        loginWithGoogle.fulfilled.match(resultAction)
+      ) {
+        const successMessage = resultAction.payload.message;
+        toast.success(successMessage);
+        setTimeout(() => {
+          navigate("/");
+        }, 1000);
+      } else if (loginWithGoogle.rejected.match(resultAction)) {
+        // This code will run if there was an error during authentication
+        const error = resultAction.error.message;
+        console.log("ERRORRRRRRRRR", error);
+        toast.error(error);
+        // Handle the error, e.g., show an error message to the user
+      }
+    } catch (error) {
+      console.error("Authentication failed:", error);
+    }
+  };
   return {
     loginHandler,
     signUpHandler,
@@ -169,6 +199,8 @@ const useAuth = () => {
     forgotPassword,
     recoverPasswordEmail,
     updateUserHandler,
+    handleSignInWithGoogle,
+    getUserByToken,
   };
 };
 
