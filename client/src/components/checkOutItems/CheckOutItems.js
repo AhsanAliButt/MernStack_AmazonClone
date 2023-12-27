@@ -7,8 +7,12 @@ import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
 import {
   addItem,
   decrement,
+  fetchDecreaseQuantity,
+  fetchRemoveItem,
+  fetchAddItemToCart,
   increment,
   removeItem,
+  fetchIncreaseQuantity,
 } from "../../redux/slicers/cartSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
@@ -31,15 +35,17 @@ const CheckOutItems = ({ item, index }) => {
   const dispatch = useDispatch();
   const handleRemoveItem = (index) => {
     // console.log(index);
-    dispatch(removeItem(index));
+    dispatch(fetchRemoveItem(index));
   };
   const handleIncrement = (e) => {
     // console.log("ID OF PRODUCT", e);
-    dispatch(increment(e));
+    // dispatch(increment(e));
+    dispatch(fetchIncreaseQuantity(e));
   };
   const handleDecrement = (e) => {
     // console.log("ID OF PRODUCT", e);
-    dispatch(decrement(e));
+    // dispatch(decrement(e));
+    dispatch(fetchDecreaseQuantity(e));
   };
   // console.log("INDEX", index);
   return (

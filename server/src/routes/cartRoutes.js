@@ -9,7 +9,9 @@ router.use("/addToCart", authMiddleware);
 //Protecting the routes with the authentication middleware
 router.post("/addToCart", CartController.addItemToCart); //Add Cart
 router.post("/getCart", CartController.getCart); //Get Cart
+router.patch("/increaseQuantity", CartController.increaseQuantity); //Get Cart
 router.patch("/decreaseQuantity", CartController.decreaseQuantity); //Get Cart
+router.delete("/removeItemFromCart", CartController.removeItem); //Get Cart
 // router.put("/updateProduct/:id", ProductController.updateProduct); //Update product
 // router.delete("/deleteProduct/:id", ProductController.deleteProduct); //Delete product
 // router.get("/getUserProducts/:userId", ProductController.getProductByUserId); //user's product

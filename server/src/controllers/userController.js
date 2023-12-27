@@ -1,4 +1,6 @@
 const UserModel = require("../models/User");
+const CartModel = require("../models/cart");
+const ProductModel = require("../models/product");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
@@ -8,6 +10,7 @@ const passport = require("passport");
 const otpGenerator = require("otp-generator");
 const cloudinary = require("cloudinary").v2;
 const cloudinarySecret = process.env.CLOUDNARY_API_SECRET;
+
 cloudinary.config({
   cloud_name: "dbi6jvkot",
   api_key: "268511633691445",
@@ -135,6 +138,8 @@ const UserController = {
       const token = jwt.sign({ _id: user._id }, secret, {
         expiresIn: "15d",
       });
+      // Retrieve the user's cart
+      const cart = await CartModel.findOne({ userId: user._id });
 
       // Set the cookie before sending the JSON response
       res.cookie("AmazonWeb", token, {
@@ -161,7 +166,7 @@ const UserController = {
           gender: user?.gender,
           // Include other user data as needed
         },
-        // cart: cart, // Include cart items
+        cart: cart || { products: [], subTotal: 0 }, // Include cart items or an empty cart if it doesn't exist
       });
     } catch (error) {
       return res.status(500).json({
@@ -526,7 +531,43 @@ const UserController = {
           message: "User not found",
         });
       }
+      // Retrieve the user's cart
+      const cart = await CartModel.findOne({ userId: user._id });
+      // Extract product IDs from the cart
+      const productIds = cart.products.map((product) => product.productId);
 
+      // Find product details for each product ID
+      const productsDetails = await ProductModel.find({
+        _id: { $in: productIds },
+      });
+
+      console.log(
+        "PRODUCT DETAILS",
+        productsDetails,
+        "PRODUCT IDS",
+        productIds
+      );
+      // Enhance each product in the cart with additional details
+      const enhancedCart = {
+        products: cart.products.map((cartProduct) => {
+          const productDetails = productsDetails.find((product) =>
+            product._id.equals(cartProduct.productId)
+          );
+          return {
+            ...cartProduct.toObject(), // Convert to plain JavaScript object
+            name: productDetails
+              ? productDetails.name
+              : "Product Name Not Found",
+            imageUrl: productDetails
+              ? productDetails.imageUrl
+              : "Product Picture Not Found",
+            // Add other details as needed
+          };
+        }),
+        subTotal: cart.subTotal,
+      };
+
+      console.log("ENHANCED CART", enhancedCart);
       // Set the cookie before sending the JSON response
       res.cookie("AmazonWeb", token, {
         expires: new Date(Date.now() + 900000),
@@ -553,7 +594,7 @@ const UserController = {
           fromGoogle: user?.fromGoogle,
           // Include other user data as needed
         },
-        // cart: cart, // Include cart items
+        cart: enhancedCart || { products: [], subTotal: 0 }, // Include cart items or an empty cart if it doesn't exist
       });
     } catch (error) {
       return res.status(500).json({

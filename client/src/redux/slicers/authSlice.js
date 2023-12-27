@@ -12,6 +12,9 @@ import {
 } from "../../components/constant/authApiCalls";
 import { createSelector } from "reselect"; // its normaly use to memorize the selectors used in the component
 import { useNavigate } from "react-router-dom";
+import { addItem } from "./cartSlice";
+import { useDispatch } from "react-redux";
+
 const loginUser = createAsyncThunk(
   "auth/loginUser",
   async (credentials, thunkApi) => {
@@ -41,6 +44,8 @@ const loginWithGoogle = createAsyncThunk(
     try {
       const user = await signInWithGoogle(token);
       // localStorage.setItem("usersdatatoken", user.token);
+
+      console.log("Cart Items:", user.cart.products);
       if (user.status === 200) {
         return thunkApi.fulfillWithValue(user);
       } else if (user.status === 400) {
@@ -177,7 +182,6 @@ const fetchUpdateUserDetails = createAsyncThunk(
 //     }
 //   }
 // );
-
 const authSlice = createSlice({
   name: "auth",
   initialState: {
@@ -191,6 +195,7 @@ const authSlice = createSlice({
     loading: false,
     error: null,
     success: null,
+    cartItems: [],
   },
   reducers: {
     clearErrors: (state) => {
@@ -221,6 +226,8 @@ const authSlice = createSlice({
       state.loading = false;
       state.error = null;
       state.userId = action.payload.user._id;
+      const cartItems = selectCartItems(action.payload.cart.products);
+      console.log("Cart Items:", action.payload.cart.products);
       // Store the last route
     },
     [loginUser.rejected]: (state, action) => {
@@ -247,12 +254,23 @@ const authSlice = createSlice({
       state.loading = true;
     },
     [loginWithGoogle.fulfilled]: (state, action) => {
+      // const dispatch = useDispatch();
       state.user = action.payload.user;
       state.token = action.payload.token;
       state.isAuthenticated = true;
       state.loading = false;
       state.error = null;
       state.userId = action.payload.user._id;
+      state.cartItems = action.payload.cart.products;
+      // const cartItems = selectCartItems(action.payload.cart.products);
+      // console.log("Cart Items:", action.payload.cart.products);
+      // const cartItems = action.payload.cart.products;
+      // console.log("Cart Items:", cartItems);
+
+      // // Dispatch the addItem action to update the items state in the cart slice
+      // cartItems.forEach((item) => {
+      //   dispatch(addItem(item));
+      // });
       // Store the last route
     },
     [loginWithGoogle.rejected]: (state, action) => {
@@ -371,4 +389,8 @@ export const selectlastRoute = createSelector(
 export const selectUserId = createSelector(
   [selectAuthState],
   (auth) => auth.userId
+);
+export const selectCartItems = createSelector(
+  [selectAuthState],
+  (auth) => auth.cartItems
 );

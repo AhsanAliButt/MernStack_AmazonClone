@@ -2,6 +2,7 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   selectAuthLoading,
+  selectCartItems,
   selectLoading,
   selectToken,
   selectUser,
@@ -24,6 +25,7 @@ const useStates = () => {
   const cartItems = useSelector((state) => state.cart.items);
   const allProducts = useSelector(selectProducts);
   const filteredProducts = useSelector(selectfilteredProducts);
+  const userCartItems = useSelector(selectCartItems);
 
   return {
     authToken,
@@ -35,6 +37,7 @@ const useStates = () => {
     allProducts,
     filteredProducts,
     authLoading,
+    userCartItems,
   };
 };
 

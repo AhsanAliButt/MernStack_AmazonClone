@@ -13,10 +13,19 @@ import { ThemeProvider } from "@emotion/react";
 import { customTheme } from "./theme";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import useStates from "./components/hooks/useStates";
+import { setItemsFromList } from "./redux/slicers/cartSlice";
 
 // console.log("Last Route: " + selectlastRoute);
 
 function App() {
+  const { userCartItems } = useStates();
+  console.log("USER CART ITEMS", userCartItems);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(setItemsFromList(userCartItems));
+  }, [userCartItems]);
+
   return <Routing />;
 }
 

@@ -16,22 +16,43 @@ import CancelPayment from "../pages/cancelPayment/CancelPayment";
 import SendPasswordRecoveryEmail from "../pages/auth/sendPasswordRecoveryEmail/sendPasswordRecoveryEmail";
 import Footer from "../components/footer/Footer";
 import Navbar1 from "../components/navBar/Navbar1";
-
+import { useSelector } from "react-redux";
+import { selectIsAuthenticated } from "../redux/slicers/authSlice";
+import { Navigate } from "react-router-dom";
 const Routing = () => {
+  const isAuthenticated = useSelector(selectIsAuthenticated);
   return (
     <Router>
       <Navbar />
       {/* <Navbar1 /> */}
       <Routes>
         <Route path="/search" element={<DisplayItemPage />} />
-        <Route path="/myProducts" element={<MyProducts />} />
+        <Route
+          path="/myProducts"
+          element={isAuthenticated ? <MyProducts /> : <Navigate to="/signIn" />}
+        />
         <Route path="/productOrderPage/:id" element={<ProductOrderPage />} />
         <Route path="/checkOutPage" element={<CheckOutPage />} />
         <Route path="/signIn" element={<SignIn />} />
         <Route path="/signUp" element={<SignUp />} />
-        <Route path="/forgetPassword" element={<ForgetPassword />} />
-        <Route path="/productForm" element={<ProductForm />} />
-        <Route path="/productEditForm/:id" element={<ProductForm />} />
+        <Route
+          path="/forgetPassword"
+          element={
+            isAuthenticated ? <ForgetPassword /> : <Navigate to="/signIn" />
+          }
+        />
+        <Route
+          path="/productForm"
+          element={
+            isAuthenticated ? <ProductForm /> : <Navigate to="/signIn" />
+          }
+        />
+        <Route
+          path="/productEditForm/:id"
+          element={
+            isAuthenticated ? <ProductForm /> : <Navigate to="/signIn" />
+          }
+        />
         <Route path="/successPayment" element={<SuccessPayment />} />
         <Route path="/cancelPayment" element={<CancelPayment />} />
         <Route
@@ -42,7 +63,10 @@ const Routing = () => {
           path="/sendRecoveryEmail"
           element={<SendPasswordRecoveryEmail />}
         />
-        <Route path="/editProfile/:userId/:token" element={<SignUp />} />
+        <Route
+          path="/editProfile/:userId/:token"
+          element={isAuthenticated ? <SignUp /> : <Navigate to="/signIn" />}
+        />
         <Route path="/" element={<MainPage />} />
       </Routes>
       <Footer />
@@ -51,7 +75,13 @@ const Routing = () => {
 };
 
 // export default Routing;
-
+{
+  /* <PrivateRoute
+          path="/myProducts"
+          element={<MyProducts />}
+          isAuthenticated={isAuthenticated}
+        /> */
+}
 // import ReactDOM from "react-dom/client";
 // import { BrowserRouter, Routes, Route } from "react-router-dom";
 // // import your route components too

@@ -1,7 +1,12 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { createSelector } from "reselect";
 import { selectUser } from "./authSlice";
-import { addItemToCart } from "../../components/constant/cartApiCalls";
+import {
+  addItemToCart,
+  removeItemFromCart,
+  decreaseQuantityOfCart,
+  increaseQuantityOfCart,
+} from "../../components/constant/cartApiCalls";
 const fetchAddItemToCart = createAsyncThunk(
   "cart/fetchAddItemToCart",
   async (item, thunkAPI) => {
@@ -37,6 +42,114 @@ const fetchAddItemToCart = createAsyncThunk(
     }
   }
 );
+const fetchIncreaseQuantity = createAsyncThunk(
+  "cart/fetchIncreaseQuantity",
+  async (item, thunkAPI) => {
+    // Always add the item to local storage
+    const state = thunkAPI.getState();
+    const userId = state.auth.userId;
+    const userToken = state.auth.token;
+    const localCart = state.cart;
+    console.log("ITEMMMMMMMMMMMMMM", item);
+    // Perform local actions
+    thunkAPI.dispatch(increment(item));
+    if (userId) {
+      try {
+        const response = await increaseQuantityOfCart(item, userId, userToken);
+        console.log("RESPONSE FOR CART API", response);
+        if (response.status === 200) {
+          // Scenario 1: If the status is 200, it's a successful response
+          // You can handle it here and potentially return some data if needed
+          // const item = { ...data, quantity: 1 }; // Create the item to add to the cart
+          thunkAPI.dispatch(setTotal()); // Recalculate the total
+          return item;
+        } else if (response.status === 400) {
+          // Scenario 2: If the status is 400, it's an error response
+          // You can handle it here and reject with a message
+          console.log("Item Add to Cart failed:", response.message);
+          return thunkAPI.rejectWithValue(response.message);
+        } else {
+          // Scenario 3: Handle other status codes as needed
+          // You can handle other status codes as needed
+          console.error("Unexpected status code:", response.status);
+          return thunkAPI.rejectWithValue("Unexpected status code");
+        }
+      } catch (error) {}
+    }
+  }
+);
+const fetchDecreaseQuantity = createAsyncThunk(
+  "cart/fetchDecreaseQuantity",
+  async (item, thunkAPI) => {
+    // Always add the item to local storage
+    const state = thunkAPI.getState();
+    const userId = state.auth.userId;
+    const userToken = state.auth.token;
+    const localCart = state.cart;
+    console.log("ITEMMMMMMMMMMMMMM", item);
+    // Perform local actions
+    thunkAPI.dispatch(decrement(item));
+    if (userId) {
+      try {
+        const response = await decreaseQuantityOfCart(item, userId, userToken);
+        console.log("RESPONSE FOR CART API", response);
+        if (response.status === 200) {
+          // Scenario 1: If the status is 200, it's a successful response
+          // You can handle it here and potentially return some data if needed
+          // const item = { ...data, quantity: 1 }; // Create the item to add to the cart
+          thunkAPI.dispatch(setTotal()); // Recalculate the total
+          return item;
+        } else if (response.status === 400) {
+          // Scenario 2: If the status is 400, it's an error response
+          // You can handle it here and reject with a message
+          console.log("Item Add to Cart failed:", response.message);
+          return thunkAPI.rejectWithValue(response.message);
+        } else {
+          // Scenario 3: Handle other status codes as needed
+          // You can handle other status codes as needed
+          console.error("Unexpected status code:", response.status);
+          return thunkAPI.rejectWithValue("Unexpected status code");
+        }
+      } catch (error) {}
+    }
+  }
+);
+const fetchRemoveItem = createAsyncThunk(
+  "cart/fetchRemoveItem",
+  async (item, thunkAPI) => {
+    // Always add the item to local storage
+    const state = thunkAPI.getState();
+    const userId = state.auth.userId;
+    const userToken = state.auth.token;
+    const localCart = state.cart;
+    console.log("ITEMMMMMMMMMMMMMM", item);
+    // Perform local actions
+    thunkAPI.dispatch(removeItem(item));
+    if (userId) {
+      try {
+        const response = await removeItemFromCart(item, userId, userToken);
+        console.log("RESPONSE FOR CART API", response);
+        if (response.status === 200) {
+          // Scenario 1: If the status is 200, it's a successful response
+          // You can handle it here and potentially return some data if needed
+          // const item = { ...data, quantity: 1 }; // Create the item to add to the cart
+          thunkAPI.dispatch(setTotal()); // Recalculate the total
+          return item;
+        } else if (response.status === 400) {
+          // Scenario 2: If the status is 400, it's an error response
+          // You can handle it here and reject with a message
+          console.log("Item Add to Cart failed:", response.message);
+          return thunkAPI.rejectWithValue(response.message);
+        } else {
+          // Scenario 3: Handle other status codes as needed
+          // You can handle other status codes as needed
+          console.error("Unexpected status code:", response.status);
+          return thunkAPI.rejectWithValue("Unexpected status code");
+        }
+      } catch (error) {}
+    }
+  }
+);
 
 const cartSlice = createSlice({
   name: "cart",
@@ -47,7 +160,19 @@ const cartSlice = createSlice({
   },
   reducers: {
     // add your non-async reducers here
+    setItemsFromList: (state, action) => {
+      const productList = action.payload; // Assuming action.payload is an array of products
 
+      // Reset items state with the new product list
+      state.items = productList.map((product) => ({
+        ...product,
+        quantity: product.quantity || 1, // Set quantity to 1 if not provided
+      }));
+
+      // Recalculate count and total
+      state.count = state.items.length;
+      state.total = state.items.reduce((acc, item) => acc + item.price, 0);
+    },
     increment: (state, action) => {
       const productId = action.payload;
 
@@ -133,6 +258,33 @@ const cartSlice = createSlice({
         console.warn("Invalid index to remove item:", indexToRemove);
       }
     },
+    // removeItem: (state, action) => {
+    //   const itemIdToRemove = action.payload; // Assuming action.payload contains the ID of the item to remove
+
+    //   // Find the index of the item with the specified ID
+    //   const indexToRemove = state.items.findIndex(
+    //     (item) => item.id === itemIdToRemove
+    //   );
+
+    //   if (indexToRemove !== -1) {
+    //     state.items.splice(indexToRemove, 1); // Remove the item from the items array
+    //     state.count = state.items.length; // Update the count
+
+    //     state.total = state.items.reduce((acc, item) => {
+    //       return acc + item.price;
+    //     }, 0); // Recalculate the total
+
+    //     localStorage.setItem(
+    //       "cart",
+    //       JSON.stringify({
+    //         items: state.items,
+    //         count: state.count,
+    //       })
+    //     );
+    //   } else {
+    //     console.warn("Item with ID not found:", itemIdToRemove);
+    //   }
+    // },
     setTotal: (state) => {
       console.log("Setting total");
       let totalPrice = 0;
@@ -149,6 +301,8 @@ const cartSlice = createSlice({
     clearCart: (state) => {
       state.items = [];
     },
+    // Selector function to get the cart items
+    selectCartItems: (state) => state.cart.items,
   },
 
   extraReducers: {
@@ -170,8 +324,15 @@ export const {
   removeItem,
   setTotal,
   clearCart,
+  selectCartItems,
+  setItemsFromList,
 } = cartSlice.actions;
 
-export { fetchAddItemToCart };
+export {
+  fetchIncreaseQuantity,
+  fetchAddItemToCart,
+  fetchDecreaseQuantity,
+  fetchRemoveItem,
+};
 
 export default cartSlice.reducer;
