@@ -12,7 +12,7 @@ import {
 } from "../../components/constant/authApiCalls";
 import { createSelector } from "reselect"; // its normaly use to memorize the selectors used in the component
 import { useNavigate } from "react-router-dom";
-import { addItem } from "./cartSlice";
+import { addItem, clearCart, setItemsFromList } from "./cartSlice";
 import { useDispatch } from "react-redux";
 
 const loginUser = createAsyncThunk(
@@ -21,6 +21,7 @@ const loginUser = createAsyncThunk(
     try {
       const user = await signInUser(credentials);
       // localStorage.setItem("usersdatatoken", user.token);
+      thunkApi.dispatch(setItemsFromList(user.cart.products));
       if (user.status === 200) {
         return thunkApi.fulfillWithValue(user);
       } else if (user.status === 400) {
@@ -41,11 +42,15 @@ const loginUser = createAsyncThunk(
 const loginWithGoogle = createAsyncThunk(
   "auth/loginWithGoogle",
   async (token, thunkApi) => {
+    const state = thunkApi.getState();
+    const localCart = state.cart.items;
+
     try {
       const user = await signInWithGoogle(token);
       // localStorage.setItem("usersdatatoken", user.token);
-
+      thunkApi.dispatch(setItemsFromList([]));
       console.log("Cart Items:", user.cart.products);
+      thunkApi.dispatch(setItemsFromList(user.cart.products));
       if (user.status === 200) {
         return thunkApi.fulfillWithValue(user);
       } else if (user.status === 400) {
@@ -159,6 +164,52 @@ const fetchUpdateUserDetails = createAsyncThunk(
     }
   }
 );
+// const signOutUser = createAsyncThunk("auth/signOutUser", async (thunkApi) => {
+//   try {
+//     console.log("AuthSliceSignOut");
+//     // Make the API call to sign out
+//     thunkApi.dispatch(clearUser());
+//     thunkApi.dispatch(clearCart());
+//     const response = await signOutUser();
+
+//     if (response.status === 200) {
+//       // Dispatch any additional actions or handle the response as needed
+//       // For example, clear user data, reset authentication state, etc.
+//       thunkApi.dispatch(clearUser());
+//       // You can also dispatch other actions if needed
+//       // thunkApi.dispatch(someOtherAction());
+
+//       return thunkApi.fulfillWithValue(response);
+//     } else {
+//       console.error("Unexpected status code:", response.status);
+//       return thunkApi.rejectWithValue("Unexpected status code");
+//     }
+//   } catch (error) {
+//     console.error("Error", error);
+//     return thunkApi.rejectWithValue(error);
+//   }
+// });
+const signOutUser = createAsyncThunk(
+  "auth/signOutUser",
+  async (_, thunkApi) => {
+    try {
+      console.log("AuthSliceSignOut");
+
+      // Clear local user and cart data
+      thunkApi.dispatch(clearUser());
+      thunkApi.dispatch(clearCart());
+
+      // You can perform any other local state changes here if needed
+
+      // No API call is needed, so you can immediately fulfill the promise
+      return thunkApi.fulfillWithValue("Sign-out successful");
+    } catch (error) {
+      console.error("Error", error);
+      return thunkApi.rejectWithValue(error);
+    }
+  }
+);
+
 // const getUserDetailsByToken = createAsyncThunk(
 //   "auth/getUserDetailsByToken",
 //   async (token, thunkApi) => {
@@ -209,6 +260,8 @@ const authSlice = createSlice({
       state.loading = false;
       state.error = null;
       state.userId = null;
+      // Dispatch the clearItems action to clear the items state in the other slice
+      clearCart(state.cart);
     },
     setPreviousRoute: (state, action) => {
       state.lastRoute = action.payload;
@@ -226,30 +279,12 @@ const authSlice = createSlice({
       state.loading = false;
       state.error = null;
       state.userId = action.payload.user._id;
-      const cartItems = selectCartItems(action.payload.cart.products);
-      console.log("Cart Items:", action.payload.cart.products);
       // Store the last route
     },
     [loginUser.rejected]: (state, action) => {
       state.loading = false;
       state.error = action.payload;
     },
-    // [getUserDetailsByToken.pending]: (state, action) => {
-    //   state.loading = true;
-    // },
-    // [getUserDetailsByToken.fulfilled]: (state, action) => {
-    //   state.user = action.payload.user;
-    //   state.token = action.payload.token;
-    //   state.isAuthenticated = true;
-    //   state.loading = false;
-    //   state.error = null;
-    //   state.userId = action.payload.user._id;
-    //   // Store the last route
-    // },
-    // [getUserDetailsByToken.rejected]: (state, action) => {
-    //   state.loading = false;
-    //   state.error = action.payload;
-    // },
     [loginWithGoogle.pending]: (state, action) => {
       state.loading = true;
     },
@@ -261,17 +296,6 @@ const authSlice = createSlice({
       state.loading = false;
       state.error = null;
       state.userId = action.payload.user._id;
-      state.cartItems = action.payload.cart.products;
-      // const cartItems = selectCartItems(action.payload.cart.products);
-      // console.log("Cart Items:", action.payload.cart.products);
-      // const cartItems = action.payload.cart.products;
-      // console.log("Cart Items:", cartItems);
-
-      // // Dispatch the addItem action to update the items state in the cart slice
-      // cartItems.forEach((item) => {
-      //   dispatch(addItem(item));
-      // });
-      // Store the last route
     },
     [loginWithGoogle.rejected]: (state, action) => {
       state.loading = false;
@@ -296,14 +320,8 @@ const authSlice = createSlice({
       state.loading = true;
     },
     [resetPasssword.fulfilled]: (state, action) => {
-      // state.user = action.payload.user;
-      // state.token = action.payload.token;
-      // state.isAuthenticated = true;
       state.success = action.payload;
       state.loading = false;
-      // state.error = null;
-      // state.userId = action.payload.user._id;
-      // Store the last route
     },
     [resetPasssword.rejected]: (state, action) => {
       state.loading = false;
@@ -313,14 +331,8 @@ const authSlice = createSlice({
       state.loading = true;
     },
     [sendResetPassswordEmail.fulfilled]: (state, action) => {
-      // state.user = action.payload.user;
-      // state.token = action.payload.token;
-      // state.isAuthenticated = true;
       state.loading = false;
       state.success = action.payload;
-      // state.error = null;
-      // state.userId = action.payload.user._id;
-      // Store the last route
     },
     [sendResetPassswordEmail.rejected]: (state, action) => {
       state.loading = false;
@@ -341,6 +353,29 @@ const authSlice = createSlice({
       state.loading = false;
       state.error = action.payload;
     },
+    [signOutUser.pending]: (state, action) => {
+      state.loading = true;
+    },
+    [signOutUser.fulfilled]: (state, action) => {
+      // Handle sign-out success, clear user-related state
+      state.user = "";
+      state.token = null;
+      state.isAuthenticated = false;
+      state.loading = false;
+      state.error = null;
+      state.userId = null;
+      state.success = null;
+      state.cartItems = [];
+
+      // You can also handle other state changes or dispatch additional actions if needed
+
+      // Store the last route or perform other actions if needed
+    },
+    [signOutUser.rejected]: (state, action) => {
+      // Handle sign-out failure
+      state.loading = false;
+      state.error = action.payload;
+    },
   },
 });
 
@@ -348,6 +383,7 @@ const authSlice = createSlice({
 export const { clearErrors, clearUser, setPreviousRoute } = authSlice.actions;
 export {
   loginUser,
+  signOutUser,
   createUser,
   resetPasssword,
   sendResetPassswordEmail,

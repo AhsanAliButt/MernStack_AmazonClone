@@ -513,6 +513,95 @@ const UserController = {
       });
     }
   },
+  // userDetailsByToken: async (req, res) => {
+  //   try {
+  //     const { token } = req.params;
+  //     console.log("User token: " + token);
+
+  //     // Verify the token and extract the user ID
+  //     const decoded = jwt.verify(token, process.env.JWT_SECRET);
+  //     const userId = decoded._id;
+
+  //     // Find the user by ID
+  //     const user = await UserModel.findById(userId);
+
+  //     if (!user) {
+  //       return res.status(400).json({
+  //         status: 400,
+  //         message: "User not found",
+  //       });
+  //     }
+  //     // Retrieve the user's cart
+  //     const cart = await CartModel.findOne({ userId: user._id });
+  //     // Extract product IDs from the cart
+  //     const productIds = cart.products.map((product) => product.productId);
+
+  //     // Find product details for each product ID
+  //     const productsDetails = await ProductModel.find({
+  //       _id: { $in: productIds },
+  //     });
+
+  //     console.log(
+  //       "PRODUCT DETAILS",
+  //       productsDetails,
+  //       "PRODUCT IDS",
+  //       productIds
+  //     );
+  //     // Enhance each product in the cart with additional details
+  //     const enhancedCart = {
+  //       products: cart.products.map((cartProduct) => {
+  //         const productDetails = productsDetails.find((product) =>
+  //           product._id.equals(cartProduct.productId)
+  //         );
+  //         return {
+  //           ...cartProduct.toObject(), // Convert to plain JavaScript object
+  //           name: productDetails
+  //             ? productDetails.name
+  //             : "Product Name Not Found",
+  //           imageUrl: productDetails
+  //             ? productDetails.imageUrl
+  //             : "Product Picture Not Found",
+  //           // Add other details as needed
+  //         };
+  //       }),
+  //       subTotal: cart.subTotal,
+  //     };
+
+  //     console.log("ENHANCED CART", enhancedCart);
+  //     // Set the cookie before sending the JSON response
+  //     res.cookie("AmazonWeb", token, {
+  //       expires: new Date(Date.now() + 900000),
+  //       httpOnly: true,
+  //     });
+
+  //     // Now, send the JSON response
+  //     return res.status(200).json({
+  //       status: 200,
+  //       message: "Login successful",
+  //       token: token,
+  //       user: {
+  //         firstName: user?.firstName,
+  //         lastName: user?.lastName,
+  //         imageUrl: user?.imageUrl,
+  //         name: user?.name,
+  //         _id: user?._id,
+  //         email: user?.email,
+  //         dob: user?.dob,
+  //         zipCode: user?.zipCode,
+  //         country: user?.country,
+  //         recoveryEmail: user?.recoveryEmail,
+  //         gender: user?.gender,
+  //         fromGoogle: user?.fromGoogle,
+  //         // Include other user data as needed
+  //       },
+  //       cart: enhancedCart || { products: [], subTotal: 0 }, // Include cart items or an empty cart if it doesn't exist
+  //     });
+  //   } catch (error) {
+  //     return res.status(500).json({
+  //       message: error.message,
+  //     });
+  //   }
+  // },
   userDetailsByToken: async (req, res) => {
     try {
       const { token } = req.params;
@@ -531,10 +620,14 @@ const UserController = {
           message: "User not found",
         });
       }
+
       // Retrieve the user's cart
       const cart = await CartModel.findOne({ userId: user._id });
-      // Extract product IDs from the cart
-      const productIds = cart.products.map((product) => product.productId);
+
+      // Initialize an empty cart if it doesn't exist
+      const productIds = cart
+        ? cart.products.map((product) => product.productId)
+        : [];
 
       // Find product details for each product ID
       const productsDetails = await ProductModel.find({
@@ -547,27 +640,31 @@ const UserController = {
         "PRODUCT IDS",
         productIds
       );
+
       // Enhance each product in the cart with additional details
       const enhancedCart = {
-        products: cart.products.map((cartProduct) => {
-          const productDetails = productsDetails.find((product) =>
-            product._id.equals(cartProduct.productId)
-          );
-          return {
-            ...cartProduct.toObject(), // Convert to plain JavaScript object
-            name: productDetails
-              ? productDetails.name
-              : "Product Name Not Found",
-            imageUrl: productDetails
-              ? productDetails.imageUrl
-              : "Product Picture Not Found",
-            // Add other details as needed
-          };
-        }),
-        subTotal: cart.subTotal,
+        products: cart
+          ? cart.products.map((cartProduct) => {
+              const productDetails = productsDetails.find((product) =>
+                product._id.equals(cartProduct.productId)
+              );
+              return {
+                ...cartProduct.toObject(), // Convert to plain JavaScript object
+                name: productDetails
+                  ? productDetails.name
+                  : "Product Name Not Found",
+                imageUrl: productDetails
+                  ? productDetails.imageUrl
+                  : "Product Picture Not Found",
+                // Add other details as needed
+              };
+            })
+          : [],
+        subTotal: cart ? cart.subTotal : 0,
       };
 
       console.log("ENHANCED CART", enhancedCart);
+
       // Set the cookie before sending the JSON response
       res.cookie("AmazonWeb", token, {
         expires: new Date(Date.now() + 900000),

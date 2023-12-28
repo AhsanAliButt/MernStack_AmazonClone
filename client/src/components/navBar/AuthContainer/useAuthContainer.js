@@ -4,6 +4,7 @@ import { routes } from "../../constant/routes";
 import useAuth from "../../hooks/useAuth";
 import { useDispatch } from "react-redux";
 import useStates from "../../hooks/useStates";
+import { signOutUser } from "../../../redux/slicers/authSlice";
 const useAuthContainer = () => {
   const dispatch = useDispatch();
   const [showDropdown, setShowDropdown] = useState(false);
@@ -12,7 +13,7 @@ const useAuthContainer = () => {
   const handleFocus = () => {
     alert("Focus");
   };
-  const { signOutUser } = useAuth();
+  // const { signOutUser, signOut } = useAuth();
   const handleMouseEnter = () => {
     setShowDropdown(true);
   };

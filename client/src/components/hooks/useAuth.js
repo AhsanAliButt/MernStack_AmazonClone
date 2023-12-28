@@ -12,6 +12,7 @@ import {
   selectUser,
   sendResetPassswordEmail,
   setPreviousRoute,
+  signOutUser,
 } from "../../redux/slicers/authSlice";
 import { useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
@@ -56,12 +57,12 @@ const useAuth = () => {
     }
   };
 
-  const signOutUser = () => (dispatch) => {
-    console.log("Signing out in UseAuth");
-    // Clear the user-related data from Redux state
-    dispatch(clearErrors());
-    dispatch(clearUser()); //
-  };
+  // const signOutUser = () => (dispatch) => {
+  //   console.log("Signing out in UseAuth");
+  //   // Clear the user-related data from Redux state
+  //   dispatch(clearErrors());
+  //   dispatch(clearUser()); //
+  // };
 
   const signUpHandler = async (credentials, locationPath) => {
     try {
@@ -161,6 +162,11 @@ const useAuth = () => {
     try {
     } catch (error) {}
   };
+
+  const signOut = async (dispatch) => {
+    console.log("useAuthSignOut");
+    dispatch(signOutUser());
+  };
   const handleSignInWithGoogle = () => {
     window.open("http://localhost:8001/api/user/google", "_self");
   };
@@ -195,12 +201,13 @@ const useAuth = () => {
     loginHandler,
     signUpHandler,
     checkUser,
-    signOutUser,
+    // signOutUser,
     forgotPassword,
     recoverPasswordEmail,
     updateUserHandler,
     handleSignInWithGoogle,
     getUserByToken,
+    signOut,
   };
 };
 

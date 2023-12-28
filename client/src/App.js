@@ -22,9 +22,9 @@ function App() {
   const { userCartItems } = useStates();
   console.log("USER CART ITEMS", userCartItems);
   const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(setItemsFromList(userCartItems));
-  }, [userCartItems]);
+  // useEffect(() => {
+  //   dispatch(setItemsFromList(userCartItems));
+  // }, [userCartItems]);
 
   return <Routing />;
 }

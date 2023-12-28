@@ -27,27 +27,18 @@ import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined
 
 // ...
 const CheckOutItems = ({ item, index }) => {
-  const items = useSelector((state) => state.cart.items);
-  // console.log(items);
-  const [removeProduct, setRemoveProduct] = useState();
-  // let { id } = useParams();
-  // console.log("IDDDDDDDD", id);
   const dispatch = useDispatch();
-  const handleRemoveItem = (index) => {
-    // console.log(index);
-    dispatch(fetchRemoveItem(index));
+  const handleRemoveItem = (e) => {
+    dispatch(fetchRemoveItem(e));
   };
-  const handleIncrement = (e) => {
-    // console.log("ID OF PRODUCT", e);
-    // dispatch(increment(e));
-    dispatch(fetchIncreaseQuantity(e));
+  const handleIncrement = (productId) => {
+    dispatch(fetchIncreaseQuantity(productId));
   };
   const handleDecrement = (e) => {
-    // console.log("ID OF PRODUCT", e);
-    // dispatch(decrement(e));
+    console.log("Decrement", e);
     dispatch(fetchDecreaseQuantity(e));
   };
-  // console.log("INDEX", index);
+
   return (
     <Grid container mt={2}>
       <Grid item xs={12} sm={12} md={3} lg={2}>
@@ -80,7 +71,7 @@ const CheckOutItems = ({ item, index }) => {
                 <Box>
                   <DeleteOutlineOutlinedIcon
                     style={{ color: "red", cursor: "pointer" }}
-                    onClick={() => handleRemoveItem(index)}
+                    onClick={() => handleRemoveItem(item.productId)}
                   />
                 </Box>
               </Typography>
@@ -106,8 +97,8 @@ const CheckOutItems = ({ item, index }) => {
             <Button
               onClick={
                 item.quantity <= 1
-                  ? () => handleRemoveItem(index)
-                  : () => handleDecrement(item._id)
+                  ? () => handleRemoveItem(item.productId)
+                  : () => handleDecrement(item.productId)
               }
             >
               <DoNotDisturbOnOutlinedIcon
@@ -119,7 +110,12 @@ const CheckOutItems = ({ item, index }) => {
             <Button disabled>
               <Typography textAlign="center">{item.quantity}</Typography>
             </Button>
-            <Button onClick={() => handleIncrement(item._id)}>
+            <Button
+              onClick={() =>
+                // console.log(item.productId)
+                handleIncrement(item.productId)
+              }
+            >
               <AddCircleOutlineIcon
                 style={{
                   color: "green",

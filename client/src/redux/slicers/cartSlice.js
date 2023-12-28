@@ -44,12 +44,13 @@ const fetchAddItemToCart = createAsyncThunk(
 );
 const fetchIncreaseQuantity = createAsyncThunk(
   "cart/fetchIncreaseQuantity",
-  async (item, thunkAPI) => {
+  async (productId, thunkAPI) => {
     // Always add the item to local storage
     const state = thunkAPI.getState();
     const userId = state.auth.userId;
     const userToken = state.auth.token;
     const localCart = state.cart;
+    const item = productId;
     console.log("ITEMMMMMMMMMMMMMM", item);
     // Perform local actions
     thunkAPI.dispatch(increment(item));
@@ -161,6 +162,7 @@ const cartSlice = createSlice({
   reducers: {
     // add your non-async reducers here
     setItemsFromList: (state, action) => {
+      state.items = [];
       const productList = action.payload; // Assuming action.payload is an array of products
 
       // Reset items state with the new product list
@@ -176,8 +178,11 @@ const cartSlice = createSlice({
     increment: (state, action) => {
       const productId = action.payload;
 
+      // const productIndex = state.items.findIndex(
+      //   (item) => item._id === productId
+      // );
       const productIndex = state.items.findIndex(
-        (item) => item._id === productId
+        (item) => item.productId === productId || item._id === productId
       );
 
       if (productIndex >= 0) {
@@ -188,11 +193,19 @@ const cartSlice = createSlice({
       }
     },
     decrement: (state, action) => {
-      const productId = action.payload;
+      console.log("Decre" + action.payload);
+      const productId = action.payload; // Update this line
 
+      // const productId = action.payload;
+
+      // const productIndex = state.items.findIndex(
+      //   (item) => item._id === productId
+      // );
       const productIndex = state.items.findIndex(
-        (item) => item._id === productId
+        (item) => item.productId === productId || item._id === productId
       );
+
+      console.log("proDuctIndex", productIndex);
 
       if (productIndex !== -1) {
         if (state.items[productIndex].quantity > 0) {
@@ -238,15 +251,21 @@ const cartSlice = createSlice({
       );
     },
     removeItem: (state, action) => {
-      const indexToRemove = action.payload; // Assuming action.payload contains the index of the item to remove
+      const itemIdToRemove = action.payload; // Assuming action.payload contains the ProductId of the item to remove
 
-      if (indexToRemove >= 0 && indexToRemove < state.items.length) {
+      // Find the index of the item with the specified ID
+      const indexToRemove = state.items.findIndex(
+        (item) => item.productId === itemIdToRemove
+      );
+
+      if (indexToRemove !== -1) {
         state.items.splice(indexToRemove, 1); // Remove the item from the items array
         state.count = state.items.length; // Update the count
 
         state.total = state.items.reduce((acc, item) => {
           return acc + item.price;
         }, 0); // Recalculate the total
+
         localStorage.setItem(
           "cart",
           JSON.stringify({
@@ -255,36 +274,9 @@ const cartSlice = createSlice({
           })
         );
       } else {
-        console.warn("Invalid index to remove item:", indexToRemove);
+        console.warn("Item with ID not found:", itemIdToRemove);
       }
     },
-    // removeItem: (state, action) => {
-    //   const itemIdToRemove = action.payload; // Assuming action.payload contains the ID of the item to remove
-
-    //   // Find the index of the item with the specified ID
-    //   const indexToRemove = state.items.findIndex(
-    //     (item) => item.id === itemIdToRemove
-    //   );
-
-    //   if (indexToRemove !== -1) {
-    //     state.items.splice(indexToRemove, 1); // Remove the item from the items array
-    //     state.count = state.items.length; // Update the count
-
-    //     state.total = state.items.reduce((acc, item) => {
-    //       return acc + item.price;
-    //     }, 0); // Recalculate the total
-
-    //     localStorage.setItem(
-    //       "cart",
-    //       JSON.stringify({
-    //         items: state.items,
-    //         count: state.count,
-    //       })
-    //     );
-    //   } else {
-    //     console.warn("Item with ID not found:", itemIdToRemove);
-    //   }
-    // },
     setTotal: (state) => {
       console.log("Setting total");
       let totalPrice = 0;
@@ -298,8 +290,9 @@ const cartSlice = createSlice({
     saveToLocalCache: (state, action) => {
       localStorage.setItem("cart", JSON.stringify(state.items));
     },
-    clearCart: (state) => {
+    clearCart: (state, action) => {
       state.items = [];
+      state.count = 0;
     },
     // Selector function to get the cart items
     selectCartItems: (state) => state.cart.items,

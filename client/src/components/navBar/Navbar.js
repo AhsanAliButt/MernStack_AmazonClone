@@ -83,11 +83,13 @@ const Navbar = () => {
               </Typography>
             </Box>
           </Box>
-          <Box className="navbar_cart">
-            <Box className="navbar_cart_image"></Box>
-            <Box className="navbar_cart_count">{count}</Box>
-            <Box className="navbar_cart_text"> Cart</Box>
-          </Box>
+          <Link to={"/checkOutPage"}>
+            <Box className="navbar_cart">
+              <Box className="navbar_cart_image"></Box>
+              <Box className="navbar_cart_count">{count}</Box>
+              <Box className="navbar_cart_text"> Cart</Box>
+            </Box>
+          </Link>
         </Box>
         <Box
           style={{

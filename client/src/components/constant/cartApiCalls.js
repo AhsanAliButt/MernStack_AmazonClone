@@ -73,8 +73,8 @@ export const increaseQuantityOfCart = async (item, userId, userToken) => {
   }
 };
 export const decreaseQuantityOfCart = async (item, userId, userToken) => {
-  // console.log("CART API DeleteItemToCart", item, "quantity", item.quantity);
-  // console.log("CART API addItemToCart UserId", userId);
+  console.log("CART API DecreaseItemToCart", item);
+  console.log("CART API addItemToCart UserId", userId);
   // console.log("CART API addItemToCart UserToken", userToken);
   const requestOptions = {
     method: "PATCH", // Use Patch method for sending data
