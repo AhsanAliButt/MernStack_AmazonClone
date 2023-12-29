@@ -1,6 +1,7 @@
 const jwt = require("jsonwebtoken");
 const UserModel = require("../models/User");
 const secret = process.env.JWT_SECRET;
+const expiredTokens = new Set();
 
 const authMiddleware = async (req, res, next) => {
   let authorization =
@@ -9,6 +10,15 @@ const authMiddleware = async (req, res, next) => {
     try {
       authorization = authorization.split(" ")[1];
       console.log("AUTHORIZATION", authorization);
+      // Check if the token is in the list of expired tokens
+      // This is a security check to ensure user requests will not entertained if he is already signOut
+      // So no one can use his token for security breach
+      if (expiredTokens.has(authorization)) {
+        return res.status(401).json({
+          status: 401,
+          message: "Unauthorized: Token has been invalidated",
+        });
+      }
       // Verify Token
       const decoded = jwt.verify(authorization, secret);
       console.log("DECODE", decoded);

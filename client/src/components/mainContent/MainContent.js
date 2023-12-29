@@ -89,7 +89,7 @@ const MainContent = () => {
         backgroundColor: "#EAEDED",
         height: "100%",
       }}
-      // width={"100vw"}
+      // width={"auto"}
     >
       <Box className="main_page_container">
         <Box>
@@ -207,6 +207,12 @@ const MainContent = () => {
         <FeedCarsol allProducts={allProducts} />
       </Box>
     </Box>
+    // <Box
+    //   style={{
+    //     backgroundColor: "red",
+    //     height: "200px",
+    //   }}
+    // ></Box>
   );
 };
 

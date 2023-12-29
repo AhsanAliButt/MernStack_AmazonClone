@@ -10,6 +10,7 @@ const useAuthContainer = () => {
   const [showDropdown, setShowDropdown] = useState(false);
   const navigate = useNavigate();
   const { authToken } = useStates();
+  const { signOut } = useAuth();
   const handleFocus = () => {
     alert("Focus");
   };
@@ -35,7 +36,8 @@ const useAuthContainer = () => {
   };
   const handleSignOutButton = () => {
     console.log("SignOutTriiggered"); //
-    dispatch(signOutUser());
+    // dispatch(signOutUser());
+    signOut();
   };
   const handleEditProfile = (user) => {
     const userId = user._id;

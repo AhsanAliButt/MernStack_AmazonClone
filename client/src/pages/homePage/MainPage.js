@@ -15,7 +15,7 @@ const MainPage = () => {
   const [searchParams] = useSearchParams();
   const { getUserByToken } = useAuth();
   const getToken = searchParams.get("token");
-  console.log("TOKEN", getToken);
+  // console.log("TOKEN", getToken);
   useEffect(() => {
     dispatch(fetchProducts());
   }, []);

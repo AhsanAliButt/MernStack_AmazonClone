@@ -1,6 +1,5 @@
 .navbar_container {
   width: 100% !important;
-  height: 60px;
   background-color: black;
   position: fixed;
   top: 0;
@@ -19,8 +18,8 @@
 .navbar_locator_image {
   background: url("https://ik.imagekit.io/amazonClone/sprite_350x_yGip6ov_K.png?ik-sdk-version=javascript-1.4.3&updatedAt=1660049647468")
     no-repeat -70px -305px;
-  width: 19px;
-  height: 22px;
+  /* width: 19px;
+  height: 22px; */
 }
 .navbar_location {
   color: aliceblue;
@@ -30,7 +29,7 @@
 }
 .navbar_locator {
   display: flex;
-  margin: 20px 0px;
+  /* margin: 20px 0px; */
 }
 /* .navbar_searchbox {
   width: 50vw;

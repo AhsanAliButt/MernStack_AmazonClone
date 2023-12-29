@@ -20,6 +20,7 @@ router.post("/login", UserController.userLogin); //Login a user
 router.post("/sendEmailPasswordReset", UserController.sendEmailPasswordReset); //Send email to reset password
 router.post("/resetPassword/:id/:token", UserController.userPasswordReset); //Reset password
 router.post("/getUserByToken/:token", UserController.userDetailsByToken); //Get current user
+router.post("/signOut", UserController.signOut); //LogOut a user
 
 //Private Routes
 
@@ -34,35 +35,6 @@ router.get(
   "/google",
   passport.authenticate("google", { scope: ["email", "profile"] })
 );
-
-// // google callback
-// router.get(
-//   "/google/callback",
-//   passport.authenticate("google", {
-//     // successRedirect: process.env.CLIENT_SUCCESS_LOGIN_URL,
-//     // failureRedirect: process.env.CLIENT_FAIL_LOGIN_URL + "/?err=emailExists",
-//     successRedirect: "http://localhost:3000/",
-//     failureRedirect: "http://localhost:3000/signIn/",
-//   })
-// );
-// router.get("/google/callback", (req, res, next) => {
-//   passport.authenticate("google", (err, user, info) => {
-//     if (err) {
-//       console.error(err);
-//       return res.redirect("/error");
-//     }
-//     if (!user) {
-//       console.error(info);
-//       return res.redirect("http://localhost:3000/signIn/");
-//     }
-
-//     // Update user information in the session
-//     req.session.user = user;
-//     console.log("User information:", user);
-
-//     return res.redirect("http://localhost:3000/");
-//   })(req, res, next);
-// });
 router.get("/google/callback", (req, res, next) => {
   passport.authenticate("google", (err, user, info) => {
     if (err) {

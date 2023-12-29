@@ -221,3 +221,22 @@ export const updateUserDetails = async (credentials) => {
     throw error;
   }
 };
+
+export const signOutUserRequest = async (token) => {
+  const formData = new FormData();
+  formData.append("token", token);
+  requestOptions.body = formData;
+  try {
+
+    const response = await fetch(`${authApi}/signOut`, requestOptions);
+
+    const result = await response.json();
+
+    console.log("Response Body:", result);
+
+    return result; // API response contains a "userDetails" array
+  } catch (error) {
+    console.log("Error:", error);
+    throw error;
+  }
+};

@@ -8,7 +8,6 @@ import {
   loginUser,
   loginWithGoogle,
   resetPasssword,
-  selectIsAuthenticated,
   selectUser,
   sendResetPassswordEmail,
   setPreviousRoute,
@@ -19,16 +18,14 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 const useAuth = () => {
   const dispatch = useDispatch();
-  const user = useSelector(selectUser);
-  const isAuthenticated = useSelector(selectIsAuthenticated);
   const navigate = useNavigate();
-  const [isLogin, setIsLogin] = useState(isAuthenticated);
-  useEffect(() => {
-    setIsLogin(!false);
-  }, [user]);
+  const showToast = (type, message) => {
+    // Close existing toast before showing a new one
+    toast.dismiss();
 
-  // console.log(isLogin);
-
+    // Show the new toast with a fade transition
+    toast[type](message, { autoClose: 5000, transition: "fade" });
+  };
   const loginHandler = async (credentials, locationPath) => {
     try {
       console.log("location", locationPath);
@@ -56,13 +53,6 @@ const useAuth = () => {
       console.error("Authentication failed:", error);
     }
   };
-
-  // const signOutUser = () => (dispatch) => {
-  //   console.log("Signing out in UseAuth");
-  //   // Clear the user-related data from Redux state
-  //   dispatch(clearErrors());
-  //   dispatch(clearUser()); //
-  // };
 
   const signUpHandler = async (credentials, locationPath) => {
     try {
@@ -124,7 +114,7 @@ const useAuth = () => {
         toast.success(successMessage);
         setTimeout(() => {
           navigate("/");
-        }, 1000);
+        }, 5000);
       } else if (sendResetPassswordEmail.rejected.match(resultAction)) {
         const error = resultAction.error.message;
         console.error("Authentication failed:", error);
@@ -145,6 +135,11 @@ const useAuth = () => {
       const resultAction = await dispatch(fetchUpdateUserDetails(credentials));
       if (fetchUpdateUserDetails.fulfilled.match(resultAction)) {
         console.log("UPDATE USER RESULT ACTION PAYLOAD", resultAction.payload);
+        const successMessage = `${resultAction.payload.message}`;
+        toast.success(successMessage);
+        setTimeout(() => {
+          // navigate("/");
+        }, 5000);
         navigate("/"); // Redirect to the last route
       } else if (fetchUpdateUserDetails.rejected.match(resultAction)) {
         // This code will run if there was an error during authentication
@@ -163,10 +158,38 @@ const useAuth = () => {
     } catch (error) {}
   };
 
-  const signOut = async (dispatch) => {
-    console.log("useAuthSignOut");
-    dispatch(signOutUser());
+  // const signOut = async (dispatch) => {
+  //   console.log("useAuthSignOut");
+  //   dispatch(signOutUser());
+  // };
+  const signOut = async (credentials, locationPath) => {
+    try {
+      console.log("location", locationPath);
+      // Perform authentication logic, e.g., make an API request to verify credentials
+      // If authentication is successful, dispatch the loginUser action
+      dispatch(setPreviousRoute(locationPath));
+      const resultAction = await dispatch(signOutUser());
+      if (
+        // isLogin === true
+        signOutUser.fulfilled.match(resultAction)
+      ) {
+        const successMessage = resultAction.payload.message;
+        toast.success(successMessage);
+        setTimeout(() => {
+          // navigate("/");
+        }, 5000);
+      } else if (signOutUser.rejected.match(resultAction)) {
+        // This code will run if there was an error during authentication
+        const error = resultAction.error.message;
+        console.log("ERRORRRRRRRRR", error);
+        toast.error(error);
+        // Handle the error, e.g., show an error message to the user
+      }
+    } catch (error) {
+      console.error("Authentication failed:", error);
+    }
   };
+
   const handleSignInWithGoogle = () => {
     window.open("http://localhost:8001/api/user/google", "_self");
   };

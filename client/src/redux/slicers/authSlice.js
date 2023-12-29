@@ -8,6 +8,7 @@ import {
   changeUserDetails,
   updateUserDetails,
   signInWithGoogle,
+  signOutUserRequest,
   // userDetailsByToken,
 } from "../../components/constant/authApiCalls";
 import { createSelector } from "reselect"; // its normaly use to memorize the selectors used in the component
@@ -164,72 +165,53 @@ const fetchUpdateUserDetails = createAsyncThunk(
     }
   }
 );
-// const signOutUser = createAsyncThunk("auth/signOutUser", async (thunkApi) => {
-//   try {
-//     console.log("AuthSliceSignOut");
-//     // Make the API call to sign out
-//     thunkApi.dispatch(clearUser());
-//     thunkApi.dispatch(clearCart());
-//     const response = await signOutUser();
-
-//     if (response.status === 200) {
-//       // Dispatch any additional actions or handle the response as needed
-//       // For example, clear user data, reset authentication state, etc.
-//       thunkApi.dispatch(clearUser());
-//       // You can also dispatch other actions if needed
-//       // thunkApi.dispatch(someOtherAction());
-
-//       return thunkApi.fulfillWithValue(response);
-//     } else {
-//       console.error("Unexpected status code:", response.status);
-//       return thunkApi.rejectWithValue("Unexpected status code");
-//     }
-//   } catch (error) {
-//     console.error("Error", error);
-//     return thunkApi.rejectWithValue(error);
-//   }
-// });
 const signOutUser = createAsyncThunk(
   "auth/signOutUser",
   async (_, thunkApi) => {
+    const state = thunkApi.getState();
+    const token = state.auth.token;
     try {
       console.log("AuthSliceSignOut");
-
-      // Clear local user and cart data
+      // Make the API call to sign out
       thunkApi.dispatch(clearUser());
       thunkApi.dispatch(clearCart());
+      const response = await signOutUserRequest(token);
 
-      // You can perform any other local state changes here if needed
+      if (response.status === 200) {
+        // Dispatch any additional actions or handle the response as needed
+        // For example, clear user data, reset authentication state, etc.
+        thunkApi.dispatch(clearUser());
+        // You can also dispatch other actions if needed
+        // thunkApi.dispatch(someOtherAction());
 
-      // No API call is needed, so you can immediately fulfill the promise
-      return thunkApi.fulfillWithValue("Sign-out successful");
+        return thunkApi.fulfillWithValue(response);
+      } else {
+        console.error("Unexpected status code:", response.status);
+        return thunkApi.rejectWithValue("Unexpected status code");
+      }
     } catch (error) {
       console.error("Error", error);
       return thunkApi.rejectWithValue(error);
     }
   }
 );
-
-// const getUserDetailsByToken = createAsyncThunk(
-//   "auth/getUserDetailsByToken",
-//   async (token, thunkApi) => {
+// const signOutUser = createAsyncThunk(
+//   "auth/signOutUser",
+//   async (_, thunkApi) => {
 //     try {
-//       const user = await userDetailsByToken(token);
-//       // localStorage.setItem("usersdatatoken", user.token);
-//       if (user.status === 200) {
-//         return thunkApi.fulfillWithValue(user);
-//       } else if (user.status === 400) {
-//         console.log("Authentication failed:", user.message);
-//         return thunkApi.rejectWithValue(user.message);
-//       } else {
-//         // Handle other status codes as needed
-//         console.error("Unexpected status code:", user.status);
-//         return thunkApi.rejectWithValue("Unexpected status code");
-//       }
+//       console.log("AuthSliceSignOut");
+
+//       // Clear local user and cart data
+//       thunkApi.dispatch(clearUser());
+//       thunkApi.dispatch(clearCart());
+
+//       // You can perform any other local state changes here if needed
+
+//       // No API call is needed, so you can immediately fulfill the promise
+//       return thunkApi.fulfillWithValue("Sign-out successful");
 //     } catch (error) {
 //       console.error("Error", error);
-
-//       return thunkApi.rejectWithValue(error); // Use rejectWithValue to handle rejections
+//       return thunkApi.rejectWithValue(error);
 //     }
 //   }
 // );
@@ -366,6 +348,7 @@ const authSlice = createSlice({
       state.userId = null;
       state.success = null;
       state.cartItems = [];
+      state.success = action.payload;
 
       // You can also handle other state changes or dispatch additional actions if needed
 

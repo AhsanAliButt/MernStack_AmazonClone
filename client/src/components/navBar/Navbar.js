@@ -10,6 +10,8 @@ import {
   selectIsAuthenticated,
   selectUser,
 } from "../../redux/slicers/authSlice";
+import AMAZONICON from "../../assets/amazon-logo.png";
+import LOCATIONICON from "../../assets/locationIcon.jpg";
 
 const Navbar = () => {
   const count = useSelector((state) => state.cart.count);
@@ -41,12 +43,49 @@ const Navbar = () => {
           flexDirection: "column",
         }}
       >
-        <Box className="navbar_container">
+        <Box
+          className="navbar_container"
+          sx={{
+            height: "60px",
+          }}
+        >
           <Link to={"/"}>
-            <Box className="navbar_logo"></Box>
+            {/* <Box className="navbar_logo"></Box> */}
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                marginTop: {
+                  xs: "2px",
+                  sm: "2px",
+                  md: "10px",
+                },
+                marginLeft: "10px",
+              }}
+              width={{ xs: "60px", sm: "80px", md: "100px", lg: "120px" }}
+            >
+              <img
+                src={AMAZONICON}
+                alt="Google Icon"
+                style={{
+                  width: "100%", // Make the image take up 100% of its container width
+                  height: "auto", // Maintain the aspect ratio
+                  maxWidth: "100%", // Ensure the image doesn't exceed its natural size
+                }} // Adjust the width and height as needed
+              />
+            </Box>
           </Link>
-          <Box className="navbar_locator">
-            <Box className="navbar_locator_image"></Box>
+          <Box
+            className="navbar_locator"
+            marginTop={{ xs: "6px", sm: "12px", md: "16px", lg: "20px" }}
+            marginLeft={"4px"}
+          >
+            <Box
+              className="navbar_locator_image"
+              width={"20px"}
+              height={"30px"}
+            ></Box>
 
             <Box
               className="navbar_location"
@@ -68,7 +107,7 @@ const Navbar = () => {
           <Box className="navbar_returns">
             <Box>
               <Typography
-                fontSize={{ xs: "9px", sm: "8px", md: "12.5px", lg: "12.5px" }}
+                fontSize={{ xs: "7px", sm: "8px", md: "12.5px", lg: "12.5px" }}
                 fontWeight={"bold"}
               >
                 Returns
@@ -76,7 +115,7 @@ const Navbar = () => {
             </Box>
             <Box>
               <Typography
-                fontSize={{ xs: "10px", sm: "7px", md: "13.5px", lg: "15px" }}
+                fontSize={{ xs: "7px", sm: "7px", md: "13.5px", lg: "15px" }}
                 fontWeight={"bold"}
               >
                 & Orders

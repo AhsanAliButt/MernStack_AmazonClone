@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "../NavBar.css";
-import { Box, InputBase, MenuItem, Typography } from "@mui/material";
+import { Box, Button, InputBase, MenuItem, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { selectProducts } from "../../../redux/slicers/productSlice";
@@ -120,9 +120,14 @@ const SearchBar = () => {
             sx={{
               backgroundColor: "white",
               marginTop: "8px",
-              height: "43px",
+              height: {
+                xs: "20px",
+                sm: "30vw",
+                md: "35px",
+                lg: "43px",
+              },
               width: {
-                xs: "20vw",
+                xs: "18vw",
                 sm: "25vw",
                 md: "30vw",
                 lg: "50vw",
@@ -148,8 +153,24 @@ const SearchBar = () => {
             </Box>
           )}
         </Box>
-        <Box className="search_icon_container" onClick={handleSearch}>
-          <button className="navbar_searchicon" onClick={handleSearch}></button>
+        <Box
+          className="search_icon_container"
+          onClick={handleSearch}
+          sx={{
+            height: {
+              xs: "20px",
+              sm: "30vw",
+              md: "35px",
+              lg: "43px",
+            },
+          }}
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <Box className="navbar_searchicon"></Box>
         </Box>
       </Box>
     </Box>

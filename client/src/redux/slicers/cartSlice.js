@@ -133,7 +133,6 @@ const fetchRemoveItem = createAsyncThunk(
         if (response.status === 200) {
           // Scenario 1: If the status is 200, it's a successful response
           // You can handle it here and potentially return some data if needed
-          // const item = { ...data, quantity: 1 }; // Create the item to add to the cart
           thunkAPI.dispatch(setTotal()); // Recalculate the total
           return item;
         } else if (response.status === 400) {
@@ -178,9 +177,6 @@ const cartSlice = createSlice({
     increment: (state, action) => {
       const productId = action.payload;
 
-      // const productIndex = state.items.findIndex(
-      //   (item) => item._id === productId
-      // );
       const productIndex = state.items.findIndex(
         (item) => item.productId === productId || item._id === productId
       );
@@ -195,18 +191,9 @@ const cartSlice = createSlice({
     decrement: (state, action) => {
       console.log("Decre" + action.payload);
       const productId = action.payload; // Update this line
-
-      // const productId = action.payload;
-
-      // const productIndex = state.items.findIndex(
-      //   (item) => item._id === productId
-      // );
       const productIndex = state.items.findIndex(
         (item) => item.productId === productId || item._id === productId
       );
-
-      console.log("proDuctIndex", productIndex);
-
       if (productIndex !== -1) {
         if (state.items[productIndex].quantity > 0) {
           state.items[productIndex].quantity -= 1;
@@ -215,10 +202,6 @@ const cartSlice = createSlice({
       }
     },
     addItem: (state, action) => {
-      // const reduxStore = store.getState();
-      // console.log("GET STATE", reduxStore);
-      // const user = selectUser(state);
-      // console.log(user, "User", user);
       const ItemIndex = state.items.findIndex(
         (item) => item._id === action.payload._id
       );
@@ -231,10 +214,6 @@ const cartSlice = createSlice({
         state.items = [...state.items, temp];
         setTotal();
       }
-
-      const products = state.items;
-      console.log("PRODUCTS QUANTITY", products);
-      // state.items.push(productWithQuantity);
       state.count = state.items.length;
       state.total = state.items.reduce((acc, item) => {
         console.log("Item Price", acc + item.price);
