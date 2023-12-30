@@ -26,6 +26,10 @@ const settings = ["Profile", "Account", "Dashboard", "Logout"];
 const Navbar1 = () => {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
+  const [open, setOpen] = React.useState(false);
+  const [selectedLocation, setSelectedLocation] = React.useState("Faisalabad");
+  const [inputValue, setInputValue] = React.useState("");
+
   const [age, setAge] = React.useState("");
 
   const handleChange = (event) => {

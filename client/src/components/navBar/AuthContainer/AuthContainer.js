@@ -31,7 +31,7 @@ const AuthContainer = ({ isLogin, user }) => {
       >
         <Box>
           <Typography
-            fontSize={{ xs: "6px", sm: "4px", md: "12.5px", lg: "12.5px" }}
+            fontSize={{ xs: "6px", sm: "7.8px", md: "12.5px", lg: "12.5px" }}
           >
             Hellow, {user ? user.name : "sign in"}
           </Typography>
@@ -40,7 +40,7 @@ const AuthContainer = ({ isLogin, user }) => {
           sx={{
             display: {
               xs: "none",
-              sm: "none",
+              sm: "block",
               md: "block",
             },
           }}
@@ -57,7 +57,13 @@ const AuthContainer = ({ isLogin, user }) => {
             padding={"10px"}
             marginTop={"7px"}
             display={"block"}
-            width={"300px"}
+            sx={{
+              width: {
+                xs: "140px",
+                sm: "250px",
+                md: "300px",
+              },
+            }}
             color={"black"}
             backgroundColor="whitesmoke"
           >
@@ -71,7 +77,7 @@ const AuthContainer = ({ isLogin, user }) => {
                   <Button
                     sx={{
                       width: {
-                        xs: "80px",
+                        xs: "140px",
                         sm: "200px",
                         md: "300px",
                       },
@@ -106,7 +112,11 @@ const AuthContainer = ({ isLogin, user }) => {
                   </Box>
                   <Button
                     sx={{
-                      minWidth: "250px",
+                      width: {
+                        xs: "140px",
+                        sm: "200px",
+                        md: "300px",
+                      },
                       borderRadius: "5px",
                       color: "white",
                       backgroundColor: "skyblue",
@@ -124,7 +134,11 @@ const AuthContainer = ({ isLogin, user }) => {
 
                   <Button
                     sx={{
-                      minWidth: "250px",
+                      width: {
+                        xs: "140px",
+                        sm: "200px",
+                        md: "300px",
+                      },
                       borderRadius: "5px",
                       color: "white",
                       backgroundColor: "skyblue",
@@ -141,7 +155,11 @@ const AuthContainer = ({ isLogin, user }) => {
                   </Button>
                   <Button
                     sx={{
-                      minWidth: "250px",
+                      width: {
+                        xs: "140px",
+                        sm: "200px",
+                        md: "300px",
+                      },
                       borderRadius: "5px",
                       color: "white",
                       backgroundColor: "skyblue",
@@ -163,7 +181,11 @@ const AuthContainer = ({ isLogin, user }) => {
                 <Box display={"flex"} justifyContent={"center"}>
                   <Button
                     sx={{
-                      minWidth: "250px",
+                      width: {
+                        xs: "80px",
+                        sm: "200px",
+                        md: "300px",
+                      },
                       borderRadius: "5px",
                       color: "white",
                       backgroundColor: "skyblue",

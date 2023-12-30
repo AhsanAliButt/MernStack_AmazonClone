@@ -4,7 +4,7 @@ import "./NavBar.css";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import SearchBar from "./SearchBar/SearchBar";
-import { Box, Button, Menu, MenuItem, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import AuthContainer from "./AuthContainer/AuthContainer";
 import {
   selectIsAuthenticated,
@@ -15,26 +15,9 @@ import LOCATIONICON from "../../assets/locationIcon.jpg";
 
 const Navbar = () => {
   const count = useSelector((state) => state.cart.count);
-  const [showDropdown, setShowDropdown] = useState(false);
   const isLogin = useSelector(selectIsAuthenticated);
   const user = useSelector(selectUser);
 
-  const handleFocus = () => {
-    alert("Focus");
-  };
-  const handleMouseEnter = () => {
-    // Add a white border when hover the mouse
-    // const element = document.querySelector(".navbar_signin");
-    // element.style.border = "1px solid white";
-    setShowDropdown(true);
-  };
-
-  const handleMouseLeave = () => {
-    // Remove the white border when stop hovering
-    // const element = document.querySelector(".navbar_signin");
-    // element.style.border = "none";
-    setShowDropdown(false);
-  };
   return (
     <>
       <Box
@@ -58,7 +41,7 @@ const Navbar = () => {
                 justifyContent: "center",
                 marginTop: {
                   xs: "2px",
-                  sm: "2px",
+                  sm: "10px",
                   md: "10px",
                 },
                 marginLeft: "10px",

@@ -265,6 +265,7 @@ const SignUp = () => {
                       sx={{
                         flexGrow: 1,
                       }}
+                      display={userId ? "none" : "flex"}
                     >
                       <Header tag={"Email"} />
                       <InputField
@@ -279,7 +280,7 @@ const SignUp = () => {
                       />
                     </Box>
                     <Box
-                      margin="0px 0px 0px 20px"
+                      margin={userId ? "0px 0px 0px 0px" : "0px 0px 0px 20px"}
                       sx={{
                         flexGrow: 1,
                       }}

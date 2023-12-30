@@ -46,10 +46,10 @@
 .navbar_searchicon:hover {
   cursor: pointer;
 }
-.navbar_searchcontainer {
+/* .navbar_searchcontainer {
   display: flex;
   margin: 0px 10px;
-}
+} */
 .search_icon_container {
   background-color: #febe68;
   width: 48px;
@@ -63,7 +63,7 @@
 
 .navbar_dropdown {
   width: auto;
-  height: 44px;
+  height: 100%;
   border-radius: 5px 0px 0px 5px;
   margin-top: 8px;
   text-align-last: center;

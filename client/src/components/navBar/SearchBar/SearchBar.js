@@ -64,12 +64,22 @@ const SearchBar = () => {
 
   return (
     <Box>
-      <Box className="navbar_searchcontainer">
+      <Box
+        className="navbar_searchcontainer"
+        display={"flex"}
+        margin={"0 auto"}
+      >
         <Box
           sx={{
             display: {
               xs: "none",
               sm: "block",
+            },
+            height: {
+              xs: "20px",
+              sm: "36px",
+              md: "35px",
+              lg: "43px",
             },
           }}
         >
@@ -122,7 +132,7 @@ const SearchBar = () => {
               marginTop: "8px",
               height: {
                 xs: "20px",
-                sm: "30vw",
+                sm: "36px",
                 md: "35px",
                 lg: "43px",
               },
@@ -159,7 +169,7 @@ const SearchBar = () => {
           sx={{
             height: {
               xs: "20px",
-              sm: "30vw",
+              sm: "36px",
               md: "35px",
               lg: "43px",
             },
