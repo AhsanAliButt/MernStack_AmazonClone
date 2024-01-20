@@ -374,7 +374,8 @@ const ProductsController = {
     try {
       // Perform any necessary validation or data processing here
       // const { id, amount, currency, userId, paymentMethod, status } = req.body;
-
+      const userEmail = req?.user?.email;
+      console.log("USER EMAIL>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>", userEmail);
       const lineItems = products.cartItems.map((product) => ({
         price_data: {
           currency: "pkr",

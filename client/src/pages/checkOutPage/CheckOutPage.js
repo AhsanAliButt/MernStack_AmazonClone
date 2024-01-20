@@ -12,7 +12,7 @@ import { ArrowDropDown } from "@mui/icons-material";
 import { loadStripe } from "@stripe/stripe-js";
 import useProducts from "../../components/hooks/useProducts";
 import { setTotal } from "../../redux/slicers/cartSlice";
-
+import axios from "axios";
 const CheckOutPage = () => {
   const { createPayment } = useProducts();
 
@@ -25,7 +25,16 @@ const CheckOutPage = () => {
       "pk_test_51O4QRMIXiyixalhgAWATTpSnrqDhM6oVzTLiXdVOOUrcypbIDevbYCDPExbV0geNWjmO3yCdBYuKUCjqktB9GWZM00pQs7TKBi"
     );
     createPayment(stripe);
+    // createPayment(items);
   };
+  // const handlePayments = async () => {
+  //   // const stripe = await loadStripe(
+  //   //   "pk_test_51O4QRMIXiyixalhgAWATTpSnrqDhM6oVzTLiXdVOOUrcypbIDevbYCDPExbV0geNWjmO3yCdBYuKUCjqktB9GWZM00pQs7TKBi"
+  //   // );
+  //   // createPayment(stripe);
+  //   axios.post(`http://localhost:8001/api/order/create-checkout-session`);
+  //   // createPayment(items);
+  // };
   return (
     <Box
       className="checkOutPage__container"

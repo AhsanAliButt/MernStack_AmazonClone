@@ -8,6 +8,7 @@ const connectDB = require("./src/config/connectdb");
 const userRoutes = require("./src/routes/userRoutes");
 const productRoutes = require("./src/routes/productRoutes");
 const cartRoutes = require("./src/routes/cartRoutes");
+const orderRoutes = require("./src/routes/orderRoutes");
 const Product = require("./src/models/product"); // Import your Mongoose model
 const pluralize = require("pluralize");
 const User = require("./src/models/User");
@@ -16,6 +17,8 @@ const cookieParser = require("cookie-parser");
 const { faker } = require("@faker-js/faker");
 const cookieSession = require("cookie-session");
 const passport = require("passport");
+const bodyParser = require("body-parser");
+
 require("./passport");
 // faker.context.aspect();
 
@@ -245,10 +248,18 @@ app.use(
     maxAge: 24 * 60 * 60 * 1000, // 24 hours
   })
 );
+// Use the raw body parser middleware before your webhook endpoint handler
+// app.use(bodyParser.raw({ type: "application/json" }));
 // Cors Policy
 app.use(cors());
 //JSON Parser
-app.use(express.json());
+app.use(
+  express.json({
+    verify: (req, res, buf) => {
+      return (req["rawBody"] = buf);
+    },
+  })
+);
 // // Passport middleware
 // app.use(passport.initialize());
 // app.use(passport.session());
@@ -283,10 +294,10 @@ connectDB();
 app.use("/api/user", userRoutes);
 app.use("/api/product", productRoutes);
 app.use("/api/cart", cartRoutes);
-// app.use("/api/order", orderRoutes);
+app.use("/api/order", orderRoutes);
 
 //RUn Server
 app.listen(port, (res, req) => {
   console.log(`Server is running on port ${port} `);
-  console.log("error", process.env.CLIENT_URL);
+  console.log("Client Runs on", process.env.CLIENT_URL);
 });
