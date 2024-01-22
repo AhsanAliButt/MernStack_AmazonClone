@@ -370,14 +370,15 @@ const ProductsController = {
   createPayment: async (req, res) => {
     const { products, user } = req.body;
     console.log("createPaymentInController", products);
-    console.log("createPaymentInController", products.cartItems.quantity);
+    console.log("createPaymentInController user", user);
     try {
       // Perform any necessary validation or data processing here
 
       const customer = await stripe.customers.create({
         metadata: {
           userId: user?._id,
-          cart: JSON.stringify(products.cart),
+          name: user?.name,
+          email: user?.email,
         },
       });
       console.log("USER EMAIL>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>", user.email);
@@ -397,7 +398,7 @@ const ProductsController = {
 
       console.log("LINE ITEMS >>>>", lineItems);
       const session = await stripe.checkout.sessions.create({
-        // customer: customer.id,
+        customer: customer.id,
         payment_method_types: ["card"],
         line_items: lineItems,
         // customer_email: user.email,

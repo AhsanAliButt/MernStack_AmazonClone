@@ -272,11 +272,17 @@ const OrderController = {
       case "checkout.session.completed":
         // const checkoutSessionCompleted = event.data.object;
         // console.log("Data is coming from webhook", checkoutSessionCompleted);
+        const customerId = data.customer || data.client_reference_id;
+        if (!customerId) {
+          console.log("Error: Customer ID is missing in webhook data.");
+          res.status(400).send("Webhook Error: Customer ID is missing.");
+          return;
+        }
         stripe.customers
-          .retrieve(data.customer)
+          .retrieve(customerId)
           .then((customer) => {
-            // console.log("CUSTOMER FROM WEBHOOK", customer);
-            // console.log("Data >>>>>>>>", data);
+            console.log("CUSTOMER FROM WEBHOOK", customer.metadata);
+            console.log("Data >>>>>>>>", data);
             // createOrder(customer, data);
           })
           .catch((err) => console.log("ERROR FROM WEBHOOK", err.message));
