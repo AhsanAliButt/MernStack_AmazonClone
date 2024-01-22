@@ -177,54 +177,143 @@ const OrderController = {
       return res.status(200).send(orders);
     }
   },
+
+  createCheckoutSession: async (req, res) => {
+    const { products } = req.body;
+    console.log("createPaymentInController", products);
+    console.log("createPaymentInController", products.cartItems.quantity);
+    try {
+      // Perform any necessary validation or data processing here
+      // const { id, amount, currency, userId, paymentMethod, status } = req.body;
+      const userEmail = req.body;
+      console.log("USER EMAIL>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>", userEmail);
+      const lineItems = products?.cartItems?.map((product) => ({
+        price_data: {
+          currency: "pkr",
+          product_data: {
+            name: product.name,
+            images: [product.imageUrl],
+            metadata: { productId: product._id },
+          },
+          unit_amount: product.price * 100,
+        },
+        quantity: product.quantity,
+      }));
+      const session = await stripe.checkout.sessions.create({
+        payment_method_types: ["card"],
+        line_items: lineItems,
+        mode: "payment",
+        shipping_address_collection: {
+          allowed_countries: ["US"],
+        },
+        custom_text: {
+          shipping_address: {
+            message:
+              "Please note that we can't guarantee 2-day delivery for PO boxes at this time.",
+          },
+          submit: {
+            message: "We'll email you instructions on how to get started.",
+          },
+        },
+        success_url: "http://localhost:3000/successPayment",
+        cancel_url: "http://localhost:3000/cancelPayment",
+      });
+
+      // Save payment data to your MongoDB using Mongoose
+      const { id, amount_total, currency, payment_status } = session;
+      const payment = new paymentModel({
+        // Map Stripe session data to your schema
+        // e.g., session_id, user_id, product details, etc.
+
+        id: id,
+        amount: amount_total,
+        currency: currency,
+        // userId, // Include the user who made the payment
+        // paymentMethod:payment_status, // Include the payment method used
+        // status, // Include the payment status
+        sessionId: session.id, // Map Stripe session ID
+        // Add other fields as needed
+      });
+      await payment.save();
+      console.log("SESSSSSSIIIIIOOOOONNNNN", JSON.stringify(session));
+
+      res.status(200).json({ status: 200, id: session.id });
+    } catch (error) {
+      console.error("Payment error:", error);
+      res.status(500).json({ status: 500, error: "Payment failed" });
+    }
+  },
   webhookStripe: async (req, res) => {
     const rawBody = req.rawBody;
     const sig = req.headers["stripe-signature"];
+    let data;
+    let eventType;
     let event;
-
-    try {
-      event = stripe.webhooks.constructEvent(rawBody, sig, endpointSecret, {
-        tolerance: 100000,
-      });
-      console.log("Webhook Verified");
-    } catch (err) {
-      console.error(`Webhook Error: ${err.message}`);
-      return res.status(400).json({ error: `Webhook Error: ${err.message}` });
+    if (endpointSecret) {
+      try {
+        event = stripe.webhooks.constructEvent(rawBody, sig, endpointSecret, {
+          tolerance: 1000,
+        });
+        console.log("Webhook Verified");
+      } catch (err) {
+        res.status(400).send(`Webhook Error: ${err.message}`);
+        return;
+      }
+      data = event.data.object;
+      eventType = event.type;
+    } else {
+      data = req.body.data.object;
+      eventType = req.body.type;
+      console.log("Webhook Else", data, eventType);
     }
 
     // Handle the event
     switch (event.type) {
       case "checkout.session.completed":
-        const checkoutSessionCompleted = event.data.object;
-        console.log("Data is coming from webhook", checkoutSessionCompleted);
+        // const checkoutSessionCompleted = event.data.object;
+        // console.log("Data is coming from webhook", checkoutSessionCompleted);
+        stripe.customers
+          .retrieve(data.customer)
+          .then((customer) => {
+            // console.log("CUSTOMER FROM WEBHOOK", customer);
+            // console.log("Data >>>>>>>>", data);
+            // createOrder(customer, data);
+          })
+          .catch((err) => console.log("ERROR FROM WEBHOOK", err.message));
+        const line_items = await stripe.checkout.sessions.listLineItems(
+          event.data.object.id
+        );
+        console.log("LINE ITEMS", line_items);
         // Then define and call a function to handle the event checkout.session.completed
         break;
       // ... handle other event types
       default:
         console.log(`Unhandled event type ${event.type}`);
     }
-
-    try {
-      // if successfull
-      // Retrieve the session. If you require line items in the response, you may include them by expanding line_items.
-      const sessionWithLineItems = await stripe.checkout.sessions.retrieve(
-        event.data.object.id,
-        {
-          expand: ["line_items"],
-        }
-      );
-      const lineItems = sessionWithLineItems.line_items;
-      console.log("lineItems>>>>>>>>>: " + lineItems);
-      // Fulfill the purchase...
-      addOrderItem(req, lineItems);
-
-      // Return a 200 response to acknowledge receipt of the event
-      res.json({ received: true });
-    } catch (error) {
-      console.error("Error in OrderController.addOrderItem:", error);
-      return res.status(500).json({ error: "Internal Server Error" });
-    }
+    // if successfull
+    // OrderController.addOrderItem(req, res);
+    // Return a 200 response to acknowledge receipt of the event
+    res.json({ received: true });
   },
 };
+// async function createOrder(customer, data) {
+//   const Items = JSON.parse(customer.metadata.cart);
+//   console.log(`Create Order ITEMS >>>>`, );
+//   const newOrderItem = OrderModel({
+//     user: customer.metadata.userId,
+//     customerId: data.customer,
+//     products: Items,
+//     subtotal: data.amount_subtotal,
+//     total: data.amount_total,
+//     shipping: data.customer_details,
+//     payment_status: data.payment_status,
+//   });
+//   try {
+//     const createOrder = await newOrderItem.save();
+//     console.log("Order Created >>>", createOrder);
+//   } catch (error) {
+//     console.log(error);
+//   }
+// }
 
 module.exports = OrderController;

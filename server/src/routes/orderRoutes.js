@@ -23,8 +23,9 @@ router.put(
   "/updateOrderToPending/:orderId",
   OrderController.updateOrderToPending
 ); //Update order to pending
+router.post("/create-checkout-session", OrderController.createCheckoutSession); //Make a payment
 router.get("/getMyOrders/:userId", OrderController.getMyOrders); //Get my orders
-// router.post("/webhook/stripe", OrderController.webhookStripe); //Get my orders
+router.post("/webhook/stripe", OrderController.webhookStripe); //webhookStripe route
 // router.post("/webhook/stripe", async (req, res) => {
 //   // Access the raw request body through req.rawBody
 //   console.log("Received Stripe Webhook:", req.body);
@@ -63,50 +64,50 @@ router.get("/getMyOrders/:userId", OrderController.getMyOrders); //Get my orders
 //   res.json({ received: true });
 // });
 
-router.post("/webhook/stripe", async (req, res) => {
-  const rawBody = req.rawBody;
-  const sig = req.headers["stripe-signature"];
-  let data;
-  let eventType;
-  let event;
-  if (endpointSecret) {
-    try {
-      event = stripe.webhooks.constructEvent(rawBody, sig, endpointSecret, {
-        tolerance: 1000,
-      });
-      console.log("Webhook Verified");
-    } catch (err) {
-      res.status(400).send(`Webhook Error: ${err.message}`);
-      return;
-    }
-    data = event.data.object;
-    eventType = event.type;
-  } else {
-    data = req.body.data.object;
-    eventType = req.body.type;
-    console.log("Webhook Else", data, eventType);
-  }
+// router.post("/webhook/stripe", async (req, res) => {
+//   const rawBody = req.rawBody;
+//   const sig = req.headers["stripe-signature"];
+//   let data;
+//   let eventType;
+//   let event;
+//   if (endpointSecret) {
+//     try {
+//       event = stripe.webhooks.constructEvent(rawBody, sig, endpointSecret, {
+//         tolerance: 1000,
+//       });
+//       console.log("Webhook Verified");
+//     } catch (err) {
+//       res.status(400).send(`Webhook Error: ${err.message}`);
+//       return;
+//     }
+//     data = event.data.object;
+//     eventType = event.type;
+//   } else {
+//     data = req.body.data.object;
+//     eventType = req.body.type;
+//     console.log("Webhook Else", data, eventType);
+//   }
 
-  // Handle the event
-  switch (event.type) {
-    case "checkout.session.completed":
-      const checkoutSessionCompleted = event.data.object;
-      console.log("Data is coming from webhook", checkoutSessionCompleted);
-      const line_items = await stripe.checkout.sessions.listLineItems(
-        event.data.object.id
-      );
-      console.log("LINE ITEMS", line_items);
-      // Then define and call a function to handle the event checkout.session.completed
-      break;
-    // ... handle other event types
-    default:
-      console.log(`Unhandled event type ${event.type}`);
-  }
-  // if successfull
-  // OrderController.addOrderItem(req, res);
-  // Return a 200 response to acknowledge receipt of the event
-  res.json({ received: true });
-});
+//   // Handle the event
+//   switch (event.type) {
+//     case "checkout.session.completed":
+//       const checkoutSessionCompleted = event.data.object;
+//       console.log("Data is coming from webhook", checkoutSessionCompleted);
+//       const line_items = await stripe.checkout.sessions.listLineItems(
+//         event.data.object.id
+//       );
+//       console.log("LINE ITEMS", line_items);
+//       // Then define and call a function to handle the event checkout.session.completed
+//       break;
+//     // ... handle other event types
+//     default:
+//       console.log(`Unhandled event type ${event.type}`);
+//   }
+//   // if successfull
+//   // OrderController.addOrderItem(req, res);
+//   // Return a 200 response to acknowledge receipt of the event
+//   res.json({ received: true });
+// });
 // router.post("/webhook/stripe", async (req, res) => {
 //   const rawBody = req.rawBody;
 //   const sig = req.headers["stripe-signature"];

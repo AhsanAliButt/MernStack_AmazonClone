@@ -2,6 +2,7 @@ import { useSelector } from "react-redux";
 import { selectToken } from "../../redux/slicers/authSlice";
 
 const productApi = process.env.REACT_APP_API_PRODUCT_ROUTE;
+const orderApi = process.env.REACT_APP_API_ORDER_ROUTE;
 
 const requestOptions = {
   headers: {
@@ -234,7 +235,7 @@ export const deleteProduct = async (data) => {
   }
 };
 
-export const createPayment = async (data) => {
+export const createPayment = async (data, user) => {
   const { stripe, cart } = data;
   console.log("Create Payment data for stripe in ProductApi", data);
   const requestOptions = {
@@ -244,7 +245,7 @@ export const createPayment = async (data) => {
       // "Access-Control-Allow-Origin": "*",
       // "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
     },
-    body: JSON.stringify({ products: cart }), // Convert cart data to JSON and set it as the request body
+    body: JSON.stringify({ products: cart, user: user }), // Convert cart data to JSON and set it as the request body
   };
 
   try {

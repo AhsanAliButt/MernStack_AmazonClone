@@ -368,30 +368,47 @@ const ProductsController = {
     }
   },
   createPayment: async (req, res) => {
-    const { products } = req.body;
+    const { products, user } = req.body;
     console.log("createPaymentInController", products);
     console.log("createPaymentInController", products.cartItems.quantity);
     try {
       // Perform any necessary validation or data processing here
-      // const { id, amount, currency, userId, paymentMethod, status } = req.body;
-      const userEmail = req?.user?.email;
-      console.log("USER EMAIL>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>", userEmail);
-      const lineItems = products.cartItems.map((product) => ({
+
+      const customer = await stripe.customers.create({
+        metadata: {
+          userId: user?._id,
+          cart: JSON.stringify(products.cart),
+        },
+      });
+      console.log("USER EMAIL>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>", user.email);
+      const lineItems = products?.cartItems?.map((product) => ({
         price_data: {
           currency: "pkr",
           product_data: {
             name: product.name,
+            description: product.description,
+            images: [product.imageUrl],
+            metadata: { productId: product._id },
           },
           unit_amount: product.price * 100,
         },
         quantity: product.quantity,
       }));
+
+      console.log("LINE ITEMS >>>>", lineItems);
       const session = await stripe.checkout.sessions.create({
+        // customer: customer.id,
         payment_method_types: ["card"],
         line_items: lineItems,
+        // customer_email: user.email,
+        // name: user.name,
+        client_reference_id: user._id,
         mode: "payment",
         shipping_address_collection: {
           allowed_countries: ["US"],
+        },
+        phone_number_collection: {
+          enabled: true,
         },
         custom_text: {
           shipping_address: {

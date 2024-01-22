@@ -4,20 +4,22 @@ import { createPayment } from "../../components/constant/productApiCalls";
 
 const fetchPayment = createAsyncThunk(
   "payment/fetchPayment",
-  async (data, thunkApi) => {
+  async (data, thunkAPI) => {
+    const state = thunkAPI.getState();
+    const user = state.auth.user;
     console.log("Payment Slice New Payment", data);
     try {
-      const newPayment = await createPayment(data);
+      const newPayment = await createPayment(data, user);
       console.log("UserAUTH", newPayment);
       if (newPayment.status === 200) {
-        return thunkApi.fulfillWithValue();
+        return thunkAPI.fulfillWithValue();
       } else if (newPayment.status === 400) {
         console.log("Authentication failed:", newPayment.message);
-        return thunkApi.rejectWithValue(newPayment.message);
+        return thunkAPI.rejectWithValue(newPayment.message);
       } else {
         // Handle other status codes as needed
         console.error("Unexpected status code:", newPayment.status);
-        return thunkApi.rejectWithValue("Unexpected status code");
+        return thunkAPI.rejectWithValue("Unexpected status code");
       }
       // localStorage.setItem("usersdatatoken", user.token);
     } catch (error) {
