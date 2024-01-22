@@ -278,18 +278,19 @@ const OrderController = {
           res.status(400).send("Webhook Error: Customer ID is missing.");
           return;
         }
+        const line_items = await stripe.checkout.sessions.listLineItems(
+          event.data.object.id
+        );
+        console.log("LINE ITEMS", line_items);
         stripe.customers
           .retrieve(customerId)
           .then((customer) => {
             console.log("CUSTOMER FROM WEBHOOK", customer.metadata);
             console.log("Data >>>>>>>>", data);
-            // createOrder(customer, data);
+            createOrder(customer, data, line_items);
           })
           .catch((err) => console.log("ERROR FROM WEBHOOK", err.message));
-        const line_items = await stripe.checkout.sessions.listLineItems(
-          event.data.object.id
-        );
-        console.log("LINE ITEMS", line_items);
+
         // Then define and call a function to handle the event checkout.session.completed
         break;
       // ... handle other event types
@@ -302,24 +303,36 @@ const OrderController = {
     res.json({ received: true });
   },
 };
-// async function createOrder(customer, data) {
-//   const Items = JSON.parse(customer.metadata.cart);
-//   console.log(`Create Order ITEMS >>>>`, );
-//   const newOrderItem = OrderModel({
-//     user: customer.metadata.userId,
-//     customerId: data.customer,
-//     products: Items,
-//     subtotal: data.amount_subtotal,
-//     total: data.amount_total,
-//     shipping: data.customer_details,
-//     payment_status: data.payment_status,
-//   });
-//   try {
-//     const createOrder = await newOrderItem.save();
-//     console.log("Order Created >>>", createOrder);
-//   } catch (error) {
-//     console.log(error);
-//   }
-// }
+async function createOrder(customer, data, line_items) {
+  // const Items = JSON.parse(customer.metadata.cart);
+  console.log(`Create Order ITEMS >>>>`);
+  const products = line_items.data.map((item) => {
+    return {
+      product: item.id,
+      quantity: item.quantity,
+      ImageUrl: item.description, // or wherever the image URL is stored in line_items
+      name: item.description,
+      price: item.amount_total / 100, // assuming the amount is in cents
+      brand: "SomeBrand", // set as needed
+      description: "SomeDescription", // set as needed
+      cartQuantity: item.quantity,
+    };
+  });
+  const newOrderItem = OrderModel({
+    user: customer.metadata.userId,
+    customerId: data.customer,
+    products: products,
+    subtotal: data.amount_subtotal,
+    total: data.amount_total,
+    shipping: data.customer_details,
+    payment_status: data.payment_status,
+  });
+  try {
+    const createOrder = await newOrderItem.save();
+    console.log("Order Created >>>", createOrder);
+  } catch (error) {
+    console.log(error);
+  }
+}
 
 module.exports = OrderController;

@@ -123,31 +123,12 @@ const orderSchema = new mongoose.Schema(
     paymentIntentId: { type: String },
     products: [
       {
-        product: {
-          type: String, // product id
-          ref: "Product",
-          required: true,
-        },
-        quantity: {
-          type: Number,
-          required: true,
-        },
-        ImageUrl: {
-          type: String,
-          required: true,
-        },
-        name: {
-          type: String,
-          required: true,
-        },
-        price: {
-          type: Number,
-          required: true,
-          default: 0,
-        },
-        brand: {
-          type: String,
-        },
+        product: { type: String, ref: "Product", required: true },
+        quantity: { type: Number, required: true },
+        ImageUrl: { type: String, required: true },
+        name: { type: String, required: true },
+        price: { type: Number, required: true, default: 0 },
+        brand: { type: String },
         description: { type: String, required: true },
         cartQuantity: { type: Number },
       },
