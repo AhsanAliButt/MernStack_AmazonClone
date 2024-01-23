@@ -20,7 +20,7 @@ const fetchAddItemToCart = createAsyncThunk(
     if (userId) {
       try {
         const response = await addItemToCart(item, userId, userToken);
-        console.log("RESPONSE FOR CART API", response);
+        // console.log("RESPONSE FOR CART API", response);
         if (response.status === 200) {
           // Scenario 1: If the status is 200, it's a successful response
           // You can handle it here and potentially return some data if needed
@@ -30,12 +30,12 @@ const fetchAddItemToCart = createAsyncThunk(
         } else if (response.status === 400) {
           // Scenario 2: If the status is 400, it's an error response
           // You can handle it here and reject with a message
-          console.log("Item Add to Cart failed:", response.message);
+          // console.log("Item Add to Cart failed:", response.message);
           return thunkAPI.rejectWithValue(response.message);
         } else {
           // Scenario 3: Handle other status codes as needed
           // You can handle other status codes as needed
-          console.error("Unexpected status code:", response.status);
+          // console.error("Unexpected status code:", response.status);
           return thunkAPI.rejectWithValue("Unexpected status code");
         }
       } catch (error) {}
@@ -51,13 +51,13 @@ const fetchIncreaseQuantity = createAsyncThunk(
     const userToken = state.auth.token;
     const localCart = state.cart;
     const item = productId;
-    console.log("ITEMMMMMMMMMMMMMM", item);
+    // console.log("ITEMMMMMMMMMMMMMM", item);
     // Perform local actions
     thunkAPI.dispatch(increment(item));
     if (userId) {
       try {
         const response = await increaseQuantityOfCart(item, userId, userToken);
-        console.log("RESPONSE FOR CART API", response);
+        // console.log("RESPONSE FOR CART API", response);
         if (response.status === 200) {
           // Scenario 1: If the status is 200, it's a successful response
           // You can handle it here and potentially return some data if needed
@@ -67,12 +67,12 @@ const fetchIncreaseQuantity = createAsyncThunk(
         } else if (response.status === 400) {
           // Scenario 2: If the status is 400, it's an error response
           // You can handle it here and reject with a message
-          console.log("Item Add to Cart failed:", response.message);
+          // console.log("Item Add to Cart failed:", response.message);
           return thunkAPI.rejectWithValue(response.message);
         } else {
           // Scenario 3: Handle other status codes as needed
           // You can handle other status codes as needed
-          console.error("Unexpected status code:", response.status);
+          // console.error("Unexpected status code:", response.status);
           return thunkAPI.rejectWithValue("Unexpected status code");
         }
       } catch (error) {}
@@ -81,13 +81,14 @@ const fetchIncreaseQuantity = createAsyncThunk(
 );
 const fetchDecreaseQuantity = createAsyncThunk(
   "cart/fetchDecreaseQuantity",
-  async (item, thunkAPI) => {
+  async (productId, thunkAPI) => {
     // Always add the item to local storage
     const state = thunkAPI.getState();
     const userId = state.auth.userId;
     const userToken = state.auth.token;
     const localCart = state.cart;
-    console.log("ITEMMMMMMMMMMMMMM", item);
+    const item = productId;
+    // console.log("ITEMMMMMMMMMMMMMM", item);
     // Perform local actions
     thunkAPI.dispatch(decrement(item));
     if (userId) {
@@ -103,12 +104,12 @@ const fetchDecreaseQuantity = createAsyncThunk(
         } else if (response.status === 400) {
           // Scenario 2: If the status is 400, it's an error response
           // You can handle it here and reject with a message
-          console.log("Item Add to Cart failed:", response.message);
+          // console.log("Item Add to Cart failed:", response.message);
           return thunkAPI.rejectWithValue(response.message);
         } else {
           // Scenario 3: Handle other status codes as needed
           // You can handle other status codes as needed
-          console.error("Unexpected status code:", response.status);
+          // console.error("Unexpected status code:", response.status);
           return thunkAPI.rejectWithValue("Unexpected status code");
         }
       } catch (error) {}
@@ -117,19 +118,20 @@ const fetchDecreaseQuantity = createAsyncThunk(
 );
 const fetchRemoveItem = createAsyncThunk(
   "cart/fetchRemoveItem",
-  async (item, thunkAPI) => {
+  async (productId, thunkAPI) => {
     // Always add the item to local storage
     const state = thunkAPI.getState();
     const userId = state.auth.userId;
     const userToken = state.auth.token;
     const localCart = state.cart;
-    console.log("ITEMMMMMMMMMMMMMM", item);
+    const item = productId;
+    // console.log("Fetch Remove IteM iD", item);
     // Perform local actions
     thunkAPI.dispatch(removeItem(item));
     if (userId) {
       try {
         const response = await removeItemFromCart(item, userId, userToken);
-        console.log("RESPONSE FOR CART API", response);
+        // console.log("RESPONSE FOR CART API", response);
         if (response.status === 200) {
           // Scenario 1: If the status is 200, it's a successful response
           // You can handle it here and potentially return some data if needed
@@ -138,12 +140,12 @@ const fetchRemoveItem = createAsyncThunk(
         } else if (response.status === 400) {
           // Scenario 2: If the status is 400, it's an error response
           // You can handle it here and reject with a message
-          console.log("Item Add to Cart failed:", response.message);
+          // console.log("Item Add to Cart failed:", response.message);
           return thunkAPI.rejectWithValue(response.message);
         } else {
           // Scenario 3: Handle other status codes as needed
           // You can handle other status codes as needed
-          console.error("Unexpected status code:", response.status);
+          // console.error("Unexpected status code:", response.status);
           return thunkAPI.rejectWithValue("Unexpected status code");
         }
       } catch (error) {}
